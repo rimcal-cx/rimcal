@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GoogleAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['prefix' => 'google', 'middleware' => ['web']], function(){
+    Route::get('/redirect', [GoogleAuthController::class, 'redirect']);
+    Route::get('/callback', [GoogleAuthController::class, 'callback']);
 });
