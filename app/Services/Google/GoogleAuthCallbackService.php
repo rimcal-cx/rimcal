@@ -14,18 +14,20 @@ class GoogleAuthCallbackService
     {
         $gUser = Socialite::driver('google')->stateless()->user();
         $user = User::updateOrCreate([
-            'google_id' => $gUser->id,
             'email' => $gUser->email,
         ], [
             'name' => $gUser->name,
             'email_verified_at' => now(),
             'password' => "",
             'remember_token' => "",
+            'google_id' => $gUser->id,
             'google_token' => $gUser->token,
             'google_refresh_token' => $gUser->refreshToken,
         ]);
 
-        return Auth::login($user);
+        Auth::login($user);
+
+        return Auth::user();
 
     }
 
