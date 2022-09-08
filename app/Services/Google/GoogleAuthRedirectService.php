@@ -9,7 +9,7 @@ class GoogleAuthRedirectService
 
     public function handle()
     {
-        return Socialite::driver('google')->stateless()->redirect();
+        return Socialite::driver('google')->scopes(['https://www.googleapis.com/auth/calendar'])->stateless()->redirect();
     }
 
 }

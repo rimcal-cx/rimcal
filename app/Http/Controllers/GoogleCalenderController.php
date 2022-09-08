@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Services\Google\Calender\GoogleCalenderCreateService;
 use Illuminate\Http\Request;
+use App\Http\Requests\Google\Calender\CalenderCreateRequest;
 
-class GoogleCalenderController extends Controller
+class GoogleCalenderController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -22,10 +23,10 @@ class GoogleCalenderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(CalenderCreateRequest $request)
     {
-        $result = (new GoogleCalenderCreateService())->handle();
-        return response($result, 200);
+        $result = (new GoogleCalenderCreateService())->handle($request);
+        return $this->response('Event added to calender', 200, ['event' => $result]);
     }
 
     /**

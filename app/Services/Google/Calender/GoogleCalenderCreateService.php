@@ -2,6 +2,8 @@
 
 namespace App\Services\Google\Calender;
 
+use App\Models\Calender;
+use App\Models\CalenderAttendee;
 use App\Services\Google\GoogleAuthClient;
 use Google\Service\Calendar;
 use Google\Service\Calendar\Event;
@@ -9,34 +11,64 @@ use Google\Service\Calendar\Event;
 class GoogleCalenderCreateService
 {
 
-    public function handle()
+    public function handle($request)
     {
         $client = (new GoogleAuthClient)->handle();
+        $attendees = [];
+
+        $calender = Calender::updateOrCreate(
+            [
+                'id' => $request->calender_id,
+            ],
+            [
+                'summary' => $request->summary,
+                'location' => $request->location,
+                'description' => $request->description,
+                'start_datetime' => $request->start_datetime,
+                'end_datetime' => $request->end_datetime,
+                'timezone' => $request->timezone,
+                'remind_before_in_mins' => $request->remind_before_in_mins,
+                'all_day' => $request->all_day
+            ]
+        );
+
+        foreach($request->attendees as $attendee){
+            $attendees[] = ['email' => $attendee];
+            $calAttendees[] = [
+                'calender_id' => $calender->id,
+                'user_id' => null,
+                'email' => $attendee
+            ];
+        };
+
+        CalenderAttendee::insert($calAttendees);
+        $this->addToGoogleCalender($client, $request, $attendees);
+        return $calender;
+
+    }
+
+    private function addToGoogleCalender($client, $request, $attendees)
+    {
         $service = new Calendar($client);
+
         $event = new Event(array(
-            'summary' => 'Google I/O 2015',
-            'location' => '800 Howard St., San Francisco, CA 94103',
-            'description' => 'A chance to hear more about Google\'s developer products.',
+            'summary' => $request->summary,
+            'location' => $request->location,
+            'description' => $request->description,
             'start' => array(
-              'dateTime' => '2022-08-07T09:00:00-07:00',
-              'timeZone' => 'America/Los_Angeles',
+              'dateTime' => $request->start_datetime,
+              'timeZone' => $request->timezone,
             ),
             'end' => array(
-              'dateTime' => '2022-08-07T10:00:00-08:00',
-              'timeZone' => 'America/Los_Angeles',
+              'dateTime' => $request->end_datetime,
+              'timeZone' => $request->timezone,
             ),
-            'recurrence' => array(
-              'RRULE:FREQ=DAILY;COUNT=2'
-            ),
-            'attendees' => array(
-              array('email' => 'lpage@example.com'),
-              array('email' => 'sbrin@example.com'),
-            ),
+            'attendees' => $attendees,
             'reminders' => array(
               'useDefault' => FALSE,
               'overrides' => array(
                 array('method' => 'email', 'minutes' => 24 * 60),
-                array('method' => 'popup', 'minutes' => 10),
+                array('method' => 'popup', 'minutes' => $request->remind_before_in_mins),
               ),
             ),
           ));
@@ -44,6 +76,6 @@ class GoogleCalenderCreateService
           $calendarId = 'primary';
           $event = $service->events->insert($calendarId, $event);
 
-        dd($event);
+        return true;
     }
 }

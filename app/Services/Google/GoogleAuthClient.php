@@ -14,7 +14,7 @@ class GoogleAuthClient
     {
         $client = new Client();
         $client->setApplicationName('RimCal');
-        $client->setScopes(['https://www.googleapis.com/auth/calendar']);
+        $client->setScopes(['https://www.googleapis.com/auth/calendar','https://www.googleapis.com/auth/userinfo']);
         $client->setIncludeGrantedScopes(true);
         $client->setAuthConfig(storage_path('api/google_client_secret.json'));
         $client->setAccessType('offline');
