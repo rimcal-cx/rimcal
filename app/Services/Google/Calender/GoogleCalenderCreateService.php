@@ -37,6 +37,10 @@ class GoogleCalenderCreateService
                 ]
             );
 
+            if($request->calender_id !== null){
+                CalenderAttendee::whereCalenderId($request->calender_id)->delete();
+            }
+
             foreach($request->attendees as $attendee){
                 $attendees[] = ['email' => $attendee];
                 $calAttendees[] = [

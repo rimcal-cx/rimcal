@@ -22,5 +22,7 @@ Route::group(['prefix' => 'google', 'middleware' => ['web']], function(){
 });
 
 Route::group(['prefix' => 'calender'], function(){
+    Route::apiResource('/', GoogleCalenderController::class);
     Route::post('/add', [GoogleCalenderController::class, 'create']);
+    Route::delete('/delete/{calenderId}', [GoogleCalenderController::class, 'delete']);
 });

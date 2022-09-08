@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Services\Google\Calender\GoogleCalenderCreateService;
-use Illuminate\Http\Request;
+use App\Http\Resources\Google\Calender\GoogleCalenderResource;;
 use App\Http\Requests\Google\Calender\CalenderCreateRequest;
+use App\Services\Google\Calender\GoogleCalenderDeleteService;
+use App\Services\Google\Calender\GoogleCalenderListService;
 
 class GoogleCalenderController extends BaseController
 {
@@ -15,7 +17,8 @@ class GoogleCalenderController extends BaseController
      */
     public function index()
     {
-        //
+        $result = (new GoogleCalenderListService())->handle();
+        return $this->response('Event added to calender', 200, ['events' => GoogleCalenderResource::collection($result)]);
     }
 
     /**
@@ -26,52 +29,7 @@ class GoogleCalenderController extends BaseController
     public function create(CalenderCreateRequest $request)
     {
         $result = (new GoogleCalenderCreateService())->handle($request);
-        return $this->response('Event added to calender', 200, ['event' => $result]);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        return $this->response('Event added to calender', 200, ['event' => new GoogleCalenderResource($result)]);
     }
 
     /**
@@ -80,8 +38,9 @@ class GoogleCalenderController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete($calenderId)
     {
-        //
+        (new GoogleCalenderDeleteService())->handle($calenderId);
+        return $this->response('Event deleted successfully', 200);
     }
 }

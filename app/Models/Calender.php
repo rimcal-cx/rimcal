@@ -37,6 +37,6 @@ class Calender extends Model
     ];
 
     public function attendees(){
-        $this->hasMany(CalenderAttendee::class, 'calender_id', 'id');
+        return $this->hasMany(CalenderAttendee::class, 'calender_id', 'id');
     }
 }
