@@ -6,17 +6,15 @@ use Illuminate\Http\Response;
 
 class BaseController
 {
-    private function response(string $provider): Response
+    public function response(string $message, string $status, array $data = [])
     {
-        return response(
-            view('complete', [
-                'json' => json_encode([
-                    'status' => 'success',
-                    'token' => auth()->user()->getRememberToken(),
-                    'user' => auth()->user(),
-                    'provider' => $provider,
-                ])
-            ])
-        );
+        http_response_code($status);
+        $result = array();
+        $result['message'] = $message;
+        $result['data'] = $data;
+
+        return response($result)->withHeaders([
+            'Content-Type' => 'application/json',
+        ]);;
     }
 }

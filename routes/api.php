@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleAuthController;
+use App\Http\Controllers\GoogleCalenderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,4 +19,8 @@ use App\Http\Controllers\GoogleAuthController;
 Route::group(['prefix' => 'google', 'middleware' => ['web']], function(){
     Route::get('/redirect', [GoogleAuthController::class, 'redirect']);
     Route::get('/callback', [GoogleAuthController::class, 'callback']);
+});
+
+Route::group(['prefix' => 'calender'], function(){
+    Route::post('/add', [GoogleCalenderController::class, 'create']);
 });
