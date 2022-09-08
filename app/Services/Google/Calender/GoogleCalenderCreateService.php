@@ -5,45 +5,55 @@ namespace App\Services\Google\Calender;
 use App\Models\Calender;
 use App\Models\CalenderAttendee;
 use App\Services\Google\GoogleAuthClient;
+use Exception;
 use Google\Service\Calendar;
 use Google\Service\Calendar\Event;
+use Illuminate\Support\Facades\DB;
 
 class GoogleCalenderCreateService
 {
 
     public function handle($request)
     {
-        $client = (new GoogleAuthClient)->handle();
-        $attendees = [];
+        try{
+            DB::beginTransaction();
+            $client = (new GoogleAuthClient)->handle();
+            $attendees = [];
 
-        $calender = Calender::updateOrCreate(
-            [
-                'id' => $request->calender_id,
-            ],
-            [
-                'summary' => $request->summary,
-                'location' => $request->location,
-                'description' => $request->description,
-                'start_datetime' => $request->start_datetime,
-                'end_datetime' => $request->end_datetime,
-                'timezone' => $request->timezone,
-                'remind_before_in_mins' => $request->remind_before_in_mins,
-                'all_day' => $request->all_day
-            ]
-        );
+            $calender = Calender::updateOrCreate(
+                [
+                    'id' => $request->calender_id,
+                ],
+                [
+                    'summary' => $request->summary,
+                    'location' => $request->location,
+                    'description' => $request->description,
+                    'start_datetime' => $request->start_datetime,
+                    'end_datetime' => $request->end_datetime,
+                    'timezone' => $request->timezone,
+                    'remind_before_in_mins' => $request->remind_before_in_mins,
+                    'all_day' => $request->all_day
+                ]
+            );
 
-        foreach($request->attendees as $attendee){
-            $attendees[] = ['email' => $attendee];
-            $calAttendees[] = [
-                'calender_id' => $calender->id,
-                'user_id' => null,
-                'email' => $attendee
-            ];
-        };
+            foreach($request->attendees as $attendee){
+                $attendees[] = ['email' => $attendee];
+                $calAttendees[] = [
+                    'calender_id' => $calender->id,
+                    'user_id' => null,
+                    'email' => $attendee
+                ];
+            };
 
-        CalenderAttendee::insert($calAttendees);
-        $this->addToGoogleCalender($client, $request, $attendees);
-        return $calender;
+            CalenderAttendee::insert($calAttendees);
+            $this->addToGoogleCalender($client, $request, $attendees);
+            DB::commit();
+            return $calender;
+        }catch(Exception $e){
+            DB::rollBack();
+            return $e;
+        }
+
 
     }
 
