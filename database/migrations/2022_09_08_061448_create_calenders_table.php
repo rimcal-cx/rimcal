@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('calenders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained();
+            $table->string('event_id')->nullable();
             $table->string('summary')->nullable();
             $table->string('location')->nullable();
             $table->string('description')->nullable();

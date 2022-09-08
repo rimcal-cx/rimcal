@@ -25,6 +25,7 @@ class GoogleCalenderCreateService
                     'id' => $request->calender_id,
                 ],
                 [
+                    'user_id' => 1,
                     'summary' => $request->summary,
                     'location' => $request->location,
                     'description' => $request->description,
@@ -46,7 +47,9 @@ class GoogleCalenderCreateService
             };
 
             CalenderAttendee::insert($calAttendees);
-            $this->addToGoogleCalender($client, $request, $attendees);
+            $event = $this->addToGoogleCalender($client, $request, $attendees, $calender);
+            $calender->event_id = $event->id;
+            $calender->save();
             DB::commit();
             return $calender;
         }catch(Exception $e){
@@ -57,9 +60,13 @@ class GoogleCalenderCreateService
 
     }
 
-    private function addToGoogleCalender($client, $request, $attendees)
+    private function addToGoogleCalender($client, $request, $attendees, $localCalender)
     {
         $service = new Calendar($client);
+
+        if($request->calender_id !== null){
+            $service->events->delete('primary', $localCalender->event_id);
+        }
 
         $event = new Event(array(
             'summary' => $request->summary,
@@ -81,11 +88,10 @@ class GoogleCalenderCreateService
                 array('method' => 'popup', 'minutes' => $request->remind_before_in_mins),
               ),
             ),
-          ));
+        ));
 
-          $calendarId = 'primary';
-          $event = $service->events->insert($calendarId, $event);
-
-        return true;
+        $calendarId = 'primary';
+        $event = $service->events->insert($calendarId, $event);
+        return $event;
     }
 }
