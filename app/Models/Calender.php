@@ -14,6 +14,8 @@ class Calender extends Model
 
     protected $fillable = [
         'id',
+        'user_id',
+        'event_id',
         'summary',
         'location',
         'description',
