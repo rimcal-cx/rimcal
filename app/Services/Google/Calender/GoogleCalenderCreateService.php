@@ -54,7 +54,7 @@ class GoogleCalenderCreateService
             return $calender;
         }catch(Exception $e){
             DB::rollBack();
-            return $e;
+            throw $e;
         }
 
 
@@ -67,7 +67,6 @@ class GoogleCalenderCreateService
         if($request->calender_id !== null){
             $service->events->delete('primary', $localCalender->event_id);
         }
-
         $event = new Event(array(
             'summary' => $request->summary,
             'location' => $request->location,
