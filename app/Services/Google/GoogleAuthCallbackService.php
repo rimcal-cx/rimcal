@@ -25,7 +25,9 @@ class GoogleAuthCallbackService
             'google_refresh_token' => $gUser->refreshToken,
         ]);
 
-        $user->token = $user->createToken("API TOKEN")->plainTextToken;
+        $token_expiry = config('sanctum.expiration', null) !== null ? \Carbon\Carbon::now()->addMinutes(config('sanctum.expiration')) : null;
+
+        $user->token = $user->createToken("Rimcal", ['*'], $token_expiry)->plainTextToken;
 
         return $user;
 

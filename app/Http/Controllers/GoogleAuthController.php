@@ -11,8 +11,8 @@ class GoogleAuthController extends BaseController
 
     public function redirect()
     {
-        $result = (new GoogleAuthRedirectService())->handle();
-        return $this->response('Google redirection successfull', 200, ['redirect_url' => $result->headers->get('Location')]);
+        return (new GoogleAuthRedirectService())->handle();
+        // return $this->response('Google redirection successfull', 200, ['redirect_url' => $result->headers->get('Location')]);
     }
 
     public function callback()

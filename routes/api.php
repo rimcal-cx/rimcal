@@ -16,14 +16,16 @@ use App\Http\Controllers\GoogleCalenderController;
 |
 */
 
-Route::group(['prefix' => 'google', 'middleware' => ['web']], function(){
+Route::group(['prefix' => 'google'], function(){
     Route::get('/redirect', [GoogleAuthController::class, 'redirect']);
     Route::get('/callback', [GoogleAuthController::class, 'callback']);
+    Route::post('/logout', [GoogleAuthController::class, 'logout'])->middleware('auth:sanctum');
 });
+
+
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::group(['prefix' => 'calender'], function () {
         Route::apiResource('/', GoogleCalenderController::class, ['except' => ['store, update, show'], 'only' => ['index', 'destroy']]);
         Route::post('/add', [GoogleCalenderController::class, 'create']);
     });
-    Route::post('/google/logout', [GoogleAuthController::class, 'logout']);
 });
