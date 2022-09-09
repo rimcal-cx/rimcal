@@ -28,7 +28,6 @@ class GoogleAuthCallbackService
         $user->token = $user->createToken("Rimcal", ['*'], $token_expiry)->plainTextToken;
 
         return $user;
-
     }
 
 

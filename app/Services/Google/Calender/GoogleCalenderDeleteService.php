@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class GoogleCalenderDeleteService
 {
 
-    public function handle($calender): bool
+    public function handle(Calender $calender): bool
     {
         try{
             DB::beginTransaction();
@@ -19,7 +19,7 @@ class GoogleCalenderDeleteService
             $service = new GoogleCalender($client);
             $service->events->delete('primary', $calender->event_id);
             $calender->attendees()->delete();
-            Calender::whereId($calender->id)->delete();
+            $calender->delete();
             DB::commit();
             return true;
         }catch(Exception $e){

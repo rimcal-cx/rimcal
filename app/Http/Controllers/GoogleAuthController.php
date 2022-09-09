@@ -23,7 +23,7 @@ class GoogleAuthController extends BaseController
 
     public function logout()
     {
-        $result = (new GoogleAuthRevokeService())->handle();
+        (new GoogleAuthRevokeService())->handle();
         return $this->response('Logout successfull', 200);
     }
 }

@@ -6,14 +6,14 @@ use App\Models\Calender;
 use App\Models\CalenderAttendee;
 use App\Services\Google\GoogleAuthClient;
 use Exception;
-use Google\Service\Calendar;
+use Google\Service\Calendar as GoogleCalender;
 use Google\Service\Calendar\Event;
 use Illuminate\Support\Facades\DB;
 
 class GoogleCalenderCreateService
 {
 
-    public function handle($request): object
+    public function handle($request): Calender
     {
         try{
             DB::beginTransaction();
@@ -64,9 +64,9 @@ class GoogleCalenderCreateService
 
     }
 
-    private function addToGoogleCalender($client, $request, $attendees, $localCalender)
+    private function addToGoogleCalender($client, $request, $attendees, $localCalender): Event
     {
-        $service = new Calendar($client);
+        $service = new GoogleCalender($client);
 
         if($request->calender_id !== null){
             $service->events->delete('primary', $localCalender->event_id);
