@@ -5,12 +5,12 @@ namespace App\Services\Google;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
-
+use Illuminate\Support\Collection;
 
 class GoogleAuthCallbackService
 {
 
-    public function handle()
+    public function handle(): User
     {
         $gUser = Socialite::driver('google')->stateless()->user();
         $user = User::updateOrCreate([
@@ -25,9 +25,9 @@ class GoogleAuthCallbackService
             'google_refresh_token' => $gUser->refreshToken,
         ]);
 
-        Auth::login($user);
+        $user->token = $user->createToken("API TOKEN")->plainTextToken;
 
-        return Auth::user();
+        return $user;
 
     }
 

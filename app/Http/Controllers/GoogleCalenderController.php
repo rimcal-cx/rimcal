@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\Google\Calender\GoogleCalenderCreateService;
 use App\Http\Resources\Google\Calender\GoogleCalenderResource;;
 use App\Http\Requests\Google\Calender\CalenderCreateRequest;
+use App\Models\Calender;
 use App\Services\Google\Calender\GoogleCalenderDeleteService;
 use App\Services\Google\Calender\GoogleCalenderListService;
 
@@ -38,9 +39,9 @@ class GoogleCalenderController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function delete($calenderId)
+    public function destroy(Calender $calender)
     {
-        (new GoogleCalenderDeleteService())->handle($calenderId);
+        (new GoogleCalenderDeleteService())->handle($calender);
         return $this->response('Event deleted successfully', 200);
     }
 }

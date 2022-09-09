@@ -6,11 +6,12 @@ use Google\Client;
 use App\Models\User;
 use Exception;
 use Google_Service_Calendar;
+use PhpParser\Node\Expr\Cast\Object_;
 
 class GoogleAuthClient
 {
 
-    public function handle()
+    public function handle(): object
     {
         $client = new Client();
         $client->setApplicationName('RimCal');
@@ -20,7 +21,7 @@ class GoogleAuthClient
         $client->setAccessType('offline');
         $client->setApprovalPrompt('force');// select_account consent
         $client->setPrompt('consent');
-        $user = User::whereId(1)->whereNotNull('google_id')->first();
+        $user = User::whereId(auth()->user()->id)->whereNotNull('google_id')->first();
 
         if(empty($user)){
             throw new Exception('Please login with google');

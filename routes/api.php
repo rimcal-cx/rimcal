@@ -20,9 +20,10 @@ Route::group(['prefix' => 'google', 'middleware' => ['web']], function(){
     Route::get('/redirect', [GoogleAuthController::class, 'redirect']);
     Route::get('/callback', [GoogleAuthController::class, 'callback']);
 });
-
-Route::group(['prefix' => 'calender'], function(){
-    Route::apiResource('/', GoogleCalenderController::class);
-    Route::post('/add', [GoogleCalenderController::class, 'create']);
-    Route::delete('/delete/{calenderId}', [GoogleCalenderController::class, 'delete']);
+Route::group(['middleware' => ['auth:sanctum']], function(){
+    Route::group(['prefix' => 'calender'], function () {
+        Route::apiResource('/', GoogleCalenderController::class, ['except' => ['store, update, show'], 'only' => ['index', 'destroy']]);
+        Route::post('/add', [GoogleCalenderController::class, 'create']);
+    });
+    Route::post('/google/logout', [GoogleAuthController::class, 'logout']);
 });
