@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 class GoogleCalenderCreateService
 {
 
-    public function handle($request)
+    public function handle($request): object
     {
         try{
             DB::beginTransaction();
@@ -25,7 +25,7 @@ class GoogleCalenderCreateService
                     'id' => $request->calender_id,
                 ],
                 [
-                    'user_id' => 1,
+                    'user_id' => auth()->user()->id,
                     'summary' => $request->summary,
                     'location' => $request->location,
                     'description' => $request->description,

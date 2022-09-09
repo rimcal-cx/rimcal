@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\Google\GoogleAuthRedirectService;
 use App\Services\Google\GoogleAuthCallbackService;
+use App\Services\Google\GoogleAuthRevokeService;
 
 class GoogleAuthController extends BaseController
 {
@@ -18,5 +19,11 @@ class GoogleAuthController extends BaseController
     {
         $result = (new GoogleAuthCallbackService())->handle();
         return $this->response('Login successfull', 200, ['user' => $result]);
+    }
+
+    public function logout()
+    {
+        $result = (new GoogleAuthRevokeService())->handle();
+        return $this->response('Logout successfull', 200);
     }
 }
