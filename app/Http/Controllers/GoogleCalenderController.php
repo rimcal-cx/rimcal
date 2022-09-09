@@ -8,6 +8,7 @@ use App\Http\Requests\Google\Calender\CalenderCreateRequest;
 use App\Models\Calender;
 use App\Services\Google\Calender\GoogleCalenderDeleteService;
 use App\Services\Google\Calender\GoogleCalenderListService;
+use Illuminate\Http\Response;
 
 class GoogleCalenderController extends BaseController
 {
@@ -16,7 +17,7 @@ class GoogleCalenderController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): Response
     {
         $result = (new GoogleCalenderListService())->handle();
         return $this->response('Event added to calender', 200, ['events' => GoogleCalenderResource::collection($result)]);
@@ -27,7 +28,7 @@ class GoogleCalenderController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(CalenderCreateRequest $request)
+    public function create(CalenderCreateRequest $request): Response
     {
         $result = (new GoogleCalenderCreateService())->handle($request);
         return $this->response('Event added to calender', 200, ['event' => new GoogleCalenderResource($result)]);
@@ -39,7 +40,7 @@ class GoogleCalenderController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Calender $calender)
+    public function destroy(Calender $calender): Response
     {
         (new GoogleCalenderDeleteService())->handle($calender);
         return $this->response('Event deleted successfully', 200);
