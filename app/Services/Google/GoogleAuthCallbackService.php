@@ -2,10 +2,8 @@
 
 namespace App\Services\Google;
 
-use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
-use Illuminate\Support\Collection;
 
 class GoogleAuthCallbackService
 {
