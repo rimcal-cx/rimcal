@@ -5,8 +5,6 @@ namespace App\Services\Google;
 use Google\Client;
 use App\Models\User;
 use Exception;
-use Google_Service_Calendar;
-use PhpParser\Node\Expr\Cast\Object_;
 
 class GoogleAuthClient
 {
