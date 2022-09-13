@@ -34,7 +34,6 @@ return (
 <Routes>
 <>
 <Route path='/' element={<Signup/>} exact/>
-{showEventModal && <Route path='/calender' element={<EventModal/>}/>}
 <Route path='/calender' element={<ComponentWrapper currentMonth={currentMonth}/>}/>
 </>
 </Routes>
