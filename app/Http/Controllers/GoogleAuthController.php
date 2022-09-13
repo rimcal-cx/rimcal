@@ -11,10 +11,10 @@ use Illuminate\Http\Response;
 class GoogleAuthController extends BaseController
 {
 
-    public function redirect(): RedirectResponse
+    public function redirect(): Response
     {
-        return (new GoogleAuthRedirectService())->handle();
-        // return $this->response('Google redirection successfull', 200, ['redirect_url' => $result->headers->get('Location')]);
+        $result = (new GoogleAuthRedirectService())->handle();
+        return $this->response('Google redirection successfull', 200, ['redirect_url' => $result->headers->get('Location')]);
     }
 
     public function callback(): Response
