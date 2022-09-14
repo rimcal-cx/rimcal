@@ -16,3 +16,4 @@ yarn-error.log
 /.vscode
 /storage/framework/
 /storage/logs/*.log
+/storage/logs/laravel.log
