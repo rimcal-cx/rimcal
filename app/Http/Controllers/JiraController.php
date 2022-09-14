@@ -33,6 +33,7 @@ class JiraController extends BaseController
 
     public function issues()
     {
+        echo 'hiii';exit;
         URequest::auth('somsubhra@rimsys.io', 'hX6wpQte0UUlY5LexuiV1482');
 
         $headers = array(
