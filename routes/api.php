@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\GoogleCalenderController;
+use App\Http\Controllers\JiraController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,3 +30,11 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::post('/add', [GoogleCalenderController::class, 'create']);
     });
 });
+
+Route::group(['prefix' => 'jira'], function(){
+    Route::post('/issues', [JiraController::class, 'issues']);
+    //Route::apiResource('/', JiraController::class)->except(['store', 'destroy', 'update', 'show']);
+});
+
+//Route::post('/jira//', [JiraController::class, 'getIssues']);
+//Route::get('/jira/index/', [JiraController::class, 'index']);

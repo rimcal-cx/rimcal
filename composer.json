@@ -15,6 +15,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/socialite": "^5.5",
         "laravel/tinker": "^2.7",
+        "mashape/unirest-php": "^3.0",
         "symfony/http-foundation": "^6.1"
     },
     "require-dev": {
