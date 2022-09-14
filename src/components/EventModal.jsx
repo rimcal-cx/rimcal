@@ -9,7 +9,6 @@ function EventModal() {
     const [title,settitle] =useState(selectedEvent?selectedEvent.title:"")
     const [desc,setdesc] =useState(selectedEvent?selectedEvent.desc:"")
     const [label,setclicklebel] =useState(labelsclass[0])
-    const [activeHover,setActiveHover] =useState(undefined)
 
     const HandleSubmit = ()=>{
 
@@ -34,10 +33,6 @@ function EventModal() {
     const handleDelte = (event)=>{
         DispatchCalEvents({type:"delete",payload:event})
         setshowEventModal(false)
-    }
-
-    const setHoverLabel = (i) => {
-        setActiveHover(i)
     }
 
   return (
@@ -83,8 +78,7 @@ function EventModal() {
                         labelsclass.map((lbl,i)=>(
                             <span key={i}
                             onClick={()=>{setclicklebel(lbl)}}
-                            onMouseOver={() => setHoverLabel(i)}
-                            className={`bg-${lbl}-500 w-7 h-7 rounded flex items-center justify-center cursor-pointer mx-1 ${activeHover === i ? 'p-2 rounded-l ring-2 ring-black' : null}`}
+                            className={`bg-${lbl}-500 w-7 h-7 rounded flex items-center justify-center cursor-pointer mx-1 hover:p-2 hover:rounded-l hover:ring-2 hover:ring-black`}
                             >
                 {
                     label === labelsclass &&  <HiPencilAlt className="w-7 h-7 text-gray-400" />
