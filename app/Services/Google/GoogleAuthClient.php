@@ -5,8 +5,6 @@ namespace App\Services\Google;
 use Google\Client;
 use App\Models\User;
 use Exception;
-use Google_Service_Calendar;
-use PhpParser\Node\Expr\Cast\Object_;
 
 class GoogleAuthClient
 {
@@ -17,7 +15,8 @@ class GoogleAuthClient
         $client->setApplicationName('RimCal');
         $client->setScopes(['https://www.googleapis.com/auth/calendar','https://www.googleapis.com/auth/userinfo']);
         $client->setIncludeGrantedScopes(true);
-        $client->setAuthConfig(storage_path('api/google_client_secret.json'));
+        $authConfig = config('google_client_secret.secret');
+        $client->setAuthConfig($authConfig);
         $client->setAccessType('offline');
         $client->setApprovalPrompt('force');// select_account consent
         $client->setPrompt('consent');
