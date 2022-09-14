@@ -1,10 +1,25 @@
-import React, {useState} from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router'
 import '../assets/custom-style.css'
 import { ImSpinner5 } from 'react-icons/im';
 
 const Signup =()=>{
     const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
+    const isBrowser = typeof window !== "undefined"
+
+    useEffect(() => {
+        if (isBrowser)
+            messageHandler(true)
+
+
+        return () => {
+            if (isBrowser)
+                messageHandler(false)
+        }
+    })
+
+
 
 
         /**
@@ -34,7 +49,28 @@ const Signup =()=>{
                 setLoading(false)
               }
             }, 200)
-          };
+          }
+
+          const messageHandler = (add) => {
+            if (add) return window.addEventListener('message', handleMessage)
+            return window.removeEventListener('message', handleMessage)
+          }
+
+          const handleMessage = (event) => {
+            if (event.data.user)
+              oauthComplete(event.data)
+            if (event.data.error)
+              alert('login error')
+          }
+
+          const oauthComplete = (result) => {
+            if (result.status === 'error')
+              return
+            setLoading(false)
+            console.log('--------------Login Info-----------------')
+            console.log(result)
+            navigate('/calender', { replace: true })
+          }
 
     return(
         <div className="w-full h-screen flex items-center justify-center">

@@ -5,7 +5,7 @@ import App from './App';
 import ContextWrapper from './context/ContextWrapper';
 import axios from 'axios'
 import {BrowserRouter} from 'react-router-dom'
-console.log(process.env)
+
 axios.defaults.baseURL = `${process.env.REACT_APP_API_URL}/api/`
 axios.defaults.headers = {
         'Access-Control-Allow-Origin' : '*',

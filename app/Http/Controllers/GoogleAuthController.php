@@ -19,8 +19,17 @@ class GoogleAuthController extends BaseController
 
     public function callback(): Response
     {
-        $result = (new GoogleAuthCallbackService())->handle();
-        return $this->response('Login successfull', 200, ['user' => $result]);
+        $user = (new GoogleAuthCallbackService())->handle();
+        return response(
+            view('complete', [
+                'json' => json_encode([
+                    'status' => 'success',
+                    'user' => $user,
+                    'token' => $user->token,
+                    'provider' => 'google'
+                ])
+            ])
+        )->cookie('token', $user->token, 0);
     }
 
     public function logout(): Response

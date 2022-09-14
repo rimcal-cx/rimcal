@@ -20,15 +20,15 @@ const [currentMonth ,setCurrentMonth] = useState(getMonth())
 const {monthIndex,showEventModal} = useContext(GlobalContext)
 useEffect(()=>{
 setCurrentMonth(getMonth(monthIndex))
-axios.get('google/redirect')
-.then(function (response) {
-    // handle success
-    console.log(response);
-})
-.catch(function (error) {
-    // handle error
-    console.log(error);
-});
+// axios.get('google/redirect')
+// .then(function (response) {
+//     // handle success
+//     console.log(response);
+// })
+// .catch(function (error) {
+//     // handle error
+//     console.log(error);
+// });
 },[monthIndex])
 return (
 <Routes>
