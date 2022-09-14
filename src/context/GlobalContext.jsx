@@ -12,8 +12,8 @@ const GlobalContext = createContext({
     DispatchCalEvents:({type,payload})=>{},
     saveEvents:[],
     selectedEvent:null,
-    setselectedEvent:()=>{ alert("HMMM")}
-
-
+    setselectedEvent:()=>{ alert("HMMM")},
+    token:{},
+    setToken:()=>{}
 })
 export default GlobalContext

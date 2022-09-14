@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from 'react-router'
 import '../assets/custom-style.css'
 import { ImSpinner5 } from 'react-icons/im';
+import GlobalContext from "../context/GlobalContext";
+
+
 
 const Signup =()=>{
+    const {token,setToken} = useContext(GlobalContext)
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
     const isBrowser = typeof window !== "undefined"
@@ -69,6 +73,8 @@ const Signup =()=>{
             setLoading(false)
             console.log('--------------Login Info-----------------')
             console.log(result)
+            setToken(result)
+
             navigate('/calender', { replace: true })
           }
 

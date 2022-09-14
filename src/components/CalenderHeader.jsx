@@ -1,9 +1,13 @@
+import axios from 'axios';
 import dayjs from 'dayjs';
 import React, { useContext } from 'react'
+import { useNavigate } from 'react-router';
+
 // import { AiFillCaretRight,AiFillCaretLeft } from "react-icons/ai";
 import GlobalContext from '../context/GlobalContext';
 function CalenderHeader() {
-  const {monthIndex,setMonthIndex} = useContext(GlobalContext)
+    const nevigate =useNavigate()
+  const {monthIndex,setMonthIndex,token,setToken} = useContext(GlobalContext)
   const prevChange=()=>{
     setMonthIndex(monthIndex-1)
   }
@@ -12,6 +16,20 @@ function CalenderHeader() {
   }
   const reset=()=>{
     setMonthIndex(monthIndex === dayjs().month()?monthIndex+Math.random():dayjs().month())
+  }
+
+  const logOut=async ()=>{
+    console.log(token);
+    const headers={
+        Authorization:`Bearer ${token.token}`
+    }
+    const {status} =  await axios.post('google/logout',{},{headers})
+
+    if (status === 200) {
+        setToken({})
+        nevigate('/',{replace:true})
+    }
+
   }
   return (
     <header className='px-2 py-4 flex items-center'>
@@ -29,6 +47,9 @@ function CalenderHeader() {
      <h2 className='ml-4 text-xl text-grey-500 font-bold'>
         {dayjs(new Date(dayjs().year(),monthIndex)).format("MMMM YYYY")}
      </h2>
+     <button className='border hover:bg-red-200 rounded py-2 px-4 ml-5' onClick={logOut}>
+      Logout
+     </button>
       </header>
   )
 }
