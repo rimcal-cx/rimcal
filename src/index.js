@@ -6,6 +6,7 @@ import ContextWrapper from './context/ContextWrapper';
 import { AuthProvider } from './context/AuthContext';
 import axios from 'axios'
 import {BrowserRouter} from 'react-router-dom'
+import 'react-toastify/dist/ReactToastify.min.css';
 
 axios.defaults.baseURL = `${process.env.REACT_APP_API_URL}/api/`
 axios.defaults.headers = {

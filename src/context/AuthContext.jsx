@@ -2,6 +2,7 @@ import { createContext, useState, useContext, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "../utilities/useLocalStorage";
 import axios  from "axios";
+import { toast, ToastContainer } from 'react-toastify';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -16,11 +17,23 @@ export const AuthProvider = ({ children }) => {
         'Authorization': `Bearer ${tokenInfo}`
     }
 
-    navigate("/calendar", { replace: true });
-
     if (!user) {
-        const userInfo = data ? data.user : (await axios.get('/me')).data.data;
-        setUser(userInfo);
+        try {
+            const userInfo = data ? data.user : (await axios.get('/me')).data.data;
+            setUser(userInfo);
+            if (data) {
+                toast.success("Login Successful !", {
+                    position: toast.POSITION.TOP_LEFT,
+                    toastId: 'login-id',
+                    autoClose: 2000,
+                  });
+            }
+
+            navigate("/calendar", { replace: true });
+        } catch {
+            setToken(null)
+            setUser(null)
+        }
     }
 
   }
@@ -58,7 +71,12 @@ export const AuthProvider = ({ children }) => {
     }),
     [user]
   );
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={value}>
+    <>
+    <ToastContainer />
+    {children}
+    </>
+    </AuthContext.Provider>;
 };
 
 export const useAuth = () => {
