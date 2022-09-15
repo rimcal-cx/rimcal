@@ -31,7 +31,10 @@ class CalendarCreateRequest extends FormRequest
             'start_datetime' => 'required|string',
             'end_datetime' => 'required|string',
             'timezone' => 'required|string',
-            'attendees' => 'nullable|array',
+            'attendees' => 'min:1|array',
+            'attendees.*.id' => 'required|integer',
+            'attendees.*.name' => 'required|string',
+            'attendees.*.email' => 'required|string',
             'remind_before_in_mins' => 'nullable|integer',
             'all_day' => 'required|boolean: true, false'
         ];
