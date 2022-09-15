@@ -10,17 +10,45 @@ function EventModal() {
     const [desc,setdesc] =useState(selectedEvent?selectedEvent.desc:"")
     const [label,setclicklebel] =useState(labelsclass[0])
 
-    const HandleSubmit = ()=>{
+    const HandleSubmit = async ()=>{
 
-        const CalendarEvents={
-            title:title,
-            desc:desc,
-            label:label,
-            day:clickDay.valueOf(),
-            id: selectedEvent? selectedEvent.id:Date.now()
-
+        const calendarEvents = {
+            calendar_id: null,
+            summary: title,
+            description: desc,
+            location: 'Kolkata',
+            label: label,
+            start_datetime: clickDay.format("YYYY-MM-DDTHH:mm:ss").toString(),
+            end_datetime: clickDay.format("YYYY-MM-DDTHH:mm:ss").toString(),
+            //id: selectedEvent? selectedEvent.id:Date.now()
+            timezone: 'Asia/Kolkata',
+            all_day: false,
+            attendees: ['surajit@rimsys.io'],
+            remind_before_in_mins: 10
         }
+        console.log(calendarEvents)
 
+        // const newPaylod = {
+        //     calendar_id: null,
+        //     summary: "bac",
+        //     description: "fs",
+        //     location: "Kolkata",
+        //     start_datetime: "2022-09-18T09:00:00",
+        //     end_datetime: "2022-09-18T10:00:00",
+        //     timezone: "Asia/Kolkata",
+        //     all_day: false,
+        //     remind_before_in_mins: 10,
+        //     attendees: ["surajit@rimsys.io"]
+        // }
+
+        const result = await (axios.post('calendar/add', {...calendarEvents} ))
+        // .then((res) => {
+        //     console.log('222')
+        //     console.log(res)
+        // })
+
+        console.log('---------------------')
+        console.log(result)
         if (selectedEvent) {
             DispatchCalEvents({type:"update",payload:CalendarEvents})
         }else{
@@ -62,7 +90,7 @@ function EventModal() {
                     <img src="https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678120-calendar-clock-512.png" alt="Close Modal"  className='w-7 h-7'/>
 
                 </span>
-                <p className='font-bold'>{clickDay.format("dddd,MMMM,DD")}</p>
+                <p className='font-bold'>{clickDay.format("dddd,MMMM,DD")} </p>
 
                 <span className='material-icons-outline text-gray-100'>
                 {/* https://w7.pngwing.com/pngs/321/444/png-transparent-education-organization-foundation-pedagogy-description-icon-angle-user-interface-design-text.png */}
