@@ -5,7 +5,7 @@ import axios from 'axios'
 
 function Day({day,rowIdx}) {
 
-    const[dayEvents,setDayevents] = useState([])
+    const[dayEvents,setDayevents,db_data] = useState([])
     const{
         setclickDay,
         setshowEventModal,
@@ -26,8 +26,9 @@ function Day({day,rowIdx}) {
     },[saveEvents])*/
 
     useEffect(()=>{
-        const events = saveEvents.filter(evt=>dayjs(evt.day).format("DD-MM-YY")===day.format("DD-MM-YY"))
-        setDayevents(events)
+        console.log(db_data);
+        // const events = saveEvents.filter(evt=>dayjs(evt.day).format("DD-MM-YY")===day.format("DD-MM-YY"))
+        // setDayevents(events)
     },[saveEvents,day])
 
     const currentDaystyle=()=>{

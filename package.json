@@ -12,10 +12,13 @@
     "react-icons": "^4.4.0",
     "react-router": "^6.3.0",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "react-toastify": "^9.0.8"
   },
   "scripts": {
     "start": "react-scripts start",
+    "seed": "php artisan migrate:fresh --seed",
+    "clean": "php artisan optimize:clear",
     "build": "npm run watch:css && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

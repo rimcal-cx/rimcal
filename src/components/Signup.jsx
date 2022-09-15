@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Navigate } from 'react-router'
 import '../assets/custom-style.css'
 import { ImSpinner5 } from 'react-icons/im';
 import { useAuth } from "../context/AuthContext";
@@ -12,8 +11,9 @@ const Signup =()=>{
     const isBrowser = typeof window !== "undefined"
 
     useEffect(() => {
-        if (isBrowser)
+        if (isBrowser) {
             messageHandler(true)
+        }
 
 
         return () => {
@@ -86,7 +86,6 @@ const Signup =()=>{
                         <p className={`btn-spinner ${!loading ? 'hidden' : 'show' }`}>
                             <ImSpinner5 className="animate-spin" />
                         </p>
-
                     </div>
                 </div>
             </div>

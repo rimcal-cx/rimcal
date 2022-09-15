@@ -45,7 +45,18 @@ function EventModal() {
             //id: selectedEvent? selectedEvent.id:Date.now()
             timezone: 'Asia/Kolkata',
             all_day: false,
-            attendees: ['surajit@rimsys.io'],
+            attendees: [
+                {
+                    "id": 1,
+                    "name": "Sadhukhan",
+                    "email": "surajit@rimsys.io"
+                },
+                {
+                    "id": 2,
+                    "name": "Tarun",
+                    "email": "tarun@rimsys.io"
+                }
+            ],
             remind_before_in_mins: 10
         }
         //console.log(calendarEvents)
