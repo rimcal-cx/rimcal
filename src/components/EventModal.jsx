@@ -56,11 +56,11 @@ function EventModal() {
         //console.log(result)
 
         // Save to local storage
-        if (selectedEvent) {
+        /*if (selectedEvent) {
             DispatchCalEvents({type:"update",payload:calendarEvents})
         } else {
             DispatchCalEvents({type:"push",payload:calendarEvents})
-        }
+        }*/
 
         // DispatchCalEvents({type:"push",payload:calendarEvents})
         setselectedEvent(null)

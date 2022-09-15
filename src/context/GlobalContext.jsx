@@ -1,4 +1,5 @@
-import  { createContext } from "react";
+import  { createContext, useEffect } from "react";
+import axios from 'axios'
 
 const GlobalContext = createContext({
     monthIndex:0,
@@ -15,5 +16,15 @@ const GlobalContext = createContext({
     setselectedEvent:()=>{console.log("HELLO-GLOBAL");},
     token:{},
     setToken:()=>{}
+})
+
+const loadEvents = async () => {
+    const result = (await axios.get('calendar'))
+    console.log(result)
+}
+
+useEffect(() => {
+    console.log('hiii')
+    loadEvents()
 })
 export default GlobalContext

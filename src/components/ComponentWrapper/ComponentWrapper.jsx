@@ -9,6 +9,12 @@ import EventModal from '../EventModal';
 const ComponentWrapper=({currentMonth})=>{
 
     const { showEventModal } = useContext(GlobalContext)
+
+    /*useEffect(() => {
+        const result = (axios.get('calendar/list'))
+        //setDayevents(events)
+    },[saveEvents, day])*/
+
     return (
         <div className='h-screen flex flex-col'>
         <CalendarHeader/>

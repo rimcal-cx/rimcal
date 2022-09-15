@@ -5,8 +5,6 @@ import axios from 'axios'
 
 function Day({day,rowIdx}) {
 
-    //const result = (axios.post('calendar/list', {...calendarEvents} ))
-
     const[dayEvents,setDayevents] = useState([])
     console.log(dayEvents)
     const{
@@ -16,10 +14,23 @@ function Day({day,rowIdx}) {
         selectedEvent,
         setselectedEvent,
       }=useContext(GlobalContext)
+
+    /*const loadEvents = aysnc () => {
+        const result = (await axios.get('calendar'))
+        console.log(result)
+    }
+
+    useEffect(()=>{
+        //const events = saveEvents.filter(evt=>dayjs(evt.day).format("DD-MM-YY")===day.format("DD-MM-YY"))
+        //setDayevents(events)
+        loadEvents()
+    },[saveEvents])*/
+
     useEffect(()=>{
         const events = saveEvents.filter(evt=>dayjs(evt.day).format("DD-MM-YY")===day.format("DD-MM-YY"))
         setDayevents(events)
     },[saveEvents,day])
+
     const currentDaystyle=()=>{
         return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")?"bg-blue-600 text-white rounded-full":""
     }
