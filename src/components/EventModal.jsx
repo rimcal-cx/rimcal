@@ -34,10 +34,11 @@ function EventModal() {
         DispatchCalEvents({type:"delete",payload:event})
         setshowEventModal(false)
     }
+
   return (
     <div className='h-screen w-full fixed left-0 top-0 flex justify-center items-center'>
         <div className='bg-white rounded-lg shadow-2xl w-1/4'>
-            <header className='bg-gray-100 px-4 py-2 justify-between items-center'>
+            <header className='bg-gray-100 px-4 py-2 flex justify-between'>
             {/* <span className='material-icons-outline text-gray-100'>
                     <img src="https://cdn3.iconfinder.com/data/icons/flat-actions-icons-9/792/Close_Icon_Dark-512.png" alt="" srcset="" className='w-7 h-7'/>
                 </span> */}
@@ -56,10 +57,10 @@ function EventModal() {
                 <div className='grid grid-cols-1/5 items-end gap-y-7'>
                     <div></div>
                     <input type="text" name="title" placeholder='Add Title' className='border-0 pt-3 text-gray-600 text-xl font-semibold pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus-ring-0 focus-border-blue-500' value={title} onChange={(e)=>settitle(e.target.value)}/>
-                
+
                     <span className='material-icons-outline text-gray-100'>
                     <img src="https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678120-calendar-clock-512.png" alt="Close Modal"  className='w-7 h-7'/>
-                    
+
                 </span>
                 <p className='font-bold'>{clickDay.format("dddd,MMMM,DD")}</p>
 
@@ -77,7 +78,7 @@ function EventModal() {
                         labelsclass.map((lbl,i)=>(
                             <span key={i}
                             onClick={()=>{setclicklebel(lbl)}}
-                            className={`bg-${lbl}-500 w-6 h-6 rounded flex items-center justify-center cursor-pointer`}
+                            className={`bg-${lbl}-500 w-7 h-7 rounded flex items-center justify-center cursor-pointer mx-1 hover:p-2 hover:rounded-l hover:ring-2 hover:ring-black`}
                             >
                 {
                     label === labelsclass &&  <HiPencilAlt className="w-7 h-7 text-gray-400" />
@@ -88,7 +89,7 @@ function EventModal() {
                     }
                 </div>
                 </div>
-                
+
 
             </div>
             <footer className='flex w-100 justify-end p-3 mt-5 border-t'>

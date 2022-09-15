@@ -10,7 +10,7 @@ function savedEventReducer(state,{type,payload}){
       case "update":
         return state.map(evt=>evt.id === payload.id?payload:evt)
       case "delete":
-        return state.filter((evt)=>evt.id!==payload.id)  
+        return state.filter((evt)=>evt.id!==payload.id)
       default:
         throw new Error()
     }
@@ -31,14 +31,12 @@ function ContextWrapper(props) {
     const [showEventModal,setshowEventModal] =useState(false)
     const [selectedEvent,setselectedEvent] =useState(null)
     const [saveEvents,DispatchCalEvents] =useReducer(savedEventReducer,[],initEvents)
-    
-    useEffect(()=>{
 
-      console.log(saveEvents);
+    useEffect(()=>{
       localStorage.setItem("savedEvents",JSON.stringify(saveEvents))
 
     },[saveEvents,selectedEvent])
-    
+
     useEffect(()=>{
       if (smallcalenderMonth!=null) {
         setMonthIndex(smallcalenderMonth)
