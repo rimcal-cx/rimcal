@@ -12,7 +12,7 @@ function Day({day,rowIdx}) {
         saveEvents,
         selectedEvent,
         setselectedEvent,
-        db_data
+        eventList
       }=useContext(GlobalContext)
 
     /*const loadEvents = aysnc () => {
@@ -27,9 +27,9 @@ function Day({day,rowIdx}) {
     },[saveEvents])*/
 
     useEffect(()=>{
-        const events = db_data.filter(evt=>dayjs(evt.start_date).format("DD-MM-YY")===day.format("DD-MM-YY"))
+        const events = eventList?.filter(evt=>dayjs(evt.start_date).format("DD-MM-YY")===day.format("DD-MM-YY"))
         setDayevents(events)
-    },[db_data])
+    },[eventList])
 
     const currentDaystyle=()=>{
         return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")?"bg-blue-600 text-white rounded-full":""
@@ -51,7 +51,7 @@ function Day({day,rowIdx}) {
 
         <div className='flex-1 cursor-pointer' >
 
-        {dayEvents.map((evt,idx)=>(
+        {dayEvents?.map((evt,idx)=>(
             <div className={`bg-${evt.label}-500 p-1 mr-3 text-gray-600 text-sm rounded mb-1 truncate`}
             key={idx}
             onClick={()=>{setselectedEvent(evt);setshowEventModal(true)}}

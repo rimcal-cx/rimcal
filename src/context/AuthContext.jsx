@@ -3,14 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "../utilities/useLocalStorage";
 import axios  from "axios";
 import { toast, ToastContainer } from 'react-toastify';
-import GlobalContext from "./GlobalContext";
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useLocalStorage("_auth_rimcal_token", null);
   const [user,setUser] = useState(null)
   const navigate = useNavigate();
-  const { db_data, setDbdata } = useContext(GlobalContext)
 
   if (token?.token) {
     axios.defaults.headers = {
@@ -19,10 +18,6 @@ export const AuthProvider = ({ children }) => {
     }
 
   }
-  const loadEvents =async ()=>{
-        const result = await (await axios.get('calendar'))
-        setDbdata(result)
-    }
 
 
   const setGlobalAuthentication = async (data = null) => {
@@ -38,20 +33,15 @@ export const AuthProvider = ({ children }) => {
             setUser(userInfo);
             if (data) {
                 toast.success("Login Successful !", {
-                    position: toast.POSITION.TOP_LEFT,
                     toastId: 'login-id',
-                    autoClose: 2000,
                   });
             }
 
             navigate("/calendar", { replace: true });
         } catch {
-            setToken(null)
-            setUser(null)
+            logout()
         }
     }
-
-    await loadEvents()
 
   }
 
@@ -90,7 +80,16 @@ export const AuthProvider = ({ children }) => {
   );
   return <AuthContext.Provider value={value}>
     <>
-    <ToastContainer />
+    <ToastContainer
+        autoClose="4000"
+        position="top-right"
+        closeButton={true}
+        pauseOnHover={false}
+        pauseOnFocusLoss={false}
+        closeOnClick={false}
+        newestOnTop={true}
+        draggable={false}
+    />
     {children}
     </>
     </AuthContext.Provider>;

@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import axios from 'axios'
 
 export function getMonth(month=dayjs().month()){
     month = Math.floor(month)
@@ -13,4 +14,8 @@ export function getMonth(month=dayjs().month()){
 
     })
     return daysMatrix
+}
+
+export const loadEvents = async () => {
+    return (await axios.get('calendar')).data.data
 }
