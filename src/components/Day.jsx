@@ -1,9 +1,14 @@
 import dayjs from 'dayjs'
 import React, { useContext, useEffect, useState } from 'react'
 import GlobalContext from '../context/GlobalContext'
+import axios from 'axios'
 
 function Day({day,rowIdx}) {
+
+    //const result = (axios.post('calendar/list', {...calendarEvents} ))
+
     const[dayEvents,setDayevents] = useState([])
+    console.log(dayEvents)
     const{
         setclickDay,
         setshowEventModal,
@@ -39,7 +44,7 @@ function Day({day,rowIdx}) {
             key={idx}
             onClick={()=>{setselectedEvent(evt)}}
             >
-                {evt.title}
+                {evt.summary}
             </div>
 
         ))}
