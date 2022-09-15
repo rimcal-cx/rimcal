@@ -43,7 +43,7 @@ function EventModal() {
             {/* <span className='material-icons-outline text-gray-100'>
                     <img src="https://cdn3.iconfinder.com/data/icons/flat-actions-icons-9/792/Close_Icon_Dark-512.png" alt="" srcset="" className='w-7 h-7'/>
                 </span> */}
-                <button onClick={()=>{setshowEventModal(false)}}>
+                <button onClick={()=>{setshowEventModal(false);setselectedEvent(null)}}>
                 <span className='material-icons-outline text-gray-100'>
                     <img src="https://cdn3.iconfinder.com/data/icons/flat-actions-icons-9/792/Close_Icon_Dark-512.png" alt="Close Modal"  className='w-7 h-7'/>
                 </span>
