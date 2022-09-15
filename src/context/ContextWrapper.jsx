@@ -26,7 +26,7 @@ const initEvents=()=>{
 
 function ContextWrapper(props) {
     const [monthIndex,setMonthIndex] =useState(dayjs().month())
-    const [smallcalenderMonth,setsmallMonthCalender] =useState(null)
+    const [smallcalendarMonth,setsmallMonthCalendar] =useState(null)
     const [clickDay,setclickDay] =useState(dayjs())
     const [showEventModal,setshowEventModal] =useState(false)
     const [selectedEvent,setselectedEvent] =useState(null)
@@ -38,13 +38,13 @@ function ContextWrapper(props) {
     },[saveEvents,selectedEvent])
 
     useEffect(()=>{
-      if (smallcalenderMonth!=null) {
-        setMonthIndex(smallcalenderMonth)
+      if (smallcalendarMonth!=null) {
+        setMonthIndex(smallcalendarMonth)
       }
-    },[smallcalenderMonth])
+    },[smallcalendarMonth])
   return (
 
-    <GlobalContext.Provider value={{monthIndex,setMonthIndex,smallcalenderMonth,setsmallMonthCalender,setclickDay,clickDay,showEventModal,setshowEventModal,DispatchCalEvents,saveEvents,setselectedEvent,selectedEvent}}>
+    <GlobalContext.Provider value={{monthIndex,setMonthIndex,smallcalendarMonth,setsmallMonthCalendar,setclickDay,clickDay,showEventModal,setshowEventModal,DispatchCalEvents,saveEvents,setselectedEvent,selectedEvent}}>
         {props.children}
     </GlobalContext.Provider>
 

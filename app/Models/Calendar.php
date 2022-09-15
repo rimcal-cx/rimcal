@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Calender extends Model
+class Calendar extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'calenders';
+    protected $table = 'calendars';
 
     protected $fillable = [
         'id',
@@ -37,6 +37,6 @@ class Calender extends Model
     ];
 
     public function attendees(){
-        return $this->hasMany(CalenderAttendee::class, 'calender_id', 'id');
+        return $this->hasMany(CalendarAttendee::class, 'calendar_id', 'id');
     }
 }

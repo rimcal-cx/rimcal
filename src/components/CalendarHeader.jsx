@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext'
 
 // import { AiFillCaretRight,AiFillCaretLeft } from "react-icons/ai";
 import GlobalContext from '../context/GlobalContext';
-function CalenderHeader() {
+function CalendarHeader() {
   const { logout: authLogout } = useAuth()
   const {monthIndex,setMonthIndex} = useContext(GlobalContext)
   const prevChange=()=>{
@@ -49,4 +49,4 @@ function CalenderHeader() {
   )
 }
 
-export default CalenderHeader
+export default CalendarHeader

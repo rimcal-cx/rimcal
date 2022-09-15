@@ -31,7 +31,7 @@ return (
 <Routes>
 <>
 <Route path='/' element={<Signup/>} exact/>
-<Route path='/calender' element={
+<Route path='/calendar' element={
      <ProtectedRoute>
         <ComponentWrapper currentMonth={currentMonth}/>
    </ProtectedRoute>

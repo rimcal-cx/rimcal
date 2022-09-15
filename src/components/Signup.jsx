@@ -76,7 +76,7 @@ const Signup =()=>{
                     <img src="https://dev.rimsys.dev/logo/logo-bar.png" alt="Workflow" className="h-12 w-auto" />
                 </div>
                 <div className="w-full py-20 m-4 bg-slate-100 mx-auto flex justify-center items-center">
-                {/* <Link to="/calender" className="h-3 border-2 rounded p-3 hover:bg-indigo-200 font-bold"> Go to Calender</Link> */}
+                {/* <Link to="/calendar" className="h-3 border-2 rounded p-3 hover:bg-indigo-200 font-bold"> Go to Calendar</Link> */}
                     <div className={`${!loading ? 'cursor-pointer' : 'pointer-events-none' } google-btn mx-auto`} onClick={() => login()}>
                         <div className="google-icon-wrapper">
                             <img className="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="g-sign"/>

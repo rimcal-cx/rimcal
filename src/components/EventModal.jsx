@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import GlobalContext from '../context/GlobalContext'
 import { HiPencilAlt } from "react-icons/hi";
+import axios from 'axios';
 
 function EventModal() {
     const {setshowEventModal,clickDay,DispatchCalEvents,selectedEvent } = useContext(GlobalContext)
@@ -10,24 +11,34 @@ function EventModal() {
     const [desc,setdesc] =useState(selectedEvent?selectedEvent.desc:"")
     const [label,setclicklebel] =useState(labelsclass[0])
 
-    const HandleSubmit = ()=>{
+    const HandleSubmit = async ()=>{
 
-        const calenderEvents={
-            title:title,
-            desc:desc,
-            label:label,
-            day:clickDay.valueOf(),
-            id: selectedEvent? selectedEvent.id:Date.now()
-
+        const calendarEvents = {
+            calendar_id: null,
+            summary: title,
+            description: desc,
+            location: null,
+            label: label,
+            start_datetime: clickDay.valueOf(),
+            end_datetime: clickDay.valueOf(),
+            //id: selectedEvent? selectedEvent.id:Date.now()
+            timezone: null,
+            all_day: false,
+            remind_before_in_mins: null
         }
+        console.log(calendarEvents)
 
+        const {data} = await axios.post('calendar/add', calendarEvents)
+
+        console.log('---------------------')
+        console.log(data)
         if (selectedEvent) {
-            DispatchCalEvents({type:"update",payload:calenderEvents})
-        }else{
-            DispatchCalEvents({type:"push",payload:calenderEvents})
+            //DispatchCalEvents({type:"update", payload:calendarEvents})
+        } else {
+            //DispatchCalEvents({type:"push", payload:calendarEvents})
         }
 
-        // DispatchCalEvents({type:"push",payload:calenderEvents})
+        // DispatchCalEvents({type:"push",payload:calendarEvents})
         setshowEventModal(false)
     }
     const handleDelte = (event)=>{

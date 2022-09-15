@@ -3,11 +3,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import GlobalContext from '../context/GlobalContext'
 import { getMonth } from '../utilities/util'
 
-function SmallCalender() {
+function SmallCalendar() {
     const [currentmonthIndex, setcurrentMonthIndex] = useState(dayjs().month())
     const [currentmonth, setcurrentMonth] = useState(getMonth())
 
-    const { monthIndex,setsmallMonthCalender,clickDay,setclickDay } = useContext(GlobalContext)
+    const { monthIndex,setsmallMonthCalendar,clickDay,setclickDay } = useContext(GlobalContext)
 
     const prevMonth = () => {
         setcurrentMonthIndex(currentmonthIndex - 1)
@@ -71,7 +71,7 @@ function SmallCalender() {
                         <React.Fragment key={index}>
                             {
                                 row.map((day, idx) => (
-                                    <button key={idx} onClick={()=>{setsmallMonthCalender(currentmonthIndex);setclickDay(day)}} className={`py-1 w-full ${cssDayclass(day)}`}>
+                                    <button key={idx} onClick={()=>{setsmallMonthCalendar(currentmonthIndex);setclickDay(day)}} className={`py-1 w-full ${cssDayclass(day)}`}>
                                         <span className='text-sm'>
                                             {day.format('D')}
                                         </span>
@@ -87,4 +87,4 @@ function SmallCalender() {
     )
 }
 
-export default SmallCalender
+export default SmallCalendar
