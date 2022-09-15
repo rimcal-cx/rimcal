@@ -46,4 +46,32 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public static $defaultUserAttendees = [
+        [
+            'id' => 1,
+            'name' => 'Khandkar Ujairul Islam',
+            'email' => 'ujairul@rimsys.io'
+        ],
+        [
+            'id' => 2,
+            'name' => 'Somsubhra Saha',
+            'email' => 'somsubhra@rimsys.io'
+        ],
+        [
+            'id' => 3,
+            'name' => 'Tarun Adhikary',
+            'email' => 'tarun@rimsys.io'
+        ],
+        [
+            'id' => 4,
+            'name' => 'Amit Kadam',
+            'email' => 'amit.kadam@rimsys.io'
+        ],
+        [
+            'id' => 5,
+            'name' => 'Surajit Sadhukhan',
+            'email' => 'surajit@rimsys.io'
+        ],
+    ];
 }
