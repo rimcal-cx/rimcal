@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import GlobalContext from '../context/GlobalContext'
 import { HiPencilAlt } from "react-icons/hi";
+import axios from 'axios';
 
 function EventModal() {
     const {setshowEventModal,clickDay,DispatchCalEvents,selectedEvent } = useContext(GlobalContext)
@@ -50,12 +51,12 @@ function EventModal() {
         console.log('---------------------')
         console.log(result)
         if (selectedEvent) {
-            DispatchCalEvents({type:"update",payload:CalendarEvents})
+            DispatchCalEvents({type:"update",payload:calendarEvents})
         }else{
-            DispatchCalEvents({type:"push",payload:CalendarEvents})
+            DispatchCalEvents({type:"push",payload:calendarEvents})
         }
 
-        // DispatchCalEvents({type:"push",payload:CalendarEvents})
+        // DispatchCalEvents({type:"push",payload:calendarEvents})
         setshowEventModal(false)
     }
     const handleDelte = (event)=>{
