@@ -18,7 +18,7 @@ function EventModal() {
 
     const HandleSubmit = ()=>{
 
-        const calenderEvents={
+        const CalendarEvents={
             title:title,
             desc:desc,
             label:label,
@@ -33,13 +33,14 @@ function EventModal() {
         }
 
         if (selectedEvent) {
-            DispatchCalEvents({type:"update",payload:calenderEvents})
+            DispatchCalEvents({type:"update",payload:CalendarEvents})
         }else{
-            DispatchCalEvents({type:"push",payload:calenderEvents})
+            DispatchCalEvents({type:"push",payload:CalendarEvents})
         }
 
         setselectedEvent(null)
         // DispatchCalEvents({type:"push",payload:calenderEvents})
+        // DispatchCalEvents({type:"push",payload:CalendarEvents})
         setshowEventModal(false)
     }
     const handleDelte = (event)=>{

@@ -1,12 +1,12 @@
 import React from 'react'
 import CreateEventButton from './CreateEventButton'
-import SmallCalender from './SmallCalender'
+import SmallCalendar from './SmallCalendar'
 
 function SideBar() {
   return (
     <aside className='border p-5 w-64'>
       <CreateEventButton/>
-      <SmallCalender/>
+      <SmallCalendar/>
     </aside>
   )
 }

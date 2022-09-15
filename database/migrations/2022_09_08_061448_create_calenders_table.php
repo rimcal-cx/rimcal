@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('calenders', function (Blueprint $table) {
+        Schema::create('calendars', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained();
             $table->string('event_id')->nullable();
@@ -37,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('calenders');
+        Schema::dropIfExists('Calendars');
     }
 };

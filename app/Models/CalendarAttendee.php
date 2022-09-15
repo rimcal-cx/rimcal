@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CalenderAttendee extends Model
+class CalendarAttendee extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'calender_attendees';
+    protected $table = 'calendar_attendees';
 
     protected $fillable = [
         'id',
-        'calender_id',
+        'calendar_id',
         'user_id',
         'email'
     ];

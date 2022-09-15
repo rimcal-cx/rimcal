@@ -3,8 +3,8 @@ import  { createContext } from "react";
 const GlobalContext = createContext({
     monthIndex:0,
     setMonthIndex:(index)=>{},
-    smallcalenderMonth:0,
-    setsmallMonthCalender:(index)=>{},
+    smallCalendarMonth:0,
+    setsmallMonthCalendar:(index)=>{},
     clickDay:0,
     setclickDay:(day)=>{},
     showEventModal:0,
