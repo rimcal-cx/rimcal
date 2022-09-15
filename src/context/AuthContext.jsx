@@ -19,8 +19,13 @@ export const AuthProvider = ({ children }) => {
     navigate("/calendar", { replace: true });
 
     if (!user) {
-        const userInfo = data ? data.user : (await axios.get('/me')).data.data;
-        setUser(userInfo);
+        try {
+            const userInfo = data ? data.user : (await axios.get('/me')).data.data;
+            setUser(userInfo);
+        } catch {
+            setToken(null)
+            setUser(null)
+        }
     }
 
   }
