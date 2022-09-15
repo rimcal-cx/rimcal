@@ -43,11 +43,12 @@ class GoogleCalendarCreateService
             }
 
             foreach($request->attendees as $attendee){
-                $attendees[] = ['email' => $attendee];
+                $attendees[] = ['email' => $attendee['email']];
                 $calAttendees[] = [
                     'calendar_id' => $calendar->id,
-                    'user_id' => null,
-                    'email' => $attendee
+                    'user_id' => $attendee['id'],
+                    'name' => $attendee['name'],
+                    'email' => $attendee['email']
                 ];
             };
 

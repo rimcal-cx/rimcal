@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\GoogleCalendarController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,4 +29,5 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::apiResource('/', GoogleCalendarController::class, ['except' => ['store, update, show'], 'only' => ['index', 'destroy']]);
         Route::post('/add', [GoogleCalendarController::class, 'create']);
     });
+    Route::get('/users', [UserController::class, 'index']);
 });

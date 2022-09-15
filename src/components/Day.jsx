@@ -13,6 +13,7 @@ function Day({day,rowIdx}) {
         setclickDay,
         setshowEventModal,
         saveEvents,
+        selectedEvent,
         setselectedEvent,
       }=useContext(GlobalContext)
     useEffect(()=>{
@@ -24,7 +25,10 @@ function Day({day,rowIdx}) {
     }
 
   return (
-    <div className='border border-grey-200 flex flex-col hover:bg-sky-200 font-bold'>
+    <div className='border border-grey-200 flex flex-col hover:bg-sky-200 font-bold cursor-pointer' onClick={()=>{
+            setclickDay(day)
+            setshowEventModal(true)
+        }}>
         {/* {day.format()} */}
         <header className='flex flex-col item-center'>
             {
@@ -34,15 +38,12 @@ function Day({day,rowIdx}) {
             <p className={`text-sm p-1 my-1 text-center ${currentDaystyle()}`}>{day.format("DD")}</p>
         </header>
 
-        <div className='flex-1 cursor-pointer' onClick={()=>{
-            setclickDay(day)
-            setshowEventModal(true)
-        }}>
+        <div className='flex-1 cursor-pointer' >
 
         {dayEvents.map((evt,idx)=>(
             <div className={`bg-${evt.label}-500 p-1 mr-3 text-gray-600 text-sm rounded mb-1 truncate`}
             key={idx}
-            onClick={()=>{setselectedEvent(evt)}}
+            onClick={()=>{setselectedEvent(evt);setshowEventModal(true)}}
             >
                 {evt.summary}
             </div>
