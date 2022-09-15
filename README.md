@@ -5,8 +5,12 @@ You need node version 16 and php version 8.1.
    npm install
    composer install
    
+   ## Setup ENV file
+   -----------------------
+   cp .env.example .env
+   
    ## Migration
-   ---------------
+   -----------------------
    php artisan migrate --seed
    
    ## Running in Local
