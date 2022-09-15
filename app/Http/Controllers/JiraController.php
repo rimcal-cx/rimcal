@@ -35,7 +35,6 @@ class JiraController extends BaseController
     {
         //URequest::auth('somsubhra@rimsys.io', 'uoJAc237gxtVnA3pDa1t19FC');
 
-        //echo $auth = base64_encode("somsubhra@rimsys.io" . ":" . "codelogicx101");
         //echo $auth = 'uoJAc237gxtVnA3pDa1t19FC';
         //echo $auth = "somsubhra@rimsys.io" . ":" . "uoJAc237gxtVnA3pDa1t19FC";
         echo $auth = base64_encode("somsubhra@rimsys.io" . ":" . "uoJAc237gxtVnA3pDa1t19FC");
