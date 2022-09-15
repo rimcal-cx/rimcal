@@ -1,28 +1,28 @@
 <?php
 
-namespace App\Services\Google\Calender;
+namespace App\Services\Google\Calendar;
 
-use App\Models\Calender;
-use App\Models\CalenderAttendee;
+use App\Models\Calendar;
+use App\Models\CalendarAttendee;
 use App\Services\Google\GoogleAuthClient;
 use Exception;
-use Google\Service\Calendar as GoogleCalender;
+use Google\Service\Calendar as GoogleCalendar;
 use Google\Service\Calendar\Event;
 use Illuminate\Support\Facades\DB;
 
-class GoogleCalenderCreateService
+class GoogleCalendarCreateService
 {
 
-    public function handle($request): Calender
+    public function handle($request): Calendar
     {
         try{
             DB::beginTransaction();
             $client = (new GoogleAuthClient)->handle();
             $attendees = [];
 
-            $calender = Calender::updateOrCreate(
+            $Calendar = Calendar::updateOrCreate(
                 [
-                    'id' => $request->calender_id,
+                    'id' => $request->Calendar_id,
                 ],
                 [
                     'user_id' => auth()->user()->id,
@@ -37,25 +37,25 @@ class GoogleCalenderCreateService
                 ]
             );
 
-            if($request->calender_id !== null){
-                CalenderAttendee::whereCalenderId($request->calender_id)->delete();
+            if($request->Calendar_id !== null){
+                CalendarAttendee::whereCalendarId($request->Calendar_id)->delete();
             }
 
             foreach($request->attendees as $attendee){
                 $attendees[] = ['email' => $attendee];
                 $calAttendees[] = [
-                    'calender_id' => $calender->id,
+                    'Calendar_id' => $Calendar->id,
                     'user_id' => null,
                     'email' => $attendee
                 ];
             };
 
-            CalenderAttendee::insert($calAttendees);
-            $event = $this->addToGoogleCalender($client, $request, $attendees, $calender);
-            $calender->event_id = $event->id;
-            $calender->save();
+            CalendarAttendee::insert($calAttendees);
+            $event = $this->addToGoogleCalendar($client, $request, $attendees, $Calendar);
+            $Calendar->event_id = $event->id;
+            $Calendar->save();
             DB::commit();
-            return $calender;
+            return $Calendar;
         }catch(Exception $e){
             DB::rollBack();
             throw $e;
@@ -64,12 +64,12 @@ class GoogleCalenderCreateService
 
     }
 
-    private function addToGoogleCalender($client, $request, $attendees, $localCalender): Event
+    private function addToGoogleCalendar($client, $request, $attendees, $localCalendar): Event
     {
-        $service = new GoogleCalender($client);
+        $service = new GoogleCalendar($client);
 
-        if($request->calender_id !== null){
-            $service->events->delete('primary', $localCalender->event_id);
+        if($request->Calendar_id !== null){
+            $service->events->delete('primary', $localCalendar->event_id);
         }
         $event = new Event(array(
             'summary' => $request->summary,

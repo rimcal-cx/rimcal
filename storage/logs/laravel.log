@@ -3188,3 +3188,88 @@
 #38 /home/tarun/Hacakathon_rimcal/rimcal/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(16): require_once('...')
 #39 {main}
 "} 
+[2022-09-15 08:55:10] local.ERROR: {
+  "error": {
+    "code": 401,
+    "message": "Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.",
+    "errors": [
+      {
+        "message": "Invalid Credentials",
+        "domain": "global",
+        "reason": "authError",
+        "location": "Authorization",
+        "locationType": "header"
+      }
+    ],
+    "status": "UNAUTHENTICATED"
+  }
+}
+ {"userId":1,"exception":"[object] (Google\\Service\\Exception(code: 401): {
+  \"error\": {
+    \"code\": 401,
+    \"message\": \"Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.\",
+    \"errors\": [
+      {
+        \"message\": \"Invalid Credentials\",
+        \"domain\": \"global\",
+        \"reason\": \"authError\",
+        \"location\": \"Authorization\",
+        \"locationType\": \"header\"
+      }
+    ],
+    \"status\": \"UNAUTHENTICATED\"
+  }
+}
+ at /var/www/html/RimCal/rimcal/vendor/google/apiclient/src/Http/REST.php:134)
+[stacktrace]
+#0 /var/www/html/RimCal/rimcal/vendor/google/apiclient/src/Http/REST.php(107): Google\\Http\\REST::decodeHttpResponse()
+#1 [internal function]: Google\\Http\\REST::doExecute()
+#2 /var/www/html/RimCal/rimcal/vendor/google/apiclient/src/Task/Runner.php(187): call_user_func_array()
+#3 /var/www/html/RimCal/rimcal/vendor/google/apiclient/src/Http/REST.php(66): Google\\Task\\Runner->run()
+#4 /var/www/html/RimCal/rimcal/vendor/google/apiclient/src/Client.php(920): Google\\Http\\REST::execute()
+#5 /var/www/html/RimCal/rimcal/vendor/google/apiclient/src/Service/Resource.php(238): Google\\Client->execute()
+#6 /var/www/html/RimCal/rimcal/vendor/google/apiclient-services/src/Calendar/Resource/Events.php(143): Google\\Service\\Resource->call()
+#7 /var/www/html/RimCal/rimcal/app/Services/Google/Calendar/GoogleCalendarCreateService.php(97): Google\\Service\\Calendar\\Resource\\Events->insert()
+#8 /var/www/html/RimCal/rimcal/app/Services/Google/Calendar/GoogleCalendarCreateService.php(54): App\\Services\\Google\\Calendar\\GoogleCalendarCreateService->addToGoogleCalendar()
+#9 /var/www/html/RimCal/rimcal/app/Http/Controllers/GoogleCalendarController.php(33): App\\Services\\Google\\Calendar\\GoogleCalendarCreateService->handle()
+#10 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(48): App\\Http\\Controllers\\GoogleCalendarController->create()
+#11 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Routing/Route.php(261): Illuminate\\Routing\\ControllerDispatcher->dispatch()
+#12 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Routing/Route.php(204): Illuminate\\Routing\\Route->runController()
+#13 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Routing/Router.php(725): Illuminate\\Routing\\Route->run()
+#14 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(141): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}()
+#15 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#16 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle()
+#17 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php(126): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#18 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php(102): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequest()
+#19 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php(54): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequestUsingNamedLimiter()
+#20 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\\Routing\\Middleware\\ThrottleRequests->handle()
+#21 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(44): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#22 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\\Auth\\Middleware\\Authenticate->handle()
+#23 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(116): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#24 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Routing/Router.php(726): Illuminate\\Pipeline\\Pipeline->then()
+#25 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Routing/Router.php(703): Illuminate\\Routing\\Router->runRouteWithinStack()
+#26 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Routing/Router.php(667): Illuminate\\Routing\\Router->runRoute()
+#27 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Routing/Router.php(656): Illuminate\\Routing\\Router->dispatchToRoute()
+#28 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(167): Illuminate\\Routing\\Router->dispatch()
+#29 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(141): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}()
+#30 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#31 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle()
+#32 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle()
+#33 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#34 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(40): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle()
+#35 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle()
+#36 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#37 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle()
+#38 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(86): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#39 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle()
+#40 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(62): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#41 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\\Http\\Middleware\\HandleCors->handle()
+#42 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(39): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#43 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\\Http\\Middleware\\TrustProxies->handle()
+#44 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(116): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#45 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(142): Illuminate\\Pipeline\\Pipeline->then()
+#46 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(111): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
+#47 /var/www/html/RimCal/rimcal/public/index.php(52): Illuminate\\Foundation\\Http\\Kernel->handle()
+#48 /var/www/html/RimCal/rimcal/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(16): require_once('...')
+#49 {main}
+"} 

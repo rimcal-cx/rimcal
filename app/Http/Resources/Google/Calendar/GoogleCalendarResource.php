@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Google\Calender;
+namespace App\Http\Resources\Google\Calendar;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class GoogleCalenderResource extends JsonResource
+class GoogleCalendarResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,7 +15,7 @@ class GoogleCalenderResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'calender_id' => $this->id,
+            'calendar_id' => $this->id,
             'summary' => $this->summary,
             'location' => $this->location,
             'description' => $this->description,

@@ -1,6 +1,6 @@
 
 import { useContext } from 'react'
-import CalenderHeader from "../CalenderHeader";
+import CalendarHeader from "../CalendarHeader";
 import Month from "../Month";
 import SideBar from "../SideBar";
 import GlobalContext from "../../context/GlobalContext";
@@ -11,7 +11,7 @@ const ComponentWrapper=({currentMonth})=>{
     const { showEventModal } = useContext(GlobalContext)
     return (
         <div className='h-screen flex flex-col'>
-        <CalenderHeader/>
+        <CalendarHeader/>
         <div className='flex flex-1'>
         <SideBar/>
         <Month month={currentMonth}/>

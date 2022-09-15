@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
         'Authorization': `Bearer ${tokenInfo}`
     }
 
-    navigate("/calender", { replace: true });
+    navigate("/calendar", { replace: true });
 
     if (!user) {
         const userInfo = data ? data.user : (await axios.get('/me')).data.data;

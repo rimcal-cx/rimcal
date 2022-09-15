@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Google\Calender;
+namespace App\Http\Requests\Google\Calendar;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CalenderCreateRequest extends FormRequest
+class CalendarCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class CalenderCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'calender_id' => 'nullable|integer',
+            'calendar_id' => 'nullable|integer',
             'summary' => 'required|string',
             'location' => 'required|string',
             'description' => 'nullable|string',
