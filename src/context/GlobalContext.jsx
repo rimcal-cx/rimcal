@@ -18,7 +18,7 @@ const GlobalContext = createContext({
     setToken:()=>{}
 })
 
-const loadEvents = async () => {
+/*const loadEvents = async () => {
     const result = (await axios.get('calendar'))
     console.log(result)
 }
@@ -26,5 +26,6 @@ const loadEvents = async () => {
 useEffect(() => {
     console.log('hiii')
     loadEvents()
-})
+})*/
+
 export default GlobalContext
