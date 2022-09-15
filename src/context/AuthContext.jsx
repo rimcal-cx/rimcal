@@ -9,16 +9,17 @@ export const AuthProvider = ({ children }) => {
   const [user,setUser] = useState(null)
   const navigate = useNavigate();
 
-  const setGlobalAuthentication = async (userInfo = null) => {
+  const setGlobalAuthentication = async (data = null) => {
+    const tokenInfo = data ? data.token : token.token
     axios.defaults.headers = {
         ...axios.defaults.headers,
-        'Authorization': `Bearer ${token.token}`
+        'Authorization': `Bearer ${tokenInfo}`
     }
 
     navigate("/calender", { replace: true });
 
     if (!user) {
-        userInfo = userInfo ??  (await axios.get('/me')).data.data
+        const userInfo = data ? data.user : (await axios.get('/me')).data.data;
         setUser(userInfo);
     }
 
@@ -31,11 +32,10 @@ export const AuthProvider = ({ children }) => {
   }, [])
 
   // call this function when you want to authenticate the user
-  const login = async ({token, token_expiry, ...userInfo}) => {
-
-    if (token) {
-        setToken({ token,token_expiry });
-        setGlobalAuthentication(userInfo)
+  const login = async (data) => {
+    if (!token) {
+        setToken({ token: data.token, token_expiry:data.token_expiry });
+        setGlobalAuthentication(data)
     }
   };
 
