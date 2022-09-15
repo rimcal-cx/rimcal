@@ -6,7 +6,6 @@ import axios from 'axios'
 function Day({day,rowIdx}) {
 
     const[dayEvents,setDayevents] = useState([])
-    console.log(dayEvents)
     const{
         setclickDay,
         setshowEventModal,
