@@ -3,12 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "../utilities/useLocalStorage";
 import axios  from "axios";
 import { toast, ToastContainer } from 'react-toastify';
+import GlobalContext from "./GlobalContext";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useLocalStorage("_auth_rimcal_token", null);
   const [user,setUser] = useState(null)
   const navigate = useNavigate();
+  const { db_data, setDbdata } = useContext(GlobalContext)
+
+  const loadEvents =async ()=>{
+        const result = await (await axios.get('calendar'))
+        setDbdata(result)
+    }
 
   const setGlobalAuthentication = async (data = null) => {
     const tokenInfo = data ? data.token : token.token
@@ -35,6 +42,8 @@ export const AuthProvider = ({ children }) => {
             setUser(null)
         }
     }
+
+    await loadEvents()
 
   }
 
