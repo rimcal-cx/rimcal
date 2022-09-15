@@ -122,12 +122,12 @@ function EventModal() {
                     <option>Asia/Kolkata</option>
                     <option>Z-A</option>
                     </select>
-                    <span className='material-icons-outline text-gray-100'>
+                    {/* <span className='material-icons-outline text-gray-100'>
 
                     <img src="https://img.favpng.com/25/22/25/remarketing-how-you-remind-me-behavioral-retargeting-facebook-messenger-png-favpng-MZJpSj9YwP3H6Gb8Js7T26DRj.jpg" alt="Close Modal"  className='w-7 h-7'/>
-                    </span>
-
-<div class="flex items-center">
+                    </span> */}
+</div>
+<div class="flex my-5">
   <button type="button" class={`bg-${reminder?'purple-500':'gray-500 '} relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`} role="switch" aria-checked="false" aria-labelledby="annual-billing-label" onClick={toggle}>
 
     <span aria-hidden="true" class={`translate-x-${dynocss} pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out`}></span>
@@ -143,7 +143,7 @@ function EventModal() {
 
                 <img src="https://cdn.iconscout.com/icon/free/png-256/bookmark-1754138-1493251.png" alt="Close Modal"  className='w-7 h-7'/>
                 </span> */}
-                {/* <div className='flex gap-x-2'>
+                <div className='flex my-5'>
                     {
                         labelsclass.map((lbl,i)=>(
                             <span key={i}
@@ -157,8 +157,8 @@ function EventModal() {
                 </span>
                     ))
                     }
-                </div> */}
                 </div>
+
 
 
             </div>
