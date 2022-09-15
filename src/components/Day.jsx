@@ -5,13 +5,14 @@ import axios from 'axios'
 
 function Day({day,rowIdx}) {
 
-    const[dayEvents,setDayevents,db_data] = useState([])
+    const[dayEvents,setDayevents] = useState([])
     const{
         setclickDay,
         setshowEventModal,
         saveEvents,
         selectedEvent,
         setselectedEvent,
+        db_data
       }=useContext(GlobalContext)
 
     /*const loadEvents = aysnc () => {
@@ -26,10 +27,9 @@ function Day({day,rowIdx}) {
     },[saveEvents])*/
 
     useEffect(()=>{
-        console.log(db_data);
-        // const events = saveEvents.filter(evt=>dayjs(evt.day).format("DD-MM-YY")===day.format("DD-MM-YY"))
-        // setDayevents(events)
-    },[saveEvents,day])
+        const events = db_data.filter(evt=>dayjs(evt.start_date).format("DD-MM-YY")===day.format("DD-MM-YY"))
+        setDayevents(events)
+    },[db_data])
 
     const currentDaystyle=()=>{
         return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")?"bg-blue-600 text-white rounded-full":""

@@ -10,7 +10,18 @@ import axios from 'axios';
 const ComponentWrapper=({currentMonth})=>{
 
     const { showEventModal,setDbdata,db_data } = useContext(GlobalContext)
+    const loadEvents =async ()=>{
+        const result = (await axios.get('calendar'))
+        setDbdata(result.data.data.events)
 
+    }
+
+    useEffect(()=>{
+
+    },[db_data])
+    useEffect(() => {
+        loadEvents()
+    }, [])
 
     return (
         <div className='h-screen flex flex-col'>

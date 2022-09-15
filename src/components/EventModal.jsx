@@ -4,7 +4,7 @@ import { HiPencilAlt } from "react-icons/hi"
 import axios from 'axios'
 
 function EventModal() {
-    const {setshowEventModal,clickDay,DispatchCalEvents,selectedEvent,setselectedEvent} = useContext(GlobalContext)
+    const {setshowEventModal,clickDay,DispatchCalEvents,selectedEvent,setselectedEvent,setDbdata,db_data} = useContext(GlobalContext)
     // const labelsclass = ["bg-lime-500","bg-gray-500","bg-green-500","bg-blue-500","bg-red-500","bg-purple-500"]
     const labelsclass = ["lime", "red", "green", "gray", "blue", "purple"]
     const [summary,setSummary] =useState(selectedEvent?selectedEvent.summary:"")
@@ -78,6 +78,8 @@ function EventModal() {
         // DispatchCalEvents({type:"push",payload:calenderEvents})
         // DispatchCalEvents({type:"push",payload:CalendarEvents})
         setshowEventModal(false)
+
+        setDbdata([...db_data,result.data.data.event])
     }
     const handleDelte = (event)=>{
         DispatchCalEvents({type:"delete",payload:event})
