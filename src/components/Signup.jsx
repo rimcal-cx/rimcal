@@ -1,18 +1,19 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from 'react-router'
+import React, { useState, useEffect } from "react";
+import { Navigate, useNavigate } from 'react-router'
 import '../assets/custom-style.css'
 import { ImSpinner5 } from 'react-icons/im';
-import GlobalContext from "../context/GlobalContext";
+import { useAuth } from "../context/AuthContext";
 
 
 
 const Signup =()=>{
-    const {token,setToken} = useContext(GlobalContext)
+    const auth = useAuth()
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
     const isBrowser = typeof window !== "undefined"
 
     useEffect(() => {
+        console.log(auth)
         if (isBrowser)
             messageHandler(true)
 
@@ -37,10 +38,7 @@ const Signup =()=>{
             const height = 660
             const left = window.screen.width / 2 - (width / 2)
             const top = window.screen.height / 2 - (height / 2)
-
-            let providerUrl = `${process.env.REACT_APP_API_URL}/api/google/redirect`
-            // if (provider === 'okta')
-            //   providerUrl = `${this.assets?.apiUrl}/redirectstate/${provider}`
+            const providerUrl = `${process.env.REACT_APP_API_URL}/api/google/redirect`
 
             const win = window.open(providerUrl, 'Log In',
                 `toolbar=no, location=no, directories=no, status=no, menubar=no, scollbars=no,
@@ -49,7 +47,6 @@ const Signup =()=>{
             const interval = setInterval(() => {
               if (win === null || win.closed) {
                 clearInterval(interval)
-                // this.loading[provider] = false
                 setLoading(false)
               }
             }, 200)
@@ -71,12 +68,14 @@ const Signup =()=>{
             if (result.status === 'error')
               return
             setLoading(false)
-            console.log('--------------Login Info-----------------')
-            console.log(result)
-            setToken(result)
+            auth.login(result.user)
 
             navigate('/calender', { replace: true })
           }
+
+        if (auth.user) {
+            return <Navigate to='/calender'  replace/>
+        }
 
     return(
         <div className="w-full h-screen flex items-center justify-center">

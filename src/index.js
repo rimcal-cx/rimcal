@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import ContextWrapper from './context/ContextWrapper';
+import { AuthProvider } from './context/AuthContext';
 import axios from 'axios'
 import {BrowserRouter} from 'react-router-dom'
 
@@ -15,9 +16,11 @@ axios.defaults.headers = {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <BrowserRouter>
- <ContextWrapper>
-    <App />
-  </ContextWrapper>
+    <AuthProvider>
+    <ContextWrapper>
+        <App />
+    </ContextWrapper>
+  </AuthProvider>
   </BrowserRouter>
 );
 

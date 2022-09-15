@@ -6,11 +6,12 @@ import Month from './components/Month';
 import SideBar from './components/SideBar';
 import GlobalContext from './context/GlobalContext';
 import './assets/main.css';
-import { getMonth } from './util';
+import { getMonth } from './utilities/util';
 import axios from 'axios';
 import Signup from './components/Signup';
 import ComponentWrapper from './components/ComponentWrapper/ComponentWrapper';
 import {Route ,Routes} from 'react-router-dom'
+import { ProtectedRoute } from "./components/ComponentWrapper/ProtectedRoute";
 
 
 function App() {
@@ -34,7 +35,11 @@ return (
 <Routes>
 <>
 <Route path='/' element={<Signup/>} exact/>
-<Route path='/calender' element={<ComponentWrapper currentMonth={currentMonth}/>}/>
+<Route path='/calender' element={
+     <ProtectedRoute>
+        <ComponentWrapper currentMonth={currentMonth}/>
+   </ProtectedRoute>
+}/>
 </>
 </Routes>
 );
