@@ -19,6 +19,7 @@ class GoogleCalendarCreateService
             DB::beginTransaction();
             $client = (new GoogleAuthClient)->handle();
             $attendees = [];
+            $calAttendees = [];
 
             $Calendar = Calendar::updateOrCreate(
                 [
