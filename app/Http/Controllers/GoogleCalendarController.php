@@ -40,9 +40,9 @@ class GoogleCalendarController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Calendar $Calendar): Response
+    public function destroy(Calendar $calendar): Response
     {
-        (new GoogleCalendarDeleteService())->handle($Calendar);
+        (new GoogleCalendarDeleteService())->handle($calendar);
         return $this->response('Event deleted successfully', 200);
     }
 }
