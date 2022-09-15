@@ -12,7 +12,8 @@ function EventModal() {
     const [endtime,setEndtime] =useState(selectedEvent?selectedEvent.endtime:"")
     const [starttime,setstarttime] =useState(selectedEvent?selectedEvent.starttime:"")
     const [timezone,setTimezone] =useState(selectedEvent?selectedEvent.starttime:"")
-
+    const [reminder,setreminder] =useState(selectedEvent?selectedEvent.reminder:false)
+    const [dynocss,setdynocss]= useState(0)
     const [label,setclicklebel] =useState(labelsclass[0])
 
     const HandleSubmit = ()=>{
@@ -23,7 +24,9 @@ function EventModal() {
             label:label,
             location:location,
             day:clickDay.valueOf(),
+            reminder:reminder,
             endtime:endtime,
+            dynocss:dynocss,
             timezone:timezone,
             id: selectedEvent? selectedEvent.id:Date.now()
 
@@ -45,9 +48,20 @@ function EventModal() {
         setselectedEvent(null)
     }
 
+    const toggle =()=>{
+
+        if(!reminder){
+            setdynocss(5)
+            setreminder(true)
+        }else{
+            setdynocss(0)
+            setreminder(false)
+        }
+    }
+
   return (
     <div className='h-screen w-full fixed left-0 top-0 flex justify-center items-center'>
-        <div className='bg-white rounded-lg shadow-2xl w-1/4'>
+        <div className='bg-white rounded-lg shadow-2xl w-1/4 h-3/4 '>
             <header className='bg-gray-100 px-4 py-2 flex justify-between'>
             {/* <span className='material-icons-outline text-gray-100'>
                     <img src="https://cdn3.iconfinder.com/data/icons/flat-actions-icons-9/792/Close_Icon_Dark-512.png" alt="" srcset="" className='w-7 h-7'/>
@@ -64,7 +78,7 @@ function EventModal() {
                 </span>
                 </button>}
             </header>
-            <div className='p-3'>
+            <div className='p-3 h-3/4 overflow-auto'>
                 <div className='grid grid-cols-1/5 items-end gap-y-7'>
                     <div></div>
                     <input type="text" name="title" placeholder='Add Summary' className='border-0 pt-3 text-gray-600 text-xl font-semibold pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus-ring-0 focus-border-blue-500' value={title} onChange={(e)=>settitle(e.target.value)}/>
@@ -87,7 +101,7 @@ function EventModal() {
                     <img src="https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678120-calendar-clock-512.png" alt="Close Modal"  className='w-7 h-7'/>
 
                 </span>
-                <p className='font-bold'>{clickDay.format("dddd,MMMM,DD")}</p>
+                <p className='font-medium'>{clickDay.format("dddd, MMMM, DD")}</p>
                     <span className='material-icons-outline text-gray-100'>
 
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgZOiUxzAlBLD8olJjdSvxccaH6hMHE5QGZA&usqp=CAU" alt="Close Modal"  className='w-7 h-7'/>
@@ -111,6 +125,17 @@ function EventModal() {
 
                     <img src="https://img.favpng.com/25/22/25/remarketing-how-you-remind-me-behavioral-retargeting-facebook-messenger-png-favpng-MZJpSj9YwP3H6Gb8Js7T26DRj.jpg" alt="Close Modal"  className='w-7 h-7'/>
                     </span>
+
+<div class="flex items-center">
+  <button type="button" class={`bg-${reminder?'purple-500':'gray-500 '} relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`} role="switch" aria-checked="false" aria-labelledby="annual-billing-label" onClick={toggle}>
+
+    <span aria-hidden="true" class={`translate-x-${dynocss} pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out`}></span>
+  </button>
+  <span class="ml-3" id="annual-billing-label">
+    <span class="text-sm font-normal text-gray-900">Remind (Default:10 Mins Before)</span>
+  </span>
+</div>
+
 
 
                 {/* <span className='material-icons-outline text-gray-100'>
