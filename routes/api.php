@@ -30,13 +30,14 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     });
 });
 
-/*Route::group(['prefix' => 'jira'], function(){
-    Route::post('/issues', [JiraController::class, 'issues']);
+Route::group(['prefix' => 'jira'], function(){
+    Route::get('/issues', [JiraController::class, 'issues']);
+    Route::get('/sprints', [JiraController::class, 'sprints']);
 
     // Beloe both lines are working
     //Route::apiResource('/', JiraController::class)->except(['store', 'destroy', 'update', 'show']);
     Route::get('/', [JiraController::class, 'index']);
-});*/
+});
 
-Route::get('/jira/', [JiraController::class, 'index']);
-Route::post('/jira/issues', [JiraController::class, 'issues']);
+//Route::get('jira', [JiraController::class, 'index']);
+//Route::get('jira/issues', [JiraController::class, 'issues']);

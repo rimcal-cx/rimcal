@@ -9,7 +9,7 @@ class JiraController extends BaseController
 {
     public function index()
     {
-        URequest::auth('somsubhra@rimsys.io', 'hX6wpQte0UUlY5LexuiV1482');
+        URequest::auth('somsubhra@rimsys.io', 'uoJAc237gxtVnA3pDa1t19FC');
 
         $headers = array(
             'Accept' => 'application/json'
@@ -31,17 +31,20 @@ class JiraController extends BaseController
         echo '</pre>';
     }
 
-    public function issues()
+    public function sprints()
     {
-        echo 'hiii';exit;
-        URequest::auth('somsubhra@rimsys.io', 'hX6wpQte0UUlY5LexuiV1482');
+        //URequest::auth('somsubhra@rimsys.io', 'uoJAc237gxtVnA3pDa1t19FC');
 
+        echo $auth = base64_encode("somsubhra@rimsys.io" . ":" . "codelogicx101");
+        echo $auth = 'uoJAc237gxtVnA3pDa1t19FC';
+        echo $auth = base64_encode("somsubhra@rimsys.io" . ":" . "uoJAc237gxtVnA3pDa1t19FC");
         $headers = array(
             'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
+            //'Content-Type' => 'application/json'
+            'Authorization' => 'Bearer ' . $auth
         );
 
-        $body = [
+        /*$body = [
             "expand" => [
                 "names",
                 "schema",
@@ -57,12 +60,53 @@ class JiraController extends BaseController
             ],
             "startAt" => 0
         ];
-        $jsonBody = json_encode($body);
+        $jsonBody = json_encode($body);*/
 
-        $response = URequest::post(
-            'https://rimsys.atlassian.net/rest/api/2/search',
+        $response = URequest::get(
+            //'https://rimsys.atlassian.net/rest/api/2/search',
+            'https://rimsys.atlassian.net/rest/agile/1.0/board/34/sprint',
+            $headers
+            //$jsonBody
+        );
+
+        echo '<pre>';
+        print_r($response);
+        echo '</pre>';
+    }
+
+    public function issues()
+    {
+        //URequest::auth('somsubhra@rimsys.io', 'uoJAc237gxtVnA3pDa1t19FC');
+
+        $headers = array(
+            'Accept' => 'application/json',
+            //'Content-Type' => 'application/json'
+            'Authorization' => 'Bearer uoJAc237gxtVnA3pDa1t19FC'
+        );
+
+        /*$body = [
+            "expand" => [
+                "names",
+                "schema",
+                "operations"
+            ],
+            "jql" => "project = R5",
+            "maxResults" => 15,
+            "fieldsByKeys" => false,
+            "fields" => [
+                "summary",
+                "status",
+                "assignee"
+            ],
+            "startAt" => 0
+        ];
+        $jsonBody = json_encode($body);*/
+
+        $response = URequest::get(
+            //'https://rimsys.atlassian.net/rest/api/2/search',
+            'https://rimsys.atlassian.net/rest/agile/1.0/sprint/34/issue',
             $headers,
-            $jsonBody
+            //$jsonBody
         );
 
         echo '<pre>';
