@@ -71,9 +71,8 @@ const Signup =()=>{
     return(
         <div className="w-full h-screen flex items-center justify-center">
             <div className="w-3/5">
-                <div className="flex justify-between">
-                    <img src="https://dev.rimsys.dev/logo/logo-bar.png" alt="Workflow" className="h-12 w-auto" />
-                    <img src="https://dev.rimsys.dev/logo/logo-bar.png" alt="Workflow" className="h-12 w-auto" />
+                <div className="flex justify-center">
+                    <img src="/logo-name.png" alt="Workflow" className="w-auto" />
                 </div>
                 <div className="w-full py-20 m-4 bg-slate-100 mx-auto flex justify-center items-center">
                 {/* <Link to="/calender" className="h-3 border-2 rounded p-3 hover:bg-indigo-200 font-bold"> Go to Calender</Link> */}
