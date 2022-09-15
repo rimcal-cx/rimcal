@@ -21,9 +21,9 @@ class GoogleCalendarCreateService
             $attendees = [];
             $calAttendees = [];
 
-            $Calendar = Calendar::updateOrCreate(
+            $calendar = Calendar::updateOrCreate(
                 [
-                    'id' => $request->Calendar_id,
+                    'id' => $request->calendar_id,
                 ],
                 [
                     'user_id' => auth()->user()->id,
@@ -38,25 +38,25 @@ class GoogleCalendarCreateService
                 ]
             );
 
-            if($request->Calendar_id !== null){
-                CalendarAttendee::whereCalendarId($request->Calendar_id)->delete();
+            if($request->calendar_id !== null){
+                CalendarAttendee::whereCalendarId($request->calendar_id)->delete();
             }
 
             foreach($request->attendees as $attendee){
                 $attendees[] = ['email' => $attendee];
                 $calAttendees[] = [
-                    'Calendar_id' => $Calendar->id,
+                    'calendar_id' => $calendar->id,
                     'user_id' => null,
                     'email' => $attendee
                 ];
             };
 
             CalendarAttendee::insert($calAttendees);
-            $event = $this->addToGoogleCalendar($client, $request, $attendees, $Calendar);
-            $Calendar->event_id = $event->id;
-            $Calendar->save();
+            $event = $this->addToGoogleCalendar($client, $request, $attendees, $calendar);
+            $calendar->event_id = $event->id;
+            $calendar->save();
             DB::commit();
-            return $Calendar;
+            return $calendar;
         }catch(Exception $e){
             DB::rollBack();
             throw $e;
@@ -69,7 +69,7 @@ class GoogleCalendarCreateService
     {
         $service = new GoogleCalendar($client);
 
-        if($request->Calendar_id !== null){
+        if($request->calendar_id !== null){
             $service->events->delete('primary', $localCalendar->event_id);
         }
         $event = new Event(array(
