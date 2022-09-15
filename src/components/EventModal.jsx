@@ -29,6 +29,10 @@ function EventModal() {
         console.log(calendarEvents)
 
         const {data} = await axios.post('calendar/add', calendarEvents)
+        .then((res) => {
+            console.log('222')
+            console.log(res)
+        })
 
         console.log('---------------------')
         console.log(data)
