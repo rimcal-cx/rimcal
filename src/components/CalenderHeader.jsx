@@ -1,14 +1,12 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
 import React, { useContext } from 'react'
-import { useNavigate } from 'react-router';
 import { useAuth } from '../context/AuthContext'
 
 // import { AiFillCaretRight,AiFillCaretLeft } from "react-icons/ai";
 import GlobalContext from '../context/GlobalContext';
 function CalenderHeader() {
-    const navigate =useNavigate()
-    const auth = useAuth()
+  const { logout: authLogout } = useAuth()
   const {monthIndex,setMonthIndex} = useContext(GlobalContext)
   const prevChange=()=>{
     setMonthIndex(monthIndex-1)
@@ -21,14 +19,10 @@ function CalenderHeader() {
   }
 
   const logOut=async ()=>{
-    const headers={
-        Authorization:`Bearer ${auth.user.token}`
-    }
-    const {status} =  await axios.post('google/logout',{},{headers})
+    const {status} =  await axios.post('google/logout')
 
     if (status === 200) {
-        auth.logout()
-        navigate('/',{replace:true})
+        authLogout()
     }
 
   }

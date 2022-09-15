@@ -1,9 +1,5 @@
 
 import { useState,useContext, useEffect } from 'react';
-import CalenderHeader from './components/CalenderHeader';
-import EventModal from './components/EventModal';
-import Month from './components/Month';
-import SideBar from './components/SideBar';
 import GlobalContext from './context/GlobalContext';
 import './assets/main.css';
 import { getMonth } from './utilities/util';

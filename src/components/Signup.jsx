@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Navigate, useNavigate } from 'react-router'
+import { Navigate } from 'react-router'
 import '../assets/custom-style.css'
 import { ImSpinner5 } from 'react-icons/im';
 import { useAuth } from "../context/AuthContext";
@@ -7,13 +7,11 @@ import { useAuth } from "../context/AuthContext";
 
 
 const Signup =()=>{
-    const auth = useAuth()
+    const { login: authLogin, user} = useAuth()
     const [loading, setLoading] = useState(false)
-    const navigate = useNavigate()
     const isBrowser = typeof window !== "undefined"
 
     useEffect(() => {
-        console.log(auth)
         if (isBrowser)
             messageHandler(true)
 
@@ -32,7 +30,6 @@ const Signup =()=>{
      * @param provider - Name of provider we are sending user auth to.
      */
        const login = () => {
-            // this.loading = true
             setLoading(true)
             const width = 640
             const height = 660
@@ -68,14 +65,8 @@ const Signup =()=>{
             if (result.status === 'error')
               return
             setLoading(false)
-            auth.login(result.user)
-
-            navigate('/calender', { replace: true })
+            authLogin(result.user)
           }
-
-        if (auth.user) {
-            return <Navigate to='/calender'  replace/>
-        }
 
     return(
         <div className="w-full h-screen flex items-center justify-center">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\Google\GoogleAuthRedirectService;
 use App\Services\Google\GoogleAuthCallbackService;
 use App\Services\Google\GoogleAuthRevokeService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 
@@ -26,10 +27,18 @@ class GoogleAuthController extends BaseController
                     'status' => 'success',
                     'user' => $user,
                     'token' => $user->token,
+                    'expiresIn' => $user->token_expiry,
                     'provider' => 'google'
                 ])
             ])
         )->cookie('token', $user->token, 0);
+    }
+
+    public function me(): JsonResponse
+    {
+        return response()->json([
+            "data" => auth()->user()
+        ]);
     }
 
     public function logout(): Response

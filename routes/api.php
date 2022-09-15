@@ -23,6 +23,7 @@ Route::group(['prefix' => 'google'], function(){
 
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
+    Route::get('/me', [GoogleAuthController::class, 'me']);
     Route::group(['prefix' => 'calender'], function () {
         Route::apiResource('/', GoogleCalenderController::class, ['except' => ['store, update, show'], 'only' => ['index', 'destroy']]);
         Route::post('/add', [GoogleCalenderController::class, 'create']);
