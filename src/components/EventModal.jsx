@@ -3,7 +3,7 @@ import GlobalContext from '../context/GlobalContext'
 import { HiPencilAlt } from "react-icons/hi";
 
 function EventModal() {
-    const {setshowEventModal,clickDay,DispatchCalEvents,selectedEvent } = useContext(GlobalContext)
+    const {setshowEventModal,clickDay,DispatchCalEvents,selectedEvent,setselectedEvent} = useContext(GlobalContext)
     // const labelsclass = ["bg-lime-500","bg-gray-500","bg-green-500","bg-blue-500","bg-red-500","bg-purple-500"]
     const labelsclass = ["lime", "red", "green", "gray", "blue", "purple"]
     const [title,settitle] =useState(selectedEvent?selectedEvent.title:"")
@@ -27,6 +27,7 @@ function EventModal() {
             DispatchCalEvents({type:"push",payload:calenderEvents})
         }
 
+        setselectedEvent(null)
         // DispatchCalEvents({type:"push",payload:calenderEvents})
         setshowEventModal(false)
     }
