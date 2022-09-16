@@ -17,7 +17,6 @@ function Day({day,rowIdx}) {
 
 
     useEffect(()=>{
-        console.log(db_data[0].start_date);
         const events = db_data.filter(evt=>dayjs(evt.start_date).format("DD-MM-YY")===day.format("DD-MM-YY"))
         setDayevents(events)
     },[db_data,saveEvents,day])
