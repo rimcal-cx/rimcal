@@ -3,7 +3,8 @@ import GlobalContext from '../context/GlobalContext'
 import { HiPencilAlt } from "react-icons/hi"
 import axios from 'axios'
 import UserModal from './ComponentWrapper/UserModal'
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function EventModal() {
     const {setshowEventModal,clickDay,userModal,selctedUsers,golbalSlectedUsers,DispatchCalEvents,selectedEvent,setselectedEvent,setDbdata,db_data,visbisltyUser} = useContext(GlobalContext)
 
@@ -19,11 +20,10 @@ function EventModal() {
 
     const DeletedUser=(i)=>{
 
-        selectedEvent.attendees.splice(i,1)
-        console.log(selectedEvent.attendees);
+    selectedEvent.attendees.splice(i,1)
+    console.log(selectedEvent.attendees);
         setselectedEvent(selectedEvent)
         console.log(selectedEvent);
-        return selectedEvent.attendees
     }
 
     const ValidateField=(obj)=>{
@@ -91,6 +91,9 @@ function EventModal() {
             calendarEvents.calendar_id =selectedEvent.calendar_id
             const result = await (axios.post('calendar/add', {...calendarEvents} ))
             loadEvents()
+            toast.success('Event Updated  Succesfully !', {
+                position: toast.POSITION.TOP_RIGHT
+            });
 
         } else {
             if (selctedUsers.length===0) {
@@ -100,6 +103,9 @@ function EventModal() {
             ValidateField(calendarEvents)
             const result = await (axios.post('calendar/add', {...calendarEvents} ))
             setDbdata([...db_data,result.data.data.event])
+            toast.success('Event Added Succesfully !', {
+                position: toast.POSITION.TOP_RIGHT
+            });
         }
 
         // DispatchCalEvents({type:"push",payload:calendarEvents})
@@ -117,6 +123,10 @@ function EventModal() {
         DispatchCalEvents({type:"delete",payload:event})
         setshowEventModal(false)
         setselectedEvent(null)
+        toast.success('Event Deleted Succesfully !', {
+            position: toast.POSITION.TOP_RIGHT
+        });
+
     }
 
     const toggle =()=>{
@@ -239,7 +249,7 @@ function EventModal() {
                         <img className='h-7 w-7' src="https://toppng.com/uploads/preview/edit-delete-icon-delete-icon-11553444925vxge0bju5o.png" alt=""/>
                         </span>
                         </button>
-
+                        <ToastContainer />
                         </div>
                     )
 
