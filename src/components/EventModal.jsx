@@ -18,6 +18,7 @@ function EventModal() {
     const [reminder,setreminder] =useState(selectedEvent?selectedEvent.reminder:false)
     const [dynocss,setdynocss]= useState(0)
     const [label,setclicklebel] =useState(labelsclass[0])
+    const [x,setx] =useState(0)
 
     const HandleSubmit = async ()=>{
 
@@ -81,7 +82,12 @@ function EventModal() {
 
         setDbdata([...db_data,result.data.data.event])
     }
-    const handleDelte = (event)=>{
+    const handleDelte = async(event)=>{
+        console.log(event);
+        const result = await (axios.delete(`calendar/${event.calendar_id}`))
+        const vb=db_data.map((data,i)=>data.calendar_id===event.calendar_id ? setx(i):'')
+        db_data.splice(x, 1)
+        setDbdata([...db_data])
         DispatchCalEvents({type:"delete",payload:event})
         setshowEventModal(false)
         setselectedEvent(null)
