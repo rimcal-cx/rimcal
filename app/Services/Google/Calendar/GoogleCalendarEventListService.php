@@ -15,7 +15,12 @@ class GoogleCalendarEventListService
         $client = (new GoogleAuthClient)->handle();
         $service = new GoogleCalendar($client);
 
-        $events = $service->events->listEvents('primary');
+        $params = [
+            'timeMin' => date('Y-m-01T00:00:00Z'), // start time of the first day of the current month
+            'timeMax' => date('Y-m-tT12:59:59Z'),  // end time of the last day of the current month
+        ];
+
+        $events = $service->events->listEvents('primary', $params);
         return $events;
     }
 
