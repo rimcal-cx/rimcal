@@ -21,6 +21,8 @@ class GoogleCalendarResource extends JsonResource
             'description' => $this->description,
             'start_date' => explode('T', $this->start_datetime)[0],
             'end_date' => explode('T', $this->end_datetime)[0],
+            'start_datetime' => $this->start_datetime,
+            'end_datetime' =>  $this->end_datetime,
             'start_time' => explode('T', $this->start_datetime)[1],
             'end_time' => explode('T', $this->end_datetime)[1],
             'timezone' => $this->timezone,

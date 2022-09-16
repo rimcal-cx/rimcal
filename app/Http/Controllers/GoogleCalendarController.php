@@ -8,6 +8,7 @@ use App\Http\Requests\Google\Calendar\CalendarCreateRequest;
 use App\Models\Calendar;
 use App\Services\Google\Calendar\GoogleCalendarDeleteService;
 use App\Services\Google\Calendar\GoogleCalendarListService;
+use Illuminate\Http\JsonResponse;
 use App\Services\Google\Calendar\GoogleCalendarSyncService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -33,7 +34,13 @@ class GoogleCalendarController extends BaseController
     public function create(CalendarCreateRequest $request): Response
     {
         $result = (new GoogleCalendarCreateService())->handle($request);
-        return $this->response('Event added to Calendar', 200, ['event' => new GoogleCalendarResource($result)]);
+        return $this->response('Event added to calendar', 200, ['event' => new GoogleCalendarResource($result)]);
+        // return response()->json([
+        //     'data' => [
+        //         'message' => 'Event added to calendar',
+        //         'event' => new GoogleCalendarResource($result)
+        //     ]
+        // ], 200);
     }
 
     /**

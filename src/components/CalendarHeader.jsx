@@ -1,14 +1,33 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { toast } from 'react-toastify';
 
 // import { AiFillCaretRight,AiFillCaretLeft } from "react-icons/ai";
 import GlobalContext from '../context/GlobalContext';
+import UserModal from './ComponentWrapper/UserModal';
 function CalendarHeader() {
-  const { logout: authLogout } = useAuth()
-  const {monthIndex,setMonthIndex} = useContext(GlobalContext)
+  const { logout: authLogout,token } = useAuth()
+
+  const {monthIndex,setMonthIndex,db_data,setDbdata,visbisltyUser,userModal} = useContext(GlobalContext)
+
+  axios.defaults.headers = {
+    ...axios.defaults.headers,
+    'Authorization': `Bearer ${token.token}`
+}
+
+  const loadEvents =async ()=>{
+    const result = await (await axios.get('calendar'))
+    setDbdata(result.data.data.events)
+    return result.data.data.events ;
+}
+
+useEffect(()=>{;
+    const x= loadEvents().then(result=> setDbdata(result)).catch()
+    console.log(db_data);
+},[])
+
   const [start_date, setSyncStartDate] = useState("", "")
   const [end_date, setSyncEndDate] = useState("", "")
   const [showModal, setShowModal] = useState(false);
@@ -138,6 +157,7 @@ function CalendarHeader() {
         </>
       ) : null}
       </header>
+
   )
 }
 
