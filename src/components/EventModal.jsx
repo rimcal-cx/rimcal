@@ -6,13 +6,9 @@ import UserModal from './ComponentWrapper/UserModal'
 
 function EventModal() {
     const {setshowEventModal,clickDay,userModal,selctedUsers,golbalSlectedUsers,DispatchCalEvents,selectedEvent,setselectedEvent,setDbdata,db_data,visbisltyUser} = useContext(GlobalContext)
-    // const labelsclass = ["bg-lime-500","bg-gray-500","bg-green-500","bg-blue-500","bg-red-500","bg-purple-500"]
-    // const labelsclass = ["lime", "red", "green", "gray", "blue", "purple"]
+
     const [summary,setSummary] =useState(selectedEvent?selectedEvent.summary:"")
     const [description,setDescription] =useState(selectedEvent?selectedEvent.description:"")
-    //const [title,settitle] =useState(selectedEvent?selectedEvent.title:"")
-    //const [desc,setdesc] =useState(selectedEvent?selectedEvent.desc:"")
-
     const [location,setlocation] =useState(selectedEvent?selectedEvent.location:"")
     const [endtime,setEndtime] =useState(selectedEvent?selectedEvent.end_time:"")
     const [starttime,setstarttime] =useState(selectedEvent?selectedEvent.start_time:"")
@@ -20,6 +16,15 @@ function EventModal() {
     const [reminder,setreminder] =useState(selectedEvent?selectedEvent.reminder:false)
     const [dynocss,setdynocss]= useState(0)
     const [x,setx] =useState(0)
+
+    const DeletedUser=(i)=>{
+
+        selectedEvent.attendees.splice(i,1)
+        console.log(selectedEvent.attendees);
+        setselectedEvent(selectedEvent)
+        console.log(selectedEvent);
+        return selectedEvent.attendees
+    }
 
     const ValidateField=(obj)=>{
 
@@ -50,20 +55,8 @@ function EventModal() {
 
     const HandleSubmit = async ()=>{
 
-        /*const calendarEvents={
-            title:title,
-            desc:desc,
-            label:label,
-            location:location,
-            day:clickDay.valueOf(),
-            reminder:reminder,
-            endtime:endtime,
-            dynocss:dynocss,
-            timezone:timezone,
-            id: selectedEvent? selectedEvent.id:Date.now()
-        }*/
 
-        console.log(selectedEvent);;
+        console.log(selectedEvent);
         const calendarEvents = {
             calendar_id: null,
             summary: summary,
@@ -71,8 +64,8 @@ function EventModal() {
             location: location,
             starttime:starttime,
             endtime:endtime,
-            start_datetime: clickDay.format("YYYY-MM-DD").toString()+"T"+starttime+":00",
-            end_datetime: clickDay.format("YYYY-MM-DD").toString()+"T"+endtime+":00",
+            start_datetime: selectedEvent?selectedEvent.start_datetime:clickDay.format("YYYY-MM-DD").toString()+"T"+starttime+":00",
+            end_datetime: selectedEvent?selectedEvent.end_datetime:clickDay.format("YYYY-MM-DD").toString()+"T"+endtime+":00",
             //id: selectedEvent? selectedEvent.id:Date.now()
             timezone: timezone,
             all_day: false,
@@ -87,18 +80,23 @@ function EventModal() {
 
         console.log(selctedUsers)
         //console.log(result)
-        if (selctedUsers.length===0) {
-            alert("Please Select User")
-            return
-        }
+
         // Save to local storage
         if (selectedEvent) {
+            if (selectedEvent.attendees.length===0) {
+                alert("Please Select User")
+                return
+            }
 
             calendarEvents.calendar_id =selectedEvent.calendar_id
             const result = await (axios.post('calendar/add', {...calendarEvents} ))
             loadEvents()
 
         } else {
+            if (selctedUsers.length===0) {
+                alert("Please Select User")
+                return
+            }
             ValidateField(calendarEvents)
             const result = await (axios.post('calendar/add', {...calendarEvents} ))
             setDbdata([...db_data,result.data.data.event])
@@ -131,6 +129,12 @@ function EventModal() {
             setreminder(false)
         }
     }
+
+
+    useEffect(()=>{
+
+    },[DeletedUser])
+
 
   return (
     <div className='h-screen w-full fixed left-0 top-0 flex justify-center items-center'>
@@ -219,6 +223,7 @@ function EventModal() {
                         <button className=' w-96 border hover:bg-blue-200 rounded py-2 px-4 ml-5' >
                         {user.name}
                         </button>
+
                         </div>
                     )
 
@@ -230,7 +235,11 @@ function EventModal() {
                         <div className=' mt-1 items-center w-96'>
                         <button className=' w-96 border hover:bg-blue-200 rounded py-2 px-4 ml-5' >
                         {user.name}
+                        <span onClick={()=>DeletedUser(i)} >
+                        <img className='h-7 w-7' src="https://toppng.com/uploads/preview/edit-delete-icon-delete-icon-11553444925vxge0bju5o.png" alt=""/>
+                        </span>
                         </button>
+
                         </div>
                     )
 
