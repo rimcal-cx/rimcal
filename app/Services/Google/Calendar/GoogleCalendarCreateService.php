@@ -46,7 +46,7 @@ class GoogleCalendarCreateService
                 $attendees[] = ['email' => $attendee['email']];
                 $calAttendees[] = [
                     'calendar_id' => $calendar->id,
-                    'user_id' => $attendee['id'],
+                    'user_id' => null,
                     'name' => $attendee['name'],
                     'email' => $attendee['email']
                 ];

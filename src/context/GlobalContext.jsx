@@ -1,4 +1,4 @@
-import  { createContext } from "react";
+import  { createContext, useEffect } from "react";
 
 const GlobalContext = createContext({
     monthIndex:0,
@@ -14,6 +14,14 @@ const GlobalContext = createContext({
     selectedEvent:null,
     setselectedEvent:()=>{console.log("HELLO-GLOBAL");},
     token:{},
-    setToken:()=>{}
+    setToken:()=>{},
+    db_data:[],
+    setDbdata:()=>{},
+    userModal:false,
+    visbisltyUser:()=>{},
+    selctedUsers:[],
+    golbalSlectedUsers:()=>{},
+
 })
+
 export default GlobalContext
