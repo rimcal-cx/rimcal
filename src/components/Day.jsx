@@ -49,10 +49,10 @@ function Day({day,rowIdx}) {
             <p className={`text-sm p-1 my-1 text-center ${currentDaystyle()}`}>{day.format("DD")}</p>
         </header>
 
-        <div className='flex-1 cursor-pointer' >
+        <div className='flex-1 cursor-pointer text-white' >
 
         {dayEvents.map((evt,idx)=>(
-            <div className={`bg-${evt.label}-500 p-1 mr-3 text-gray-600 text-sm rounded mb-1 truncate`}
+            <div className={`bg-lime-500 p-1 mr-3 text-gray-600 text-sm rounded mb-1 truncate`}
             key={idx}
             onClick={()=>{setselectedEvent(evt);setshowEventModal(true)}}
             >

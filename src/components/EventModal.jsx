@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import GlobalContext from '../context/GlobalContext'
 import { HiPencilAlt } from "react-icons/hi"
 import axios from 'axios'
@@ -6,19 +6,45 @@ import axios from 'axios'
 function EventModal() {
     const {setshowEventModal,clickDay,DispatchCalEvents,selectedEvent,setselectedEvent,setDbdata,db_data} = useContext(GlobalContext)
     // const labelsclass = ["bg-lime-500","bg-gray-500","bg-green-500","bg-blue-500","bg-red-500","bg-purple-500"]
-    const labelsclass = ["lime", "red", "green", "gray", "blue", "purple"]
+    // const labelsclass = ["lime", "red", "green", "gray", "blue", "purple"]
     const [summary,setSummary] =useState(selectedEvent?selectedEvent.summary:"")
     const [description,setDescription] =useState(selectedEvent?selectedEvent.description:"")
     //const [title,settitle] =useState(selectedEvent?selectedEvent.title:"")
     //const [desc,setdesc] =useState(selectedEvent?selectedEvent.desc:"")
+    console.log(selectedEvent);
     const [location,setlocation] =useState(selectedEvent?selectedEvent.location:"")
-    const [endtime,setEndtime] =useState(selectedEvent?selectedEvent.endtime:"")
-    const [starttime,setstarttime] =useState(selectedEvent?selectedEvent.starttime:"")
-    const [timezone,setTimezone] =useState(selectedEvent?selectedEvent.starttime:"")
+    const [endtime,setEndtime] =useState(selectedEvent?selectedEvent.end_time:"")
+    const [starttime,setstarttime] =useState(selectedEvent?selectedEvent.start_time:"")
+    const [timezone,setTimezone] =useState(selectedEvent?selectedEvent.timezone:"")
     const [reminder,setreminder] =useState(selectedEvent?selectedEvent.reminder:false)
     const [dynocss,setdynocss]= useState(0)
-    const [label,setclicklebel] =useState(labelsclass[0])
     const [x,setx] =useState(0)
+
+    const ValidateField=(obj)=>{
+
+        for (const key in obj) {
+
+                const element = obj[key];
+
+                if (!element && key!=='calendar_id' & key!=='all_day') {
+
+                    alert("Please Fill "+key.toUpperCase())
+
+                    return false
+                }
+
+        }
+    }
+
+    useEffect(()=>{
+
+    },[db_data])
+
+    const loadEvents =async ()=>{
+        const result = (await axios.get('calendar'))
+        setDbdata(result.data.data.events)
+
+    }
 
     const HandleSubmit = async ()=>{
 
@@ -39,12 +65,13 @@ function EventModal() {
             calendar_id: null,
             summary: summary,
             description: description,
-            location: 'Kolkata',
-            label: label,
-            start_datetime: clickDay.format("YYYY-MM-DDTHH:mm:ss").toString(),
-            end_datetime: clickDay.format("YYYY-MM-DDTHH:mm:ss").toString(),
+            location: location,
+            starttime:starttime,
+            endtime:endtime,
+            start_datetime: clickDay.format("YYYY-MM-DD").toString()+"T"+starttime+":00",
+            end_datetime: clickDay.format("YYYY-MM-DD").toString()+"T"+endtime+":00",
             //id: selectedEvent? selectedEvent.id:Date.now()
-            timezone: 'Asia/Kolkata',
+            timezone: timezone,
             all_day: false,
             attendees: [
                 {
@@ -62,17 +89,23 @@ function EventModal() {
         }
         //console.log(calendarEvents)
 
-        const result = await (axios.post('calendar/add', {...calendarEvents} ))
+            // const result = await (axios.post('calendar/add', {...calendarEvents} ))
+
 
         //console.log('---------------------')
         //console.log(result)
 
         // Save to local storage
-        /*if (selectedEvent) {
-            DispatchCalEvents({type:"update",payload:calendarEvents})
+        if (selectedEvent) {
+            calendarEvents.calendar_id =selectedEvent.calendar_id
+            const result = await (axios.post('calendar/add', {...calendarEvents} ))
+            loadEvents()
+
         } else {
-            DispatchCalEvents({type:"push",payload:calendarEvents})
-        }*/
+            ValidateField(calendarEvents)
+            const result = await (axios.post('calendar/add', {...calendarEvents} ))
+            setDbdata([...db_data,result.data.data.event])
+        }
 
         // DispatchCalEvents({type:"push",payload:calendarEvents})
         setselectedEvent(null)
@@ -80,14 +113,12 @@ function EventModal() {
         // DispatchCalEvents({type:"push",payload:CalendarEvents})
         setshowEventModal(false)
 
-        setDbdata([...db_data,result.data.data.event])
+
     }
     const handleDelte = async(event)=>{
-        console.log(event);
+
         const result = await (axios.delete(`calendar/${event.calendar_id}`))
-        const vb=db_data.map((data,i)=>data.calendar_id===event.calendar_id ? setx(i):'')
-        db_data.splice(x, 1)
-        setDbdata([...db_data])
+        loadEvents()
         DispatchCalEvents({type:"delete",payload:event})
         setshowEventModal(false)
         setselectedEvent(null)
@@ -125,7 +156,7 @@ function EventModal() {
             <div className='p-3 h-3/4 overflow-auto'>
                 <div className='grid grid-cols-1/5 items-end gap-y-7'>
                     <div></div>
-                    <input type="text" name="summary" placeholder='Add Title' className='border-0 pt-3 text-gray-600 text-xl font-semibold pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus-ring-0 focus-border-blue-500' value={summary} onChange={(e)=>setSummary(e.target.value)}/>
+                    <input type="text" name="summary" placeholder='Add Summary' className='border-0 pt-3 text-gray-600 text-xl font-semibold pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus-ring-0 focus-border-blue-500' value={summary} onChange={(e)=>setSummary(e.target.value)}/>
                     <span className='material-icons-outline text-gray-100'>
                         <img src="https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678120-calendar-clock-512.png" alt="Close Modal"  className='w-7 h-7'/>
                     </span>
@@ -157,14 +188,14 @@ function EventModal() {
 
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Out_of_date_clock_icon.svg/1024px-Out_of_date_clock_icon.svg.png" alt="Close Modal"  className='w-7 h-7'/>
                     </span>
-                    <input type="time" name="title" placeholder='End Time' className='border-0 pt-3 text-gray-600 text-xl font-semibold pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus-ring-0 focus-border-blue-500' value={endtime} onChange={(e)=>setEndtime(e.target.value)}/>
+                    <input type="time" name="title" placeholder='End Time' className='border-0 pt-3 text-gray-600 text-xl font-semibold pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus-ring-0 focus-border-blue-500' min={starttime} value={endtime} onChange={(e)=>setEndtime(e.target.value)}/>
                     <span className='material-icons-outline text-gray-100'>
 
                     <img src="https://cdn-icons-png.flaticon.com/512/1455/1455306.png" alt="Close Modal"  className='w-7 h-7'/>
                     </span>
-                    <select type="time" name="title" placeholder='End Time' className='border-0 pt-3 text-gray-600 text-xl font-semibold pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus-ring-0 focus-border-blue-500' value={timezone} onChange={(e)=>setTimezone(e.target.value)}>
+                    <select type="time" name="title" placeholder='End Time' className='border-0 pt-3 text-gray-600 text-xl font-semibold pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus-ring-0 focus-border-blue-500' defaultValue={timezone} onChange={(e)=>setTimezone(e.target.value)}>
                     <option>Select Timezone</option>
-                    <option>Asia/Kolkata</option>
+                    <option value="Asia/Kolkata">Asia/Kolkata</option>
                     <option>Z-A</option>
                     </select>
                     {/* <span className='material-icons-outline text-gray-100'>
@@ -172,7 +203,7 @@ function EventModal() {
                     <img src="https://img.favpng.com/25/22/25/remarketing-how-you-remind-me-behavioral-retargeting-facebook-messenger-png-favpng-MZJpSj9YwP3H6Gb8Js7T26DRj.jpg" alt="Close Modal"  className='w-7 h-7'/>
                     </span> */}
 </div>
-<div class="flex my-5">
+{/* <div class="flex my-5">
   <button type="button" class={`bg-${reminder?'purple-500':'gray-500 '} relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`} role="switch" aria-checked="false" aria-labelledby="annual-billing-label" onClick={toggle}>
 
     <span aria-hidden="true" class={`translate-x-${dynocss} pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out`}></span>
@@ -180,7 +211,7 @@ function EventModal() {
   <span class="ml-3" id="annual-billing-label">
     <span class="text-sm font-normal text-gray-900">Remind (Default:10 Mins Before)</span>
   </span>
-</div>
+</div> */}
 
 
 
@@ -188,12 +219,12 @@ function EventModal() {
 
                 <img src="https://cdn.iconscout.com/icon/free/png-256/bookmark-1754138-1493251.png" alt="Close Modal"  className='w-7 h-7'/>
                 </span> */}
-                <div className='flex my-5'>
+                {/* <div className='flex my-5'>
                     {
                         labelsclass.map((lbl,i)=>(
                             <span key={i}
                             onClick={()=>{setclicklebel(lbl)}}
-                            className={`bg-${lbl}-500 w-7 h-7 rounded flex items-center justify-center cursor-pointer mx-1 hover:p-2 hover:rounded-l hover:ring-2 hover:ring-black`}
+                            className={`bg-blue-500 w-7 h-7 rounded flex items-center justify-center cursor-pointer mx-1 hover:p-2 hover:rounded-l hover:ring-2 hover:ring-black`}
                             >
                 {
                     label === labelsclass &&  <HiPencilAlt className="w-7 h-7 text-gray-400" />
@@ -202,7 +233,7 @@ function EventModal() {
                 </span>
                     ))
                     }
-                </div>
+                </div> */}
 
 
 
