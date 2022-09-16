@@ -9,6 +9,8 @@ use App\Models\Calendar;
 use App\Services\Google\Calendar\GoogleCalendarDeleteService;
 use App\Services\Google\Calendar\GoogleCalendarListService;
 use Illuminate\Http\JsonResponse;
+use App\Services\Google\Calendar\GoogleCalendarSyncService;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class GoogleCalendarController extends BaseController
@@ -51,5 +53,11 @@ class GoogleCalendarController extends BaseController
     {
         (new GoogleCalendarDeleteService())->handle($calendarId);
         return $this->response('Event deleted successfully', 200);
+    }
+
+    public function sync(Request $request): Response
+    {
+        (new GoogleCalendarSyncService())->handle($request);
+        return $this->response('Synced successfully', 200);
     }
 }
