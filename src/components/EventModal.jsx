@@ -34,7 +34,9 @@ function EventModal() {
 
                 if (!element && key!=='calendar_id' & key!=='all_day') {
 
-                    alert("Please Fill "+key.toUpperCase())
+                    toast.error('Please fill '+key.toLocaleLowerCase()+'!', {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
 
                     return false
                 }
@@ -83,8 +85,11 @@ function EventModal() {
 
         // Save to local storage
         if (selectedEvent) {
+            ValidateField(calendarEvents)
             if (selectedEvent.attendees.length===0) {
-                alert("Please Select User")
+                toast.error('Please select user', {
+                    position: toast.POSITION.TOP_RIGHT
+                });
                 return
             }
 
@@ -96,11 +101,14 @@ function EventModal() {
             });
 
         } else {
+            ValidateField(calendarEvents)
             if (selctedUsers.length===0) {
-                alert("Please Select User")
+                toast.error('Please select user', {
+                    position: toast.POSITION.TOP_RIGHT
+                });
                 return
             }
-            ValidateField(calendarEvents)
+
             const result = await (axios.post('calendar/add', {...calendarEvents} ))
             setDbdata([...db_data,result.data.data.event])
             toast.success('Event Added Succesfully !', {
