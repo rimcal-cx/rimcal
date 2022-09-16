@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::apiResource('/', GoogleCalendarController::class, ['except' => ['store, update, show', 'destroy'], 'only' => ['index']]);
         Route::post('/add', [GoogleCalendarController::class, 'create']);
         Route::post('/sync', [GoogleCalendarController::class, 'sync']);
+        Route::delete('/{calendar_id}', [GoogleCalendarController::class, 'destroy']);
     });
     Route::get('/users', [UserController::class, 'index']);
 });
