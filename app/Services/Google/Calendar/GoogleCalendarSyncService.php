@@ -37,9 +37,9 @@ class GoogleCalendarSyncService
                             'summary' => $event->summary,
                             'description' => $event->description,
                             'location' => $event->location,
-                            'start_datetime' => $event->start->dateTime,
-                            'end_datetime' => $event->end->dateTime,
-                            'timezone' => $event->start->timeZone,
+                            'start_datetime' => $event->start ? $event->start->dateTime : "00-00-00T00:00:00",
+                            'end_datetime' => $event->end ? $event->end->dateTime : "00-00-00T00:00:00",
+                            'timezone' => $event->start ? $event->start->timeZone : "",
                             'remind_before_in_mins' => 10,
                             'all_day' => false
                         ]);
