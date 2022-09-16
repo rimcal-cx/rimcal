@@ -17,9 +17,10 @@ function Day({day,rowIdx}) {
 
 
     useEffect(()=>{
+        console.log(db_data[0].start_date);
         const events = db_data.filter(evt=>dayjs(evt.start_date).format("DD-MM-YY")===day.format("DD-MM-YY"))
         setDayevents(events)
-    },[db_data])
+    },[db_data,saveEvents,day])
 
     const currentDaystyle=()=>{
         return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")?"bg-blue-600 text-white rounded-full":""
