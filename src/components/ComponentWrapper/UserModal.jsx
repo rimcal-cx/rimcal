@@ -9,10 +9,9 @@ const UserModal=()=>{
     const[userList,setUserList] =useState([])
     const[selectedUser,setselectedUser] =useState([])
 
-    console.log(selectedUser)
     const loadusers =async ()=>{
         const result = (await axios.get('users'))
-        console.log(result);
+
         setUserList(result.data.data)
 
     }
@@ -23,7 +22,7 @@ const UserModal=()=>{
 
     const setUser=(e,users)=>{
 
-        console.log();
+
         if (e.target.checked) {
             setselectedUser([...selectedUser,users])
         }else{
