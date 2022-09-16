@@ -5,10 +5,11 @@ import { useAuth } from '../context/AuthContext'
 
 // import { AiFillCaretRight,AiFillCaretLeft } from "react-icons/ai";
 import GlobalContext from '../context/GlobalContext';
+import UserModal from './ComponentWrapper/UserModal';
 function CalendarHeader() {
   const { logout: authLogout,token } = useAuth()
 
-  const {monthIndex,setMonthIndex,db_data,setDbdata} = useContext(GlobalContext)
+  const {monthIndex,setMonthIndex,db_data,setDbdata,visbisltyUser,userModal} = useContext(GlobalContext)
 
   axios.defaults.headers = {
     ...axios.defaults.headers,
@@ -63,15 +64,13 @@ useEffect(()=>{;
      <button className='border hover:bg-red-200 rounded py-2 px-4 ml-5' onClick={logOut}>
       Logout
      </button>
+     <button className='border hover:bg-red-200 rounded py-2 px-4 ml-5' onClick={()=>visbisltyUser(true)}>
+      Select User
+     </button>
+     {userModal &&  <UserModal/>}
 
-    &nbsp;<div className='gap-x-1'>
-     <select type="time" name="title" placeholder='End Time' className='border-0 pt-3 text-gray-600 text-xl font-semibold pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus-ring-0 focus-border-blue-500'>
-        <option>Select User</option>
-        <option value="Asia/Kolkata">Asia/Kolkata</option>
-        <option>Z-A</option>
-    </select>
-    </div>
       </header>
+
   )
 }
 

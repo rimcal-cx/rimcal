@@ -4,7 +4,7 @@ import { HiPencilAlt } from "react-icons/hi"
 import axios from 'axios'
 
 function EventModal() {
-    const {setshowEventModal,clickDay,DispatchCalEvents,selectedEvent,setselectedEvent,setDbdata,db_data} = useContext(GlobalContext)
+    const {setshowEventModal,clickDay,selctedUsers,golbalSlectedUsers,DispatchCalEvents,selectedEvent,setselectedEvent,setDbdata,db_data} = useContext(GlobalContext)
     // const labelsclass = ["bg-lime-500","bg-gray-500","bg-green-500","bg-blue-500","bg-red-500","bg-purple-500"]
     // const labelsclass = ["lime", "red", "green", "gray", "blue", "purple"]
     const [summary,setSummary] =useState(selectedEvent?selectedEvent.summary:"")
@@ -47,6 +47,10 @@ function EventModal() {
     }
 
     const HandleSubmit = async ()=>{
+        if (selctedUsers.length===0) {
+            alert("Please Select User")
+            return
+        }
 
         /*const calendarEvents={
             title:title,
@@ -73,18 +77,7 @@ function EventModal() {
             //id: selectedEvent? selectedEvent.id:Date.now()
             timezone: timezone,
             all_day: false,
-            attendees: [
-                {
-                    "id": 1,
-                    "name": "Sadhukhan",
-                    "email": "surajit@rimsys.io"
-                },
-                {
-                    "id": 2,
-                    "name": "Tarun",
-                    "email": "tarun@rimsys.io"
-                }
-            ],
+            attendees:selctedUsers,
             remind_before_in_mins: 10
         }
         //console.log(calendarEvents)
@@ -112,7 +105,7 @@ function EventModal() {
         // DispatchCalEvents({type:"push",payload:calenderEvents})
         // DispatchCalEvents({type:"push",payload:CalendarEvents})
         setshowEventModal(false)
-
+        golbalSlectedUsers([])
 
     }
     const handleDelte = async(event)=>{

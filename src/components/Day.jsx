@@ -15,16 +15,6 @@ function Day({day,rowIdx}) {
         db_data
       }=useContext(GlobalContext)
 
-    /*const loadEvents = aysnc () => {
-        const result = (await axios.get('calendar'))
-        console.log(result)
-    }
-
-    useEffect(()=>{
-        //const events = saveEvents.filter(evt=>dayjs(evt.day).format("DD-MM-YY")===day.format("DD-MM-YY"))
-        //setDayevents(events)
-        loadEvents()
-    },[saveEvents])*/
 
     useEffect(()=>{
         const events = db_data.filter(evt=>dayjs(evt.start_date).format("DD-MM-YY")===day.format("DD-MM-YY"))

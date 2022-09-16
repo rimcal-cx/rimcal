@@ -16,7 +16,12 @@ const GlobalContext = createContext({
     token:{},
     setToken:()=>{},
     db_data:[],
-    setDbdata:()=>{}
+    setDbdata:()=>{},
+    userModal:false,
+    visbisltyUser:()=>{},
+    selctedUsers:[],
+    golbalSlectedUsers:()=>{},
+
 })
 
 export default GlobalContext
