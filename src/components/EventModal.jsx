@@ -2,16 +2,17 @@ import React, { useContext, useEffect, useState } from 'react'
 import GlobalContext from '../context/GlobalContext'
 import { HiPencilAlt } from "react-icons/hi"
 import axios from 'axios'
+import UserModal from './ComponentWrapper/UserModal'
 
 function EventModal() {
-    const {setshowEventModal,clickDay,selctedUsers,golbalSlectedUsers,DispatchCalEvents,selectedEvent,setselectedEvent,setDbdata,db_data} = useContext(GlobalContext)
+    const {setshowEventModal,clickDay,userModal,selctedUsers,golbalSlectedUsers,DispatchCalEvents,selectedEvent,setselectedEvent,setDbdata,db_data,visbisltyUser} = useContext(GlobalContext)
     // const labelsclass = ["bg-lime-500","bg-gray-500","bg-green-500","bg-blue-500","bg-red-500","bg-purple-500"]
     // const labelsclass = ["lime", "red", "green", "gray", "blue", "purple"]
     const [summary,setSummary] =useState(selectedEvent?selectedEvent.summary:"")
     const [description,setDescription] =useState(selectedEvent?selectedEvent.description:"")
     //const [title,settitle] =useState(selectedEvent?selectedEvent.title:"")
     //const [desc,setdesc] =useState(selectedEvent?selectedEvent.desc:"")
-    console.log(selectedEvent);
+
     const [location,setlocation] =useState(selectedEvent?selectedEvent.location:"")
     const [endtime,setEndtime] =useState(selectedEvent?selectedEvent.end_time:"")
     const [starttime,setstarttime] =useState(selectedEvent?selectedEvent.start_time:"")
@@ -46,11 +47,8 @@ function EventModal() {
 
     }
 
+
     const HandleSubmit = async ()=>{
-        if (selctedUsers.length===0) {
-            alert("Please Select User")
-            return
-        }
 
         /*const calendarEvents={
             title:title,
@@ -65,6 +63,7 @@ function EventModal() {
             id: selectedEvent? selectedEvent.id:Date.now()
         }*/
 
+        console.log(selectedEvent);;
         const calendarEvents = {
             calendar_id: null,
             summary: summary,
@@ -77,7 +76,7 @@ function EventModal() {
             //id: selectedEvent? selectedEvent.id:Date.now()
             timezone: timezone,
             all_day: false,
-            attendees:selctedUsers,
+            attendees:selectedEvent?(selectedEvent.attendees):selctedUsers,
             remind_before_in_mins: 10
         }
         //console.log(calendarEvents)
@@ -85,11 +84,16 @@ function EventModal() {
             // const result = await (axios.post('calendar/add', {...calendarEvents} ))
 
 
-        //console.log('---------------------')
-        //console.log(result)
 
+        console.log(selctedUsers)
+        //console.log(result)
+        if (selctedUsers.length===0) {
+            alert("Please Select User")
+            return
+        }
         // Save to local storage
         if (selectedEvent) {
+
             calendarEvents.calendar_id =selectedEvent.calendar_id
             const result = await (axios.post('calendar/add', {...calendarEvents} ))
             loadEvents()
@@ -191,11 +195,50 @@ function EventModal() {
                     <option value="Asia/Kolkata">Asia/Kolkata</option>
                     <option>Z-A</option>
                     </select>
+
+                    {userModal &&  <UserModal/>}
                     {/* <span className='material-icons-outline text-gray-100'>
 
                     <img src="https://img.favpng.com/25/22/25/remarketing-how-you-remind-me-behavioral-retargeting-facebook-messenger-png-favpng-MZJpSj9YwP3H6Gb8Js7T26DRj.jpg" alt="Close Modal"  className='w-7 h-7'/>
                     </span> */}
 </div>
+
+                <div className=' mt-5 items-center w-96'>
+                <button className=' w-96 border hover:bg-red-200 rounded py-2 px-4 ml-5' onClick={()=>visbisltyUser(true)}>
+                    Select User
+                    </button>
+                </div>
+                <div>
+                <h6 className='mt-2 bg-red-200'>
+               &nbsp;&nbsp;Selected Users
+                </h6>
+                </div>
+                {
+                   selctedUsers&& selctedUsers.map((user,i)=>
+                        <div className=' mt-1 items-center w-96'>
+                        <button className=' w-96 border hover:bg-blue-200 rounded py-2 px-4 ml-5' >
+                        {user.name}
+                        </button>
+                        </div>
+                    )
+
+
+                }
+
+{
+                   selectedEvent&& selectedEvent.attendees.map((user,i)=>
+                        <div className=' mt-1 items-center w-96'>
+                        <button className=' w-96 border hover:bg-blue-200 rounded py-2 px-4 ml-5' >
+                        {user.name}
+                        </button>
+                        </div>
+                    )
+
+
+                }
+
+
+
 {/* <div class="flex my-5">
   <button type="button" class={`bg-${reminder?'purple-500':'gray-500 '} relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`} role="switch" aria-checked="false" aria-labelledby="annual-billing-label" onClick={toggle}>
 
@@ -240,6 +283,7 @@ function EventModal() {
             </footer>
 
         </div>
+
     </div>
   )
 }

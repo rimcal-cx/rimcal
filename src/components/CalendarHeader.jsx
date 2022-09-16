@@ -64,10 +64,8 @@ useEffect(()=>{;
      <button className='border hover:bg-red-200 rounded py-2 px-4 ml-5' onClick={logOut}>
       Logout
      </button>
-     <button className='border hover:bg-red-200 rounded py-2 px-4 ml-5' onClick={()=>visbisltyUser(true)}>
-      Select User
-     </button>
-     {userModal &&  <UserModal/>}
+
+
 
       </header>
 
