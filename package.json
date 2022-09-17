@@ -1,5 +1,5 @@
 {
-  "name": "rimsys-event-canleder",
+  "name": "rimsys-event-calendar",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -13,6 +13,7 @@
     "react-router": "^6.3.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
+    "react-select": "^5.4.0",
     "react-toastify": "^9.0.8"
   },
   "scripts": {

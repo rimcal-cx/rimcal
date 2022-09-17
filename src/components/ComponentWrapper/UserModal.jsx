@@ -32,8 +32,6 @@ const UserModal=()=>{
     }
 
     const adduser=()=>{
-
-
         golbalSlectedUsers([...selectedUser])
         visbisltyUser(false)
     }
