@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useState } from 'react'
 import GlobalContext from './GlobalContext'
 import dayjs from 'dayjs'
-//Integrate API i mean calnder API
+
 function savedEventReducer(state,{type,payload}){
 
     switch (type) {
@@ -32,7 +32,7 @@ function ContextWrapper(props) {
     const [showEventModal,setshowEventModal] =useState(false)
     const [selectedEvent,setselectedEvent] =useState(null)
     const [saveEvents,DispatchCalEvents] =useReducer(savedEventReducer,[],initEvents)
-    const [db_data,setDbdata] = useState([])
+    const [eventList, setEventList] = useState([])
     const [userModal,visbisltyUser] = useState(false)
     const [selctedUsers,golbalSlectedUsers] = useState([])
     useEffect(()=>{
@@ -47,7 +47,28 @@ function ContextWrapper(props) {
     },[smallCalendarMonth])
   return (
 
-    <GlobalContext.Provider value={{monthIndex,setMonthIndex,smallCalendarMonth,setsmallMonthCalendar,setclickDay,clickDay,showEventModal,setshowEventModal,DispatchCalEvents,saveEvents,setselectedEvent,selectedEvent,db_data,setDbdata,visbisltyUser,userModal,golbalSlectedUsers,selctedUsers}}>
+    <GlobalContext.Provider value={
+        {
+            monthIndex,
+            setMonthIndex,
+            smallCalendarMonth,
+            setsmallMonthCalendar,
+            setclickDay,
+            clickDay,
+            showEventModal,
+            setshowEventModal,
+            DispatchCalEvents,
+            saveEvents,
+            setselectedEvent,
+            selectedEvent,
+            eventList,
+            setEventList,
+            visbisltyUser,
+            userModal,
+            golbalSlectedUsers,
+            selctedUsers
+        }
+    }>
         {props.children}
     </GlobalContext.Provider>
 
