@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "../utilities/useLocalStorage";
 import axios  from "axios";
 import { toast, ToastContainer } from 'react-toastify';
+import ToastBody from "../components/ToastBody";
 
 const AuthContext = createContext();
 
@@ -31,13 +32,21 @@ export const AuthProvider = ({ children }) => {
             const userInfo = data ? data.user : (await axios.get('/me')).data.data;
             setUser(userInfo);
             if (data) {
-                toast.success("Login Successful !", {
+
+                toast.success(<ToastBody
+                title='Success'
+                type='success'
+                body='Login Successful!'
+                />, {
                     toastId: 'login-id',
                   });
             }
 
             navigate("/calendar", { replace: true });
-        } catch {}
+        } catch (e){
+            if ([403, 401].includes(e.response.status))
+                logout()
+        }
     }
 
   }
