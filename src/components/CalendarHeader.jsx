@@ -1,8 +1,9 @@
-import axios from 'axios';
 import dayjs from 'dayjs';
 import React, { useContext, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { toast } from 'react-toastify';
+import { logout as logoutUser, syncCalendar } from '../utilities/util'
+import ToastBody from './ToastBody'
 
 import GlobalContext from '../context/GlobalContext';
 function CalendarHeader() {
@@ -27,34 +28,62 @@ function CalendarHeader() {
   }
 
   const logout = async ()=>{
-    const {status} =  await axios.post('google/logout')
-
-    if (status === 200) {
-        authLogout()
+    try {
+        const {status} =  await logoutUser()
+        if (status === 200) {
+            authLogout()
+            toast.success(
+                <ToastBody
+                    title="Success"
+                    body="Logout Successfully!"
+                    type="success"
+                />
+            );
+        }
+    } catch (e) {
+        toast.error(<ToastBody title="Error" body="Logout Failed." type="error" />)
     }
 
   }
 
   const sync = async ()=>{
-    const payload = {
+    const dates = {
         start_date: start_date,
         end_date: end_date
     }
     setShowModal(false)
-    toast.success("Please wait a moment while processing...", {
-        position: toast.POSITION.TOP_LEFT,
-        toastId: 'login-id',
-        autoClose: 2000,
-      });
-    const {status} =  await axios.post('calendar/sync', payload)
-    if (status === 200) {
-        toast.success("Sync Successful!", {
-            position: toast.POSITION.TOP_LEFT,
-            toastId: 'login-id',
-            autoClose: 2000,
-          });
-    }
 
+    toast.promise(
+        syncCalendar(dates),
+        {
+          pending: {
+            render(){
+              return "Syncing in progress..."
+            },
+            icon: true,
+          },
+          success: {
+            render({data}){
+                return (<ToastBody
+                            title="Success"
+                            body="Syncing Completed Successfully!"
+                            type="success"
+                        />);
+            },
+            // other options
+          },
+          error: {
+            render({data}){
+              // When the promise reject, data will contains the error
+              return (<ToastBody
+                        title="Error"
+                        body="Syncing Failed."
+                        type="error"
+                    />);
+            }
+          }
+        }
+    )
   }
   return (
     <header className='px-2 py-4 flex items-center justify-between'>

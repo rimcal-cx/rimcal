@@ -1,7 +1,8 @@
 import { createContext, useState, useContext, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "../utilities/useLocalStorage";
-import axios  from "axios";
+import axios from 'axios'
+import { me } from '../utilities/util'
 import { toast, ToastContainer } from 'react-toastify';
 import ToastBody from "../components/ToastBody";
 
@@ -29,10 +30,9 @@ export const AuthProvider = ({ children }) => {
 
     if (!user) {
         try {
-            const userInfo = data ? data.user : (await axios.get('/me')).data.data;
+            const userInfo = data ? data.user : await me();
             setUser(userInfo);
             if (data) {
-
                 toast.success(<ToastBody
                 title='Success'
                 type='success'

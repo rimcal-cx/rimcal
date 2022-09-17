@@ -34,7 +34,7 @@ class GoogleCalendarCreateService
                     'end_datetime' => $request->end_datetime,
                     'timezone' => $request->timezone,
                     'remind_before_in_mins' => $request->remind_before_in_mins,
-                    'all_day' => $request->all_day
+                    'all_day' => false
                 ]
             );
 

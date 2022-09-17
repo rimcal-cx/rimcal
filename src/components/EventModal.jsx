@@ -1,10 +1,9 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import GlobalContext from '../context/GlobalContext'
 import { TiTick } from "react-icons/ti"
-import axios from 'axios'
 import titleIcon from '../assets/images/tag.png'
 import { toast } from 'react-toastify';
-import { loadEvents, loadUsers, getTimezonesList } from '../utilities/util'
+import { loadEvents, loadUsers, getTimezonesList, eventSent, eventDelete } from '../utilities/util'
 import Select from 'react-select';
 import ToastBody from './ToastBody'
 import { IoColorPalette } from 'react-icons/io5'
@@ -12,46 +11,36 @@ import { IoColorPalette } from 'react-icons/io5'
 
 function EventModal() {
     const {
-        setshowEventModal,
+        setShowEventModal,
         clickDay,
-        selctedUsers,
-        golbalSlectedUsers,
         DispatchCalEvents,
         selectedEvent,
-        setselectedEvent,
+        setSelectedEvent,
         setEventList,
-        eventList,
     } = useContext(GlobalContext)
 
-    const [title,setTitle] = useState(selectedEvent?selectedEvent.title:"")
-    const [description,setDescription] =useState(selectedEvent?selectedEvent.description:"")
-    const [endTime,setEndTime] =useState(selectedEvent?selectedEvent.end_time:"")
-    const [startTime,setStartTime] =useState(selectedEvent?selectedEvent.start_time:"")
-    const [timezone,setTimezone] =useState(selectedEvent?selectedEvent.timezone:"")
-    const [reminder,setReminder] =useState(selectedEvent?selectedEvent.reminder:false)
+    const [title,setTitle] = useState(selectedEvent?selectedEvent.summary:"")
+    const [description,setDescription] = useState(selectedEvent?selectedEvent.description:"")
+    const [endTime,setEndTime] = useState(selectedEvent?selectedEvent.end_time:"")
+    const [startTime,setStartTime] = useState(selectedEvent?selectedEvent.start_time:"")
+    const [timezone,setTimezone] = useState(selectedEvent ? {name: selectedEvent?.timezone, label: selectedEvent?.timezone} : {})
+    const [reminder,setReminder] = useState(selectedEvent && (selectedEvent?.remind_before_in_mins === 10) ? true : false)
     const labelCssClasses = ["lime", "red", "green", "gray", "blue", "purple"]
     const paletteCssClasses = {lime : "text-lime-500", red: "text-red-500", green: "text-green-500",gray: "text-gray-500", blue: "text-blue-500", purple: "text-purple-500"}
     const [label,setLabel] = useState(labelCssClasses[0])
-    const [toggleCss,setToggleCss]= useState('translate-x-0')
-    const [dropdownLoading,setDropdownLoading]= useState(true)
+    const [toggleCss,setToggleCss] = useState(selectedEvent && (selectedEvent?.remind_before_in_mins === 10) ? 'translate-x-5' :  'translate-x-0')
+    const [dropdownLoading,setDropdownLoading] = useState(true)
     const[userList, setUserList] = useState([])
-    const[selectedUsers, setSelectedUsers] = useState([])
+    const[selectedUsers, setSelectedUsers] = useState(selectedEvent ? selectedEvent.attendees : [])
     const[timezones, setTimezones] = useState([])
-    const[keepMenuOpen, setkeepMenuOpen] = useState(false)
-
-    const DeletedUser = useCallback((i)=>{
-        selectedEvent.attendees.splice(i,1)
-        console.log(selectedEvent.attendees);
-        setselectedEvent(selectedEvent)
-        console.log(selectedEvent);
-    }, [])
+    const[toggleMenu, setToggleMenu] = useState(false)
 
     useEffect(() => {
+        // get timezone list
         const timezoneList = getTimezonesList()
         setTimezones(timezoneList)
-    }, [])
 
-    useEffect(() => {
+        // get user(attendees) list
         loadUsers().then((users) => {
             setUserList(users)
             setDropdownLoading(false)
@@ -59,105 +48,160 @@ function EventModal() {
             console.log(e)
             toast.error(<ToastBody title="Error" body="Unable to fetch User Lists. Try again later." type="error" />)
         })
-    }, [dropdownLoading])
+    }, [])
 
     const ValidateField=(obj)=>{
-
         for (const key in obj) {
+            const element = obj[key];
+            if (!element && !['remind_before_in_mins', 'calendar_id'].includes(key)) {
+                toast.error(<ToastBody
+                    title={'Error'}
+                    body={`Please fill the details ${key.toLocaleLowerCase()}!`}
+                    type={'error'}
+                />);
 
-                const element = obj[key];
-
-                if (!element && key!=='calendar_id' & key!=='all_day') {
-
-                    toast.error('Please fill '+key.toLocaleLowerCase()+'!', {
-                        position: toast.POSITION.TOP_RIGHT
-                    });
-
-                    return false
-                }
-
+                return false
+            }
         }
+
+        return true
     }
 
 
 
     const HandleSubmit = async ()=>{
 
-
-        console.log(selectedEvent);
-        const calendarEvents = {
-            calendar_id: null,
+        const calendarEvent = {
             summary: title,
             description: description,
-            location: 'Kolkata',
+            location: timezone.name.split('/')[1],
             startTime:startTime,
             endTime:endTime,
             start_datetime: selectedEvent?selectedEvent.start_datetime:clickDay.format("YYYY-MM-DD").toString()+"T"+startTime+":00",
             end_datetime: selectedEvent?selectedEvent.end_datetime:clickDay.format("YYYY-MM-DD").toString()+"T"+endTime+":00",
-            timezone: timezone,
-            all_day: false,
-            attendees:selectedEvent?(selectedEvent.attendees):selctedUsers,
-            remind_before_in_mins: 10
+            timezone: timezone.name,
+            attendees: selectedUsers,
+            remind_before_in_mins: reminder ? 10 : 0
         }
 
+        console.log(calendarEvent)
+        if (!ValidateField(calendarEvent)) {
+            return
+        }
 
-
-        console.log(selctedUsers)
-
-        // Save to local storage
         if (selectedEvent) {
-            ValidateField(calendarEvents)
-            if (selectedEvent.attendees.length===0) {
-                toast.error('Please select user', {
-                    position: toast.POSITION.TOP_RIGHT
-                });
+            if (selectedEvent.attendees.length === 0) {
+                toast.error(<ToastBody
+                    title={'Error'}
+                    body={'Please add the attendees.'}
+                    type={'error'}
+                />);
+                return
+            }
+            try {
+                calendarEvent.calendar_id = selectedEvent.calendar_id
+                await eventSent(calendarEvent)
+            } catch (e) {
+                toast.error(<ToastBody
+                    title={'Error'}
+                    body={'Failed to update an event! Try again later.'}
+                    type={'error'}
+                />);
                 return
             }
 
-            calendarEvents.calendar_id =selectedEvent.calendar_id
-            await (axios.post('calendar/add', {...calendarEvents} ))
-            const { events } = await loadEvents()
-            setEventList([...events])
-            toast.success('Event Updated  Succesfully !', {
-                position: toast.POSITION.TOP_RIGHT
-            });
+            try {
+                const { events } = await loadEvents()
+                setEventList([...events])
+                toast.success(<ToastBody
+                    title={'Success'}
+                    body={'Event updated successfully!'}
+                    type={'success'}
+                />);
+            } catch (e) {
+                toast.error(<ToastBody
+                    title="Error"
+                    body="Unable to fetch event lists! Try again later."
+                    type="error"
+                    />)
+                return
+            }
 
         } else {
-            ValidateField(calendarEvents)
-            if (selctedUsers.length===0) {
-                toast.error('Please select user', {
-                    position: toast.POSITION.TOP_RIGHT
-                });
+            if (selectedUsers.length === 0) {
+                toast.error(<ToastBody
+                    title={'Error'}
+                    body={'Please add the attendees.'}
+                    type={'error'}
+                />);
                 return
             }
 
-            const { event } = await (await (axios.post('calendar/add', {...calendarEvents} ))).data.data
-            setEventList([...eventList, event])
-            toast.success('Event Added Succesfully !', {
-                position: toast.POSITION.TOP_RIGHT
-            });
+            try {
+                await eventSent(calendarEvent)
+            } catch (e) {
+                toast.error(<ToastBody
+                    title={'Error'}
+                    body={'Failed to create an existing event! Try again later.'}
+                    type={'error'}
+                />);
+                return
+            }
+
+            try {
+                const { events } = await loadEvents()
+                setEventList([...events])
+                toast.success(<ToastBody
+                    title={'Success'}
+                    body={'Event created successfully!'}
+                    type={'success'}
+                />);
+            } catch (e) {
+                toast.error(<ToastBody
+                    title="Error"
+                    body="Unable to fetch event lists! Try again later."
+                    type="error"
+                    />)
+                return
+            }
         }
 
-        // DispatchCalEvents({type:"push",payload:calendarEvents})
-        setselectedEvent(null)
-        // DispatchCalEvents({type:"push",payload:calenderEvents})
-        // DispatchCalEvents({type:"push",payload:CalendarEvents})
-        setshowEventModal(false)
-        golbalSlectedUsers([])
-
+        setSelectedEvent(null)
+        setShowEventModal(false)
     }
-    const handleDelte = async(event)=>{
 
-        await (axios.delete(`calendar/${event.calendar_id}`))
-        const { events } = await loadEvents()
-        setEventList([...events])
+    const handleEventDelete = async(event)=>{
+        try {
+            await eventDelete(event)
+        } catch (e) {
+            toast.error(<ToastBody
+                title={'Error'}
+                body={'Failed to delete an event! Try again later.'}
+                type={'error'}
+            />);
+            return
+        }
+
+        try {
+            const { events } = await loadEvents()
+            setEventList([...events])
+            toast.success(<ToastBody
+                title={'Success'}
+                body={'Event Deleted successfully!'}
+                type={'success'}
+            />);
+        } catch (e) {
+            toast.error(<ToastBody
+                title="Error"
+                body="Unable to fetch event lists! Try again later."
+                type="error"
+                />)
+            return
+        }
+
         DispatchCalEvents({type:"delete", payload:event})
-        setshowEventModal(false)
-        setselectedEvent(null)
-        toast.success('Event Deleted Succesfully !', {
-            position: toast.POSITION.TOP_RIGHT
-        });
-
+        setShowEventModal(false)
+        setSelectedEvent(null)
     }
 
     const toggle =()=>{
@@ -171,17 +215,12 @@ function EventModal() {
     }
 
 
-    useEffect(()=>{
-
-    },[DeletedUser])
-
-
   return (
     <div className='h-screen w-full fixed left-0 top-0 flex justify-center items-center'>
         <div className='bg-white rounded-lg shadow-2xl w-4/12 h-5/6'>
             <header className='bg-gray-100 px-4 py-2 flex justify-between'>
             <div className='flex justify-between'>
-                    <button onClick={()=>{setshowEventModal(false);setselectedEvent(null)}} className='mr-2'>
+                    <button onClick={()=>{setShowEventModal(false);setSelectedEvent(null)}} className='mr-2'>
                         <span className='material-icons-outline text-gray-100'>
                             <img src="https://cdn3.iconfinder.com/data/icons/flat-actions-icons-9/792/Close_Icon_Dark-512.png" alt="Close Modal"  className='w-7 h-7'/>
                         </span>
@@ -190,7 +229,7 @@ function EventModal() {
                 </div>
                 {
                     selectedEvent &&
-                    <button onClick={()=>{handleDelte(selectedEvent)}}>
+                    <button onClick={()=>{handleEventDelete(selectedEvent)}}>
                         <span className='material-icons-outline text-gray-100'>
                             <img src="https://www.freeiconspng.com/thumbs/remove-icon-png/remove-icon-png-26.png" alt="Close Modal"  className='w-7 h-7'/>
                         </span>
@@ -280,10 +319,10 @@ function EventModal() {
                         isLoading={dropdownLoading}
                         getOptionLabel={(option) => option.name }
                         getOptionValue={(option) => option.id }
-                        menuIsOpen={keepMenuOpen}
+                        menuIsOpen={toggleMenu}
                         closeMenuOnSelect={false}
-                        onMenuOpen={() => {  setkeepMenuOpen(true)}}
-                        onMenuClose={() => { setkeepMenuOpen(false)} }
+                        onMenuOpen={() => {  setToggleMenu(true)}}
+                        onMenuClose={() => { setToggleMenu(false)} }
                         menuPlacement={'top'}
                     />
                 </div>

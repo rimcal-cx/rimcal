@@ -25,6 +25,26 @@ export const loadUsers = async () => {
     return (await axios.get('users')).data.data
 }
 
+export const eventSent = async (calendarEvent) => {
+    return (await axios.post('calendar/add', {...calendarEvent})).data.data
+}
+
+export const eventDelete = async (calendarEvent) => {
+    return (await axios.delete(`calendar/${calendarEvent.calendar_id}`))
+}
+
+export const syncCalendar = async (dates) => {
+    return (await axios.post('calendar/sync', dates)).data.data
+}
+
+export const logout = async (dates) => {
+    return (await axios.post('google/logout'))
+}
+
+export const me = async () => {
+    return (await axios.get('me')).data.data
+}
+
 const timezones = [
     'Europe/Andorra',
     'Asia/Dubai',

@@ -7,9 +7,9 @@ function Day({day,rowIdx}) {
     const[dayEvents,setDayevents] = useState([])
     const{
         setclickDay,
-        setshowEventModal,
+        setShowEventModal,
         saveEvents,
-        setselectedEvent,
+        setSelectedEvent,
         eventList
       }=useContext(GlobalContext)
 
@@ -26,7 +26,7 @@ function Day({day,rowIdx}) {
   return (
     <div className='border border-grey-200 flex flex-col hover:bg-sky-200 font-bold cursor-pointer' onClick={()=>{
             setclickDay(day)
-            setshowEventModal(true)
+            setShowEventModal(true)
         }}>
         {/* {day.format()} */}
         <header className='flex flex-col item-center'>
@@ -42,7 +42,7 @@ function Day({day,rowIdx}) {
         {dayEvents?.map((evt,idx)=>(
             <div className={`bg-lime-500 p-1 mr-3 text-gray-600 text-sm rounded mb-1 truncate`}
             key={idx}
-            onClick={()=>{setselectedEvent(evt);setshowEventModal(true)}}
+            onClick={()=>{setSelectedEvent(evt);setShowEventModal(true)}}
             >
                 {evt.summary}
             </div>

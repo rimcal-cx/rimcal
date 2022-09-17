@@ -29,12 +29,10 @@ function ContextWrapper(props) {
     const [monthIndex,setMonthIndex] =useState(dayjs().month())
     const [smallCalendarMonth,setsmallMonthCalendar] =useState(null)
     const [clickDay,setclickDay] =useState(dayjs())
-    const [showEventModal,setshowEventModal] =useState(false)
-    const [selectedEvent,setselectedEvent] =useState(null)
+    const [showEventModal,setShowEventModal] =useState(false)
+    const [selectedEvent,setSelectedEvent] =useState(null)
     const [saveEvents,DispatchCalEvents] =useReducer(savedEventReducer,[],initEvents)
     const [eventList, setEventList] = useState([])
-    const [userModal,visbisltyUser] = useState(false)
-    const [selctedUsers,golbalSlectedUsers] = useState([])
     useEffect(()=>{
       localStorage.setItem("savedEvents",JSON.stringify(saveEvents))
 
@@ -56,17 +54,13 @@ function ContextWrapper(props) {
             setclickDay,
             clickDay,
             showEventModal,
-            setshowEventModal,
+            setShowEventModal,
             DispatchCalEvents,
             saveEvents,
-            setselectedEvent,
+            setSelectedEvent,
             selectedEvent,
             eventList,
             setEventList,
-            visbisltyUser,
-            userModal,
-            golbalSlectedUsers,
-            selctedUsers
         }
     }>
         {props.children}
