@@ -19,6 +19,8 @@ const GlobalContext = createContext({
     setEventList:()=>{},
     popupToggle: false,
     setPopupToggle: (toggle) => {},
+    syncToggle: false,
+    setSyncToggle: (toggle) => {},
     popupFooter:'Footer',
     setPopupFooter: (component) => {},
     popupHeader: "Header",

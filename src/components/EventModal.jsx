@@ -7,6 +7,7 @@ import { loadEvents, loadUsers, getTimezonesList, eventSent, eventDelete } from 
 import Select from 'react-select';
 import ToastBody from './ToastBody'
 import { IoColorPalette } from 'react-icons/io5'
+import dayjs from 'dayjs';
 
 
 function EventModal() {
@@ -28,8 +29,8 @@ function EventModal() {
 
     const [title,setTitle] = useState(selectedEvent && selectedEvent?.summary ? selectedEvent.summary : "")
     const [description,setDescription] = useState(selectedEvent && selectedEvent?.description ? selectedEvent.description: "")
-    const [endTime,setEndTime] = useState(selectedEvent && selectedEvent?.end_time? selectedEvent.end_time : "")
-    const [startTime,setStartTime] = useState(selectedEvent && selectedEvent?.start_time? selectedEvent.start_time : "")
+    const [endTime,setEndTime] = useState(selectedEvent && selectedEvent?.end_time? dayjs(selectedEvent.end_datetime).format("HH:mm").toString() : "")
+    const [startTime,setStartTime] = useState(selectedEvent && selectedEvent?.start_time ? dayjs(selectedEvent.start_datetime).format("HH:mm").toString() : "")
     const [timezone,setTimezone] = useState(selectedEvent && selectedEvent?.timezone ? {name: selectedEvent.timezone, label: selectedEvent.timezone} : undefined)
     const [reminder,setReminder] = useState(selectedEvent && (selectedEvent?.remind_before_in_mins === 10) ? true : false)
     const [label,setLabel] = useState(selectedEvent && (selectedEvent?.event_label) ? selectedEvent.event_label : labelCssClasses[0])
@@ -82,8 +83,8 @@ function EventModal() {
             location: timezone.name.split('/')[1],
             startTime:startTime,
             endTime:endTime,
-            start_datetime: selectedEvent?selectedEvent.start_datetime:clickDay.format("YYYY-MM-DD").toString()+"T"+startTime+":00",
-            end_datetime: selectedEvent?selectedEvent.end_datetime:clickDay.format("YYYY-MM-DD").toString()+"T"+endTime+":00",
+            start_datetime: `${(selectedEvent && selectedEvent?.start_datetime ? dayjs(selectedEvent.start_datetime).format("YYYY-MM-DD").toString() : clickDay.format("YYYY-MM-DD").toString())}T${startTime}:00`,
+            end_datetime: `${(selectedEvent && selectedEvent?.end_datetime ? dayjs(selectedEvent.end_datetime).format("YYYY-MM-DD").toString() : clickDay.format("YYYY-MM-DD").toString())}T${endTime}:00`,
             timezone: timezone.name,
             attendees: selectedUsers,
             remind_before_in_mins: reminder ? 10 : 0,

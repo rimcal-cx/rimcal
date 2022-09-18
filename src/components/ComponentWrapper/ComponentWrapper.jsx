@@ -16,6 +16,7 @@ const ComponentWrapper=({currentMonth})=>{
         showEventModal,
         setEventList,
         popupToggle,
+        syncToggle,
         setPopupToggle,
         popupHeader,
         popupFooter,
@@ -38,8 +39,9 @@ const ComponentWrapper=({currentMonth})=>{
         <SideBar/>
         <Month month={currentMonth}/>
         {showEventModal && <EventModal />}
-        {<PopupModal
+        {popupToggle && <PopupModal
             popupToggle={popupToggle}
+            syncToggle={syncToggle}
             setPopupToggle={setPopupToggle}
             header={popupHeader}
             footer={popupFooter}

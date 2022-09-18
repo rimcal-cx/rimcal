@@ -9,7 +9,16 @@ import GlobalContext from '../context/GlobalContext';
 function CalendarHeader() {
   const { logout: authLogout } = useAuth()
 
-  const { monthIndex, setMonthIndex, setPopupContent, setPopupToggle, popupToggle, setPopupFooter, setEventList } = useContext(GlobalContext)
+  const {
+    monthIndex,
+    setMonthIndex,
+    setPopupContent,
+    setPopupToggle,
+    popupToggle,
+    setPopupFooter,
+    setEventList,
+    setSyncToggle,
+     } = useContext(GlobalContext)
   const [start_date, setSyncStartDate] = useState("", "")
   const [end_date, setSyncEndDate] = useState("", "")
   const [showModal, setShowModal] = useState(false);
@@ -60,6 +69,8 @@ function CalendarHeader() {
     await syncCalendar(dates)
     const {events} = await loadEvents()
     setEventList(events)
+    setPopupToggle((prevToggle) => !prevToggle)
+    setSyncToggle((prevToggle) => !prevToggle)
   }
 
   const sync = async ()=>{
@@ -67,7 +78,9 @@ function CalendarHeader() {
         start_date: start_date,
         end_date: end_date
     }
+    setSyncToggle((prevToggle) => !prevToggle)
     setShowModal(false)
+    setPopupToggle((prevToggle) => !prevToggle)
 
     toast.promise(
         syncAndUpdateEvents(dates),

@@ -34,6 +34,7 @@ function ContextWrapper(props) {
     const [saveEvents,DispatchCalEvents] =useReducer(savedEventReducer,[],initEvents)
     const [eventList, setEventList] = useState([])
     const [popupToggle, setPopupToggle] = useState(false)
+    const [syncToggle, setSyncToggle] = useState(false)
     const [popupFooter, setPopupFooter] = useState()
     const [popupHeader, setPopupHeader] = useState()
     const [popupContent, setPopupContent] = useState()
@@ -78,6 +79,8 @@ function ContextWrapper(props) {
             labelCssClasses,
             eventCssClass,
             paletteCssClass,
+            syncToggle,
+            setSyncToggle,
         }
     }>
         {props.children}
