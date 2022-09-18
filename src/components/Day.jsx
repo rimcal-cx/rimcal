@@ -10,12 +10,13 @@ function Day({day,rowIdx}) {
         setShowEventModal,
         saveEvents,
         setSelectedEvent,
-        eventList
+        eventList,
+        eventCssClass,
       }=useContext(GlobalContext)
 
 
     useEffect(()=>{
-        const events = eventList?.filter(evt=>dayjs(evt.start_date).format("DD-MM-YY")===day.format("DD-MM-YY"))
+        const events = eventList?.filter(evt=>dayjs(evt.start_date).format("DD-MM-YY") === day.format("DD-MM-YY"))
         setDayevents(events)
     },[eventList, saveEvents, day])
 
@@ -40,9 +41,9 @@ function Day({day,rowIdx}) {
         <div className='flex-1 cursor-pointer text-white' >
 
         {dayEvents?.map((evt,idx)=>(
-            <div className={`bg-lime-500 p-1 mr-3 text-gray-600 text-sm rounded mb-1 truncate`}
+            <div className={`${eventCssClass[evt?.event_label ?? Object.keys(eventCssClass)[0]]} p-1 mr-3 ${['lime', 'green'].includes(evt?.event_label ?? Object.keys(eventCssClass)[0]) ? 'text-gray-700' : 'text-gray-100'} text-sm rounded mb-1 truncate`}
             key={idx}
-            onClick={()=>{setSelectedEvent(evt);setShowEventModal(true)}}
+            onClick={()=>{console.log(evt);setSelectedEvent(evt);setShowEventModal(true)}}
             >
                 {evt.summary}
             </div>

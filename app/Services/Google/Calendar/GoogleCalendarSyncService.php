@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Services\Google\GoogleAuthClient;
 use Exception;
 use Google\Service\Calendar as GoogleCalendar;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class GoogleCalendarSyncService
@@ -41,16 +42,18 @@ class GoogleCalendarSyncService
                             'end_datetime' => $event->end ? $event->end->dateTime : "00-00-00T00:00:00",
                             'timezone' => $event->start ? $event->start->timeZone : "",
                             'remind_before_in_mins' => 10,
-                            'all_day' => false
+                            'all_day' => false,
+                            'event_label' => Arr::random(Calendar::$labels),
                         ]);
                         foreach($event->attendees as $attendee){
                             if(in_array($attendee->email, array_column(User::$defaultUserAttendees, 'email'))){
                                 CalendarAttendee::whereCalendarId($calendar->id)->delete();
+                                $attendeeInfo = User::where('email', trim($attendee->email))->first();
                                 CalendarAttendee::create([
                                     'calendar_id' => $calendar->id,
-                                    'user_id' => null,
-                                    'name' => User::$defaultUserAttendees[array_search($attendee->email, array_column(User::$defaultUserAttendees, 'email'))]['name'],
-                                    'email' => $attendee->email
+                                    'user_id' => $attendeeInfo->id,
+                                    'name' => $attendeeInfo->name,
+                                    'email' => $attendeeInfo->email
                                 ]);
                             }
                         }

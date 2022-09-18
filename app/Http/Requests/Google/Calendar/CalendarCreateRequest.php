@@ -35,7 +35,8 @@ class CalendarCreateRequest extends FormRequest
             'attendees.*.id' => 'required|integer',
             'attendees.*.name' => 'required|string',
             'attendees.*.email' => 'required|string',
-            'remind_before_in_mins' => 'nullable|integer'
+            'remind_before_in_mins' => 'nullable|integer',
+            'event_label' => 'nullable|string',
         ];
     }
 }

@@ -37,6 +37,9 @@ function ContextWrapper(props) {
     const [popupFooter, setPopupFooter] = useState()
     const [popupHeader, setPopupHeader] = useState()
     const [popupContent, setPopupContent] = useState()
+    const labelCssClasses = ["lime", "red", "green", "gray", "blue", "purple"]
+    const eventCssClass = {lime : "bg-lime-500", red: "bg-red-500", green: "bg-green-500",gray: "bg-gray-500", blue: "bg-blue-500", purple: "bg-purple-500"}
+    const paletteCssClass = {lime : "text-lime-500", red: "text-red-500", green: "text-green-500",gray: "text-gray-500", blue: "text-blue-500", purple: "text-purple-500"}
     useEffect(()=>{
       localStorage.setItem("savedEvents",JSON.stringify(saveEvents))
     },[saveEvents, selectedEvent])
@@ -72,6 +75,9 @@ function ContextWrapper(props) {
             setPopupHeader,
             popupContent,
             setPopupContent,
+            labelCssClasses,
+            eventCssClass,
+            paletteCssClass,
         }
     }>
         {props.children}

@@ -21,17 +21,18 @@ function EventModal() {
         setPopupToggle,
         setPopupContent,
         setPopupFooter,
+        labelCssClasses,
+        eventCssClass,
+        paletteCssClass,
     } = useContext(GlobalContext)
 
-    const [title,setTitle] = useState(selectedEvent?selectedEvent.summary:"")
-    const [description,setDescription] = useState(selectedEvent?selectedEvent.description:"")
-    const [endTime,setEndTime] = useState(selectedEvent?selectedEvent.end_time:"")
-    const [startTime,setStartTime] = useState(selectedEvent?selectedEvent.start_time:"")
-    const [timezone,setTimezone] = useState(selectedEvent ? {name: selectedEvent?.timezone, label: selectedEvent?.timezone} : undefined)
+    const [title,setTitle] = useState(selectedEvent && selectedEvent?.summary ? selectedEvent.summary : "")
+    const [description,setDescription] = useState(selectedEvent && selectedEvent?.description ? selectedEvent.description: "")
+    const [endTime,setEndTime] = useState(selectedEvent && selectedEvent?.end_time? selectedEvent.end_time : "")
+    const [startTime,setStartTime] = useState(selectedEvent && selectedEvent?.start_time? selectedEvent.start_time : "")
+    const [timezone,setTimezone] = useState(selectedEvent && selectedEvent?.timezone ? {name: selectedEvent.timezone, label: selectedEvent.timezone} : undefined)
     const [reminder,setReminder] = useState(selectedEvent && (selectedEvent?.remind_before_in_mins === 10) ? true : false)
-    const labelCssClasses = ["lime", "red", "green", "gray", "blue", "purple"]
-    const paletteCssClasses = {lime : "text-lime-500", red: "text-red-500", green: "text-green-500",gray: "text-gray-500", blue: "text-blue-500", purple: "text-purple-500"}
-    const [label,setLabel] = useState(labelCssClasses[0])
+    const [label,setLabel] = useState(selectedEvent && (selectedEvent?.event_label) ? selectedEvent.event_label : labelCssClasses[0])
     const [toggleCss,setToggleCss] = useState(selectedEvent && (selectedEvent?.remind_before_in_mins === 10) ? 'translate-x-5' :  'translate-x-0')
     const [dropdownLoading,setDropdownLoading] = useState(true)
     const[userList, setUserList] = useState([])
@@ -85,7 +86,8 @@ function EventModal() {
             end_datetime: selectedEvent?selectedEvent.end_datetime:clickDay.format("YYYY-MM-DD").toString()+"T"+endTime+":00",
             timezone: timezone.name,
             attendees: selectedUsers,
-            remind_before_in_mins: reminder ? 10 : 0
+            remind_before_in_mins: reminder ? 10 : 0,
+            event_label: label,
         }
 
         console.log(calendarEvent)
@@ -329,9 +331,8 @@ function EventModal() {
                     <span className="col-span-8 text-right mr-2 mb-1" id="annual-billing-label">
                         <span className="text-md font-normal text-gray-900">Remind (Default:10 Mins Before)</span>
                     </span>
-
                     <p className='col-span-2 text-md font-medium text-gray-900 self-center justify-self-center'>
-                        <IoColorPalette className={`w-8 h-8 ${paletteCssClasses[label]}`}/>
+                        <IoColorPalette className={`w-8 h-8 ${paletteCssClass[label]}`}/>
                     </p>
                     <div className='col-span-8 w-9/12 justify-self-end self-center'>
                         <div className='flex justify-evenly'>
@@ -339,7 +340,7 @@ function EventModal() {
                             labelCssClasses.map((lbl,i)=>(
                                 <span key={i}
                                 onClick={()=>{setLabel(lbl)}}
-                                className={`${label === lbl ? 'border-black border-2' : '' } bg-${lbl}-500 w-7 h-7 rounded flex items-center justify-center cursor-pointer mx-1 hover:rounded-l hover:border-2 hover:border-black`}
+                                className={`${eventCssClass[label] === eventCssClass[lbl] ? 'border-black border-2' : '' } ${eventCssClass[lbl]} w-7 h-7 rounded flex items-center justify-center cursor-pointer mx-1 hover:rounded-l hover:border-2 hover:border-black`}
                                 >
                                     { label === lbl && <TiTick className='w-7 h-7 text-gray-900'/>}
                                 </span>

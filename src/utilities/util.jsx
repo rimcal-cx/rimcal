@@ -35,6 +35,7 @@ export const eventDelete = async (calendarEvent) => {
 
 export const syncCalendar = async (dates) => {
     return (await axios.post('calendar/sync', dates)).data.data
+
 }
 
 export const logout = async (dates) => {

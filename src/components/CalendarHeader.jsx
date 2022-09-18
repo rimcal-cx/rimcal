@@ -2,14 +2,14 @@ import dayjs from 'dayjs';
 import React, { useContext, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { toast } from 'react-toastify';
-import { logout as logoutUser, syncCalendar } from '../utilities/util'
+import { logout as logoutUser, syncCalendar, loadEvents } from '../utilities/util'
 import ToastBody from './ToastBody'
 
 import GlobalContext from '../context/GlobalContext';
 function CalendarHeader() {
   const { logout: authLogout } = useAuth()
 
-  const { monthIndex, setMonthIndex, setPopupContent, setPopupToggle, popupToggle, setPopupFooter } = useContext(GlobalContext)
+  const { monthIndex, setMonthIndex, setPopupContent, setPopupToggle, popupToggle, setPopupFooter, setEventList } = useContext(GlobalContext)
   const [start_date, setSyncStartDate] = useState("", "")
   const [end_date, setSyncEndDate] = useState("", "")
   const [showModal, setShowModal] = useState(false);
@@ -56,6 +56,12 @@ function CalendarHeader() {
 
   }
 
+  const syncAndUpdateEvents = async (dates) => {
+    await syncCalendar(dates)
+    const {events} = await loadEvents()
+    setEventList(events)
+  }
+
   const sync = async ()=>{
     const dates = {
         start_date: start_date,
@@ -64,7 +70,7 @@ function CalendarHeader() {
     setShowModal(false)
 
     toast.promise(
-        syncCalendar(dates),
+        syncAndUpdateEvents(dates),
         {
           pending: {
             render(){

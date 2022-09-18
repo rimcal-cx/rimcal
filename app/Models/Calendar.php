@@ -23,7 +23,8 @@ class Calendar extends Model
         'end_datetime',
         'timezone',
         'remind_before_in_mins',
-        'all_day'
+        'all_day',
+        'event_label',
     ];
 
     protected $hidden = [
@@ -35,6 +36,8 @@ class Calendar extends Model
     protected $cast = [
         'all_day' => 'boolean'
     ];
+
+    public static array $labels = ["lime", "red", "green", "gray", "blue", "purple"];
 
     public function attendees(){
         return $this->hasMany(CalendarAttendee::class, 'calendar_id', 'id');

@@ -34,7 +34,8 @@ class GoogleCalendarCreateService
                     'end_datetime' => $request->end_datetime,
                     'timezone' => $request->timezone,
                     'remind_before_in_mins' => $request->remind_before_in_mins,
-                    'all_day' => false
+                    'all_day' => false,
+                    'event_label' => $request->event_label,
                 ]
             );
 
@@ -55,6 +56,7 @@ class GoogleCalendarCreateService
             CalendarAttendee::insert($calAttendees);
             $event = $this->addToGoogleCalendar($client, $request, $attendees, $calendar);
             $calendar->event_id = $event->id;
+
             $calendar->save();
             DB::commit();
             return $calendar;

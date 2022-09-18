@@ -25,6 +25,10 @@ const GlobalContext = createContext({
     setPopupHeader: (component) => {},
     popupContent: "Content",
     setPopupContent: (component) => {},
+    labelCssClasses: [],
+    paletteCssClass: {},
+    eventCssClass: {},
+
 
 })
 
