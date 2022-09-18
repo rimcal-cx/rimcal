@@ -9,11 +9,10 @@ import GlobalContext from '../context/GlobalContext';
 function CalendarHeader() {
   const { logout: authLogout } = useAuth()
 
-  const { monthIndex, setMonthIndex } = useContext(GlobalContext)
+  const { monthIndex, setMonthIndex, setPopupContent, setPopupToggle, popupToggle, setPopupFooter } = useContext(GlobalContext)
   const [start_date, setSyncStartDate] = useState("", "")
   const [end_date, setSyncEndDate] = useState("", "")
   const [showModal, setShowModal] = useState(false);
-
 
   const prevChange=()=>{
     setMonthIndex(monthIndex-1)
@@ -28,21 +27,32 @@ function CalendarHeader() {
   }
 
   const logout = async ()=>{
-    try {
-        const {status} =  await logoutUser()
-        if (status === 200) {
-            authLogout()
-            toast.success(
-                <ToastBody
-                    title="Success"
-                    body="Logout Successfully!"
-                    type="success"
-                />
-            );
-        }
-    } catch (e) {
-        toast.error(<ToastBody title="Error" body="Logout Failed." type="error" />)
+    const popupFooter = {
+        confirm: {
+            confirmText: 'OK',
+            customCss: "bg-white text-gray-900 hover:bg-gray-300",
+            onConfirm: async () => {
+                try {
+                    const {status} =  await logoutUser()
+                    if (status === 200) {
+                        authLogout()
+                        toast.success(
+                            <ToastBody
+                                title="Success"
+                                body="Logout Successfully!"
+                                type="success"
+                            />
+                        );
+                    }
+                } catch (e) {
+                    toast.error(<ToastBody title="Error" body="Logout Failed." type="error" />)
+                }
+            }
+        },
     }
+    setPopupFooter(popupFooter)
+    setPopupContent('Do you want to logout ?')
+    setPopupToggle(!popupToggle)
 
   }
 

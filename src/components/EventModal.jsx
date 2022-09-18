@@ -17,13 +17,17 @@ function EventModal() {
         selectedEvent,
         setSelectedEvent,
         setEventList,
+        popupToggle,
+        setPopupToggle,
+        setPopupContent,
+        setPopupFooter,
     } = useContext(GlobalContext)
 
     const [title,setTitle] = useState(selectedEvent?selectedEvent.summary:"")
     const [description,setDescription] = useState(selectedEvent?selectedEvent.description:"")
     const [endTime,setEndTime] = useState(selectedEvent?selectedEvent.end_time:"")
     const [startTime,setStartTime] = useState(selectedEvent?selectedEvent.start_time:"")
-    const [timezone,setTimezone] = useState(selectedEvent ? {name: selectedEvent?.timezone, label: selectedEvent?.timezone} : {})
+    const [timezone,setTimezone] = useState(selectedEvent ? {name: selectedEvent?.timezone, label: selectedEvent?.timezone} : undefined)
     const [reminder,setReminder] = useState(selectedEvent && (selectedEvent?.remind_before_in_mins === 10) ? true : false)
     const labelCssClasses = ["lime", "red", "green", "gray", "blue", "purple"]
     const paletteCssClasses = {lime : "text-lime-500", red: "text-red-500", green: "text-green-500",gray: "text-gray-500", blue: "text-blue-500", purple: "text-purple-500"}
@@ -100,7 +104,37 @@ function EventModal() {
             }
             try {
                 calendarEvent.calendar_id = selectedEvent.calendar_id
-                await eventSent(calendarEvent)
+                const popupFooter = {
+                    confirm: {
+                        confirmText: 'OK',
+                        customCss: "bg-white text-gray-900 hover:bg-gray-300",
+                        onConfirm: async () => {
+                            setSelectedEvent(null)
+                            setShowEventModal(false)
+                            await eventSent(calendarEvent)
+
+                            try {
+                                const { events } = await loadEvents()
+                                setEventList([...events])
+                                toast.success(<ToastBody
+                                    title={'Success'}
+                                    body={'Event updated successfully!'}
+                                    type={'success'}
+                                />);
+                            } catch (e) {
+                                toast.error(<ToastBody
+                                    title="Error"
+                                    body="Unable to fetch event lists! Try again later."
+                                    type="error"
+                                    />)
+                                return
+                            }
+                        }
+                    },
+                }
+                setPopupFooter(popupFooter)
+                setPopupContent('Do you want to update this event ?')
+                setPopupToggle(!popupToggle)
             } catch (e) {
                 toast.error(<ToastBody
                     title={'Error'}
@@ -109,24 +143,6 @@ function EventModal() {
                 />);
                 return
             }
-
-            try {
-                const { events } = await loadEvents()
-                setEventList([...events])
-                toast.success(<ToastBody
-                    title={'Success'}
-                    body={'Event updated successfully!'}
-                    type={'success'}
-                />);
-            } catch (e) {
-                toast.error(<ToastBody
-                    title="Error"
-                    body="Unable to fetch event lists! Try again later."
-                    type="error"
-                    />)
-                return
-            }
-
         } else {
             if (selectedUsers.length === 0) {
                 toast.error(<ToastBody
@@ -138,7 +154,37 @@ function EventModal() {
             }
 
             try {
-                await eventSent(calendarEvent)
+                const popupFooter = {
+                    confirm: {
+                        confirmText: 'OK',
+                        customCss: "bg-white text-gray-900 hover:bg-gray-300",
+                        onConfirm: async () => {
+                            setSelectedEvent(null)
+                            setShowEventModal(false)
+                            await eventSent(calendarEvent)
+
+                            try {
+                                const { events } = await loadEvents()
+                                setEventList([...events])
+                                toast.success(<ToastBody
+                                    title={'Success'}
+                                    body={'Event created successfully!'}
+                                    type={'success'}
+                                />);
+                            } catch (e) {
+                                toast.error(<ToastBody
+                                    title="Error"
+                                    body="Unable to fetch event lists! Try again later."
+                                    type="error"
+                                    />)
+                                return
+                            }
+                        }
+                    },
+                }
+                setPopupFooter(popupFooter)
+                setPopupContent('Do you want to create this event ?')
+                setPopupToggle(!popupToggle)
             } catch (e) {
                 toast.error(<ToastBody
                     title={'Error'}
@@ -147,30 +193,10 @@ function EventModal() {
                 />);
                 return
             }
-
-            try {
-                const { events } = await loadEvents()
-                setEventList([...events])
-                toast.success(<ToastBody
-                    title={'Success'}
-                    body={'Event created successfully!'}
-                    type={'success'}
-                />);
-            } catch (e) {
-                toast.error(<ToastBody
-                    title="Error"
-                    body="Unable to fetch event lists! Try again later."
-                    type="error"
-                    />)
-                return
-            }
         }
-
-        setSelectedEvent(null)
-        setShowEventModal(false)
     }
 
-    const handleEventDelete = async(event)=>{
+    const deleteEvent = async (event) => {
         try {
             await eventDelete(event)
         } catch (e) {
@@ -202,6 +228,21 @@ function EventModal() {
         DispatchCalEvents({type:"delete", payload:event})
         setShowEventModal(false)
         setSelectedEvent(null)
+    }
+
+    const handleEventDelete = (event)=>{
+        const popupFooter = {
+            confirm: {
+                confirmText: 'OK',
+                customCss: "bg-white text-gray-900 hover:bg-gray-300",
+                onConfirm: () => {
+                    deleteEvent(event)
+                }
+            },
+        }
+        setPopupFooter(popupFooter)
+        setPopupContent('Deleting this event will remove it from your schedule. Do you still want to proceed ?')
+        setPopupToggle(!popupToggle)
     }
 
     const toggle =()=>{
@@ -335,7 +376,6 @@ function EventModal() {
                 </div>
             </footer>
         </div>
-
     </div>
   )
 }

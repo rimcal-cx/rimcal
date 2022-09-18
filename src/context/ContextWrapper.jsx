@@ -33,10 +33,13 @@ function ContextWrapper(props) {
     const [selectedEvent,setSelectedEvent] =useState(null)
     const [saveEvents,DispatchCalEvents] =useReducer(savedEventReducer,[],initEvents)
     const [eventList, setEventList] = useState([])
+    const [popupToggle, setPopupToggle] = useState(false)
+    const [popupFooter, setPopupFooter] = useState()
+    const [popupHeader, setPopupHeader] = useState()
+    const [popupContent, setPopupContent] = useState()
     useEffect(()=>{
       localStorage.setItem("savedEvents",JSON.stringify(saveEvents))
-
-    },[saveEvents,selectedEvent])
+    },[saveEvents, selectedEvent])
 
     useEffect(()=>{
       if (smallCalendarMonth!=null) {
@@ -61,6 +64,14 @@ function ContextWrapper(props) {
             selectedEvent,
             eventList,
             setEventList,
+            popupToggle,
+            setPopupToggle,
+            popupFooter,
+            setPopupFooter,
+            popupHeader,
+            setPopupHeader,
+            popupContent,
+            setPopupContent,
         }
     }>
         {props.children}

@@ -17,10 +17,14 @@ const GlobalContext = createContext({
     setToken:()=>{},
     eventList:[],
     setEventList:()=>{},
-    userModal:false,
-    visbisltyUser:()=>{},
-    selctedUsers:[],
-    golbalSlectedUsers:()=>{},
+    popupToggle: false,
+    setPopupToggle: (toggle) => {},
+    popupFooter:'Footer',
+    setPopupFooter: (component) => {},
+    popupHeader: "Header",
+    setPopupHeader: (component) => {},
+    popupContent: "Content",
+    setPopupContent: (component) => {},
 
 })
 

@@ -8,10 +8,19 @@ import EventModal from '../EventModal';
 import { toast } from 'react-toastify'
 import ToastBody from '../ToastBody'
 import { loadEvents } from '../../utilities/util';
+import { PopupModal } from '../PopupModal';
 
 const ComponentWrapper=({currentMonth})=>{
 
-    const { showEventModal, setEventList } = useContext(GlobalContext)
+    const {
+        showEventModal,
+        setEventList,
+        popupToggle,
+        setPopupToggle,
+        popupHeader,
+        popupFooter,
+        popupContent,
+    } = useContext(GlobalContext)
 
     useEffect(() => {
         loadEvents().then(({events}) => {
@@ -29,6 +38,13 @@ const ComponentWrapper=({currentMonth})=>{
         <SideBar/>
         <Month month={currentMonth}/>
         {showEventModal && <EventModal />}
+        {<PopupModal
+            popupToggle={popupToggle}
+            setPopupToggle={setPopupToggle}
+            header={popupHeader}
+            footer={popupFooter}
+            content={popupContent}
+            />}
         </div>
 
     </div>
