@@ -137,7 +137,7 @@ function EventModal() {
                 }
                 setPopupFooter(popupFooter)
                 setPopupContent('Do you want to update this event ?')
-                setPopupToggle(!popupToggle)
+                setPopupToggle((prevToggle) => !prevToggle)
             } catch (e) {
                 toast.error(<ToastBody
                     title={'Error'}
@@ -187,7 +187,7 @@ function EventModal() {
                 }
                 setPopupFooter(popupFooter)
                 setPopupContent('Do you want to create this event ?')
-                setPopupToggle(!popupToggle)
+                setPopupToggle((prevToggle) => !prevToggle)
             } catch (e) {
                 toast.error(<ToastBody
                     title={'Error'}
@@ -245,7 +245,7 @@ function EventModal() {
         }
         setPopupFooter(popupFooter)
         setPopupContent('Deleting this event will remove it from your schedule. Do you still want to proceed ?')
-        setPopupToggle(!popupToggle)
+        setPopupToggle((prevToggle) => !prevToggle)
     }
 
     const toggle =()=>{

@@ -10,13 +10,13 @@ export function PopupModal ({popupToggle, setPopupToggle, header, footer, conten
     const onConfirm = () => {
         if (footer?.confirm?.onConfirm)
             footer.confirm.onConfirm()
-        setPopupToggle(!popupToggle)
+        setPopupToggle((prevToggle) => !prevToggle)
     }
 
     const onCancel = () => {
         if (footer?.cancel?.onCancel)
             footer.cancel.onCancel()
-        setPopupToggle(!popupToggle)
+        setPopupToggle((prevToggle) => !prevToggle)
     }
 
     return (
@@ -34,7 +34,7 @@ export function PopupModal ({popupToggle, setPopupToggle, header, footer, conten
                             <p className="text-gray-900 text-lg font-medium">{header ?? "Are you sure ?"}</p>
                         </div>
                     </div>
-                    <button className="close !right-2.5" onClick={() => { setPopupToggle(!popupToggle) }}>
+                    <button className="close !right-2.5" onClick={() => { setPopupToggle((prevToggle) => !prevToggle) }}>
                         <IoMdCloseCircle className='w-7 h-7 text-red-700' />
                     </button>
                 </div>

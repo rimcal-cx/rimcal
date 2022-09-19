@@ -133,14 +133,14 @@ function CalendarHeader() {
                 {dayjs(new Date(dayjs().year(),monthIndex)).format("MMMM, YYYY")}
             </h2>
             <button
-                className="border hover:bg-green-200 rounded py-2 px-4 ml-5"
+                className="border hover:bg-gray-100 rounded py-2 px-4 ml-5"
                 type="button"
                 onClick={() => setShowModal(true)}
             >
-                Sync
+                Sync Calendar
             </button>
         </div>
-        <button className='border hover:bg-red-200 rounded py-2 px-4 mr-3' onClick={logout}>
+        <button className='border hover:bg-gray-100 rounded py-2 px-4 mr-3' onClick={logout}>
             Logout
         </button>
 
