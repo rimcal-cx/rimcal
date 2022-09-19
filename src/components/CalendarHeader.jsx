@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { toast } from 'react-toastify';
 import { logout as logoutUser, syncCalendar, loadEvents } from '../utilities/util'
 import ToastBody from './ToastBody'
+import logo from '../assets/images/logo-name.png'
 
 import GlobalContext from '../context/GlobalContext';
 function CalendarHeader() {
@@ -117,7 +118,7 @@ function CalendarHeader() {
   return (
     <header className='px-2 py-4 flex items-center justify-between'>
         <div className='flex justify-start'>
-            <img src="logo-name.png" alt="" className='mr-2 w-14 '/>
+            <img src={logo} alt="" className='mr-2 w-14 '/>
             <div className="flex justify-center">
                 <button onClick={reset} className='border rounded py-2 px-4 ml-5  hover:bg-gray-100'>
                     Today
