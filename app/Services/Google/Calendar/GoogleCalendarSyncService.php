@@ -39,7 +39,6 @@ class GoogleCalendarSyncService
                                 'start_datetime' => $event->start ? $event->start->dateTime : "00-00-00T00:00:00",
                                 'end_datetime' => $event->end ? $event->end->dateTime : "00-00-00T00:00:00",
                                 'timezone' => $event->start ? $event->start->timeZone : "",
-                                'remind_before_in_mins' => 10,
                                 'all_day' => false
                             ]);
                         } else {
@@ -52,7 +51,7 @@ class GoogleCalendarSyncService
                                 'start_datetime' => $event->start ? $event->start->dateTime : "00-00-00T00:00:00",
                                 'end_datetime' => $event->end ? $event->end->dateTime : "00-00-00T00:00:00",
                                 'timezone' => $event->start ? $event->start->timeZone : "",
-                                'remind_before_in_mins' => 10,
+                                'remind_before_in_mins' => rand(0, 1) ? 0 : 10,
                                 'all_day' => false,
                                 'event_label' => Arr::random(Calendar::$labels),
                             ]);
