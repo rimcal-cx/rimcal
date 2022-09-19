@@ -38,11 +38,7 @@ function EventModal() {
     const [dropdownLoading,setDropdownLoading] = useState(true)
     const[userList, setUserList] = useState([])
     const[selectedUsers, setSelectedUsers] = useState(selectedEvent ? [...selectedEvent.attendees] : [])
-    // ([...selectedEvent.attendees.map(attendee => {
-    //     attendee.label = attendee.name
-    //     attendee.value = attendee.id
-    //     return attendee
-    // })])
+
     const[timezones, setTimezones] = useState([])
     const[toggleMenu, setToggleMenu] = useState(false)
 
@@ -53,16 +49,6 @@ function EventModal() {
 
         // get user(attendees) list
         loadUsers().then((users) => {
-            // users.map(user => {
-            //     user.label = user.name
-            //     user.value = user.id
-            //     return user
-            // })
-            // setUserList([...users.map(user => {
-            //     user.label = user.name
-            //     user.value = user.id
-            //     return user
-            // })])
             setUserList([...users])
             setDropdownLoading(false)
         }).catch((e) => {
@@ -106,7 +92,6 @@ function EventModal() {
             event_label: label,
         }
 
-        console.log(calendarEvent)
         if (!ValidateField(calendarEvent)) {
             return
         }

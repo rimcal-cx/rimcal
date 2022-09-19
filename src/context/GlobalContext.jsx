@@ -12,7 +12,7 @@ const GlobalContext = createContext({
     DispatchCalEvents:({type,payload})=>{},
     saveEvents:[],
     selectedEvent:null,
-    setSelectedEvent:()=>{console.log("HELLO-GLOBAL");},
+    setSelectedEvent:()=>{},
     token:{},
     setToken:()=>{},
     eventList:[],

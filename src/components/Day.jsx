@@ -43,7 +43,7 @@ function Day({day,rowIdx}) {
         {dayEvents?.map((evt,idx)=>(
             <div className={`${eventCssClass[evt?.event_label ?? Object.keys(eventCssClass)[0]]} p-1 mr-3 ${['lime', 'green'].includes(evt?.event_label ?? Object.keys(eventCssClass)[0]) ? 'text-gray-700' : 'text-gray-100'} text-sm rounded mb-1 truncate`}
             key={idx}
-            onClick={()=>{console.log(evt);setSelectedEvent(evt);setShowEventModal(true)}}
+            onClick={()=>{setSelectedEvent(evt);setShowEventModal(true)}}
             >
                 {evt.summary}
             </div>
