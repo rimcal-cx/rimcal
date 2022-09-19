@@ -17,8 +17,8 @@ export function getMonth(month=dayjs().month()){
 }
 
 
-export const loadEvents = async () => {
-    return (await axios.get('calendar')).data.data
+export const loadEvents = async (dates) => {
+    return (await axios.get('calendar', { params: dates })).data.data
 }
 
 export const loadUsers = async () => {
@@ -38,7 +38,7 @@ export const syncCalendar = async (dates) => {
 
 }
 
-export const logout = async (dates) => {
+export const logout = async () => {
     return (await axios.post('google/logout'))
 }
 

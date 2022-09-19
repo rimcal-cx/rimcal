@@ -21,25 +21,26 @@ class GoogleCalendarSyncService
             $client = (new GoogleAuthClient)->handle();
             $service = new GoogleCalendar($client);
             $events = $service->events->listEvents('primary');
-            $pageToken = $events->getNextPageToken();
-                if ($pageToken) {
+            // $pageToken = $events->getNextPageToken();
+                // if ($pageToken) {
                     $optParams = array(
-                        'pageToken' => $pageToken,
+                        // 'pageToken' => $pageToken,
                         'timeMin' => $request->start_date."T00:00:00Z", // start time of the first day of the current month
                         'timeMax' => $request->end_date."T23:59:59Z",  // end time of the last day of the current month
                     );
                     $events = $service->events->listEvents('primary', $optParams);
+
                     foreach($events as $event){
                         if ($calendar = Calendar::where('event_id', $event->id)->first()) {
                                 $calendar->update([
                                 'user_id' => auth()->user()->id,
                                 'summary' => $event->summary,
                                 'description' => $event->description,
-                                'location' => $event->location,
+                                'location' => $event->location ?? $event->start?->timeZone ? \Str::of($event->start->timeZone)->after('/')->replace('_', ' ') : null,
                                 'start_datetime' => $event->start ? $event->start->dateTime : "00-00-00T00:00:00",
                                 'end_datetime' => $event->end ? $event->end->dateTime : "00-00-00T00:00:00",
                                 'timezone' => $event->start ? $event->start->timeZone : "",
-                                'all_day' => false
+                                'remind_before_in_mins' => $event->reminders?->useDefault ? 10 : 0,
                             ]);
                         } else {
                             $calendar = Calendar::create([
@@ -47,11 +48,11 @@ class GoogleCalendarSyncService
                                 'event_id' => $event->id,
                                 'summary' => $event->summary,
                                 'description' => $event->description,
-                                'location' => $event->location,
+                                'location' => $event->location ?? $event->start?->timeZone ? \Str::of($event->start->timeZone)->after('/')->replace('_', ' ') : null,
                                 'start_datetime' => $event->start ? $event->start->dateTime : "00-00-00T00:00:00",
                                 'end_datetime' => $event->end ? $event->end->dateTime : "00-00-00T00:00:00",
                                 'timezone' => $event->start ? $event->start->timeZone : "",
-                                'remind_before_in_mins' => rand(0, 1) ? 0 : 10,
+                                'remind_before_in_mins' => $event->reminders?->useDefault ? 10 : 0,
                                 'all_day' => false,
                                 'event_label' => Arr::random(Calendar::$labels),
                             ]);
@@ -82,7 +83,7 @@ class GoogleCalendarSyncService
                             Calendar::whereCalendarId($calendar->id)->whereIn('email', $attendeesRemoved)->delete();
                         }
                     }
-                }
+                // }
             DB::commit();
             return true;
         }catch(Exception $e){

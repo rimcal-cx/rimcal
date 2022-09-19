@@ -52,14 +52,9 @@ export function PopupModal ({popupToggle, setPopupToggle, header, footer, conten
             </div>)
             :
             (
-                <div className='popup !bg-transparent' style={
-                    {
-                        top: '5%',
-                        left: '61%',
-                    }
-                }>
+                <div className='popup !bg-transparent'>
                     <div className='flex justify-center rounded-full'>
-                    <span className='text-2xl font-bolder invert'>Sync in progress...     </span> <ImSpinner5 className="ml-2 w-7 h-7 text-white animate-spin" />
+                    <ImSpinner5 className="w-10 h-10 text-white animate-spin" />
                     </div>
                 </div>
             )

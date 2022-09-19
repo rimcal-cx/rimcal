@@ -18,7 +18,7 @@ function EventModal() {
         selectedEvent,
         setSelectedEvent,
         setEventList,
-        popupToggle,
+        monthIndex,
         setPopupToggle,
         setPopupContent,
         setPopupFooter,
@@ -96,6 +96,11 @@ function EventModal() {
             return
         }
 
+        const dates = {
+            start_date: dayjs().month(monthIndex).date(1).format('YYYY-MM-DD').toString(),
+            end_date: dayjs().month(monthIndex + 1).date(1).subtract(1, 'day').format('YYYY-MM-DD').toString()
+        }
+
         if (selectedEvent) {
             if (selectedEvent.attendees.length === 0) {
                 toast.error(<ToastBody
@@ -117,7 +122,7 @@ function EventModal() {
                             await eventSent(calendarEvent)
 
                             try {
-                                const { events } = await loadEvents()
+                                const { events } = await loadEvents(dates)
                                 setEventList([...events])
                                 toast.success(<ToastBody
                                     title={'Success'}
@@ -167,7 +172,7 @@ function EventModal() {
                             await eventSent(calendarEvent)
 
                             try {
-                                const { events } = await loadEvents()
+                                const { events } = await loadEvents(dates)
                                 setEventList([...events])
                                 toast.success(<ToastBody
                                     title={'Success'}
@@ -212,7 +217,11 @@ function EventModal() {
         }
 
         try {
-            const { events } = await loadEvents()
+            const dates = {
+                start_date: dayjs().month(monthIndex).date(1).format('YYYY-MM-DD').toString(),
+                end_date: dayjs().month(monthIndex + 1).date(1).subtract(1, 'day').format('YYYY-MM-DD').toString()
+            }
+            const { events } = await loadEvents(dates)
             setEventList([...events])
             toast.success(<ToastBody
                 title={'Success'}

@@ -20,9 +20,9 @@ class GoogleCalendarController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $result = (new GoogleCalendarListService())->handle();
+        $result = (new GoogleCalendarListService())->handle($request);
         return $this->response('Event added to Calendar', 200, ['events' => GoogleCalendarResource::collection($result)]);
     }
 

@@ -9,12 +9,14 @@ import { toast } from 'react-toastify'
 import ToastBody from '../ToastBody'
 import { loadEvents } from '../../utilities/util';
 import { PopupModal } from '../PopupModal';
+import dayjs from 'dayjs';
 
 const ComponentWrapper=({currentMonth})=>{
 
     const {
         showEventModal,
         setEventList,
+        monthIndex,
         popupToggle,
         syncToggle,
         setPopupToggle,
@@ -24,7 +26,11 @@ const ComponentWrapper=({currentMonth})=>{
     } = useContext(GlobalContext)
 
     useEffect(() => {
-        loadEvents().then(({events}) => {
+        const dates = {
+            start_date: dayjs().month(monthIndex).date(1).format('YYYY-MM-DD').toString(),
+            end_date: dayjs().month(monthIndex + 1).date(1).subtract(1, 'day').format('YYYY-MM-DD').toString()
+        }
+        loadEvents(dates).then(({events}) => {
             setEventList(events)
         }).catch((e) => {
             console.log(e)
