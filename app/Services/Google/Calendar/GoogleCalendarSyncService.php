@@ -30,32 +30,57 @@ class GoogleCalendarSyncService
                     );
                     $events = $service->events->listEvents('primary', $optParams);
                     foreach($events as $event){
-                        $calendar = Calendar::updateOrCreate([
-                            'event_id' => $event->id
-                        ],
-                        [
-                            'user_id' => auth()->user()->id,
-                            'summary' => $event->summary,
-                            'description' => $event->description,
-                            'location' => $event->location,
-                            'start_datetime' => $event->start ? $event->start->dateTime : "00-00-00T00:00:00",
-                            'end_datetime' => $event->end ? $event->end->dateTime : "00-00-00T00:00:00",
-                            'timezone' => $event->start ? $event->start->timeZone : "",
-                            'remind_before_in_mins' => 10,
-                            'all_day' => false,
-                            'event_label' => Arr::random(Calendar::$labels),
-                        ]);
-                        foreach($event->attendees as $attendee){
-                            if(in_array($attendee->email, array_column(User::$defaultUserAttendees, 'email'))){
-                                CalendarAttendee::whereCalendarId($calendar->id)->delete();
-                                $attendeeInfo = User::where('email', trim($attendee->email))->first();
-                                CalendarAttendee::create([
-                                    'calendar_id' => $calendar->id,
-                                    'user_id' => $attendeeInfo->id,
-                                    'name' => $attendeeInfo->name,
-                                    'email' => $attendeeInfo->email
-                                ]);
+                        if ($calendar = Calendar::where('event_id', $event->id)->first()) {
+                                $calendar->update([
+                                'user_id' => auth()->user()->id,
+                                'summary' => $event->summary,
+                                'description' => $event->description,
+                                'location' => $event->location,
+                                'start_datetime' => $event->start ? $event->start->dateTime : "00-00-00T00:00:00",
+                                'end_datetime' => $event->end ? $event->end->dateTime : "00-00-00T00:00:00",
+                                'timezone' => $event->start ? $event->start->timeZone : "",
+                                'remind_before_in_mins' => 10,
+                                'all_day' => false
+                            ]);
+                        } else {
+                            $calendar = Calendar::create([
+                                'user_id' => auth()->user()->id,
+                                'event_id' => $event->id,
+                                'summary' => $event->summary,
+                                'description' => $event->description,
+                                'location' => $event->location,
+                                'start_datetime' => $event->start ? $event->start->dateTime : "00-00-00T00:00:00",
+                                'end_datetime' => $event->end ? $event->end->dateTime : "00-00-00T00:00:00",
+                                'timezone' => $event->start ? $event->start->timeZone : "",
+                                'remind_before_in_mins' => 10,
+                                'all_day' => false,
+                                'event_label' => Arr::random(Calendar::$labels),
+                            ]);
+                        }
+
+                        $alreadyPresentAttendees = CalendarAttendee::whereCalendarId($calendar->id)->get();
+                        $alreadyPresentAttendeesEmails = collect($alreadyPresentAttendees)->pluck('email')->all();
+                        $currentAttendeesEmails = [];
+                        foreach($event->attendees as $attendee) {
+                            $attendeeEmail = trim($attendee->email);
+                            if(
+                                in_array($attendeeEmail, array_column(User::$defaultUserAttendees, 'email'))
+                            ) {
+                                $currentAttendeesEmails[] = $attendeeEmail;
+                                if (!in_array($attendeeEmail, $alreadyPresentAttendeesEmails)) {
+                                    $attendeeInfo = User::whereEmail($attendeeEmail)->first();
+                                    CalendarAttendee::create([
+                                        'calendar_id' => $calendar->id,
+                                        'user_id' => $attendeeInfo->id,
+                                        'name' => $attendeeInfo->name,
+                                        'email' => $attendeeInfo->email
+                                    ]);
+                                }
                             }
+                        }
+                        $attendeesRemoved = array_diff($alreadyPresentAttendeesEmails, $currentAttendeesEmails);
+                        if (!empty($attendeesRemoved)) {
+                            Calendar::whereCalendarId($calendar->id)->whereIn('email', $attendeesRemoved)->delete();
                         }
                     }
                 }
