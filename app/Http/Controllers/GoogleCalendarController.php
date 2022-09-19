@@ -35,12 +35,6 @@ class GoogleCalendarController extends BaseController
     {
         $result = (new GoogleCalendarCreateService())->handle($request);
         return $this->response('Event added to calendar', 200, ['event' => new GoogleCalendarResource($result)]);
-        // return response()->json([
-        //     'data' => [
-        //         'message' => 'Event added to calendar',
-        //         'event' => new GoogleCalendarResource($result)
-        //     ]
-        // ], 200);
     }
 
     /**

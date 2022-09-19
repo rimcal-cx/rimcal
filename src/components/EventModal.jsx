@@ -37,7 +37,12 @@ function EventModal() {
     const [toggleCss,setToggleCss] = useState(selectedEvent && (selectedEvent?.remind_before_in_mins === 10) ? 'translate-x-5' :  'translate-x-0')
     const [dropdownLoading,setDropdownLoading] = useState(true)
     const[userList, setUserList] = useState([])
-    const[selectedUsers, setSelectedUsers] = useState(selectedEvent ? selectedEvent.attendees : [])
+    const[selectedUsers, setSelectedUsers] = useState(selectedEvent ? [...selectedEvent.attendees] : [])
+    // ([...selectedEvent.attendees.map(attendee => {
+    //     attendee.label = attendee.name
+    //     attendee.value = attendee.id
+    //     return attendee
+    // })])
     const[timezones, setTimezones] = useState([])
     const[toggleMenu, setToggleMenu] = useState(false)
 
@@ -48,7 +53,17 @@ function EventModal() {
 
         // get user(attendees) list
         loadUsers().then((users) => {
-            setUserList(users)
+            // users.map(user => {
+            //     user.label = user.name
+            //     user.value = user.id
+            //     return user
+            // })
+            // setUserList([...users.map(user => {
+            //     user.label = user.name
+            //     user.value = user.id
+            //     return user
+            // })])
+            setUserList([...users])
             setDropdownLoading(false)
         }).catch((e) => {
             console.log(e)

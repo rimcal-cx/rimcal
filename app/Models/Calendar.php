@@ -40,6 +40,6 @@ class Calendar extends Model
     public static array $labels = ["lime", "red", "green", "gray", "blue", "purple"];
 
     public function attendees(){
-        return $this->hasMany(CalendarAttendee::class, 'calendar_id', 'id');
+        return $this->hasManyThrough(User::class, CalendarAttendee::class, 'calendar_id', 'id', 'id', 'user_id');
     }
 }
