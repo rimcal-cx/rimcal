@@ -58,7 +58,7 @@ class User extends Authenticatable
         ],
         [
             'name' => 'Tarun Adhikary',
-            'email' => 'tarun@rimsys.io'
+            'email' => 'tarun.adhikary@rimsys.io'
         ],
         [
             'name' => 'Amit Kadam',
