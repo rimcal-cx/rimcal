@@ -2,7 +2,7 @@ import React from 'react'
 
 function EventsSkeleton() {
   return (
-    <div className='mr-3'>
+    <div className='mr-2'>
         {[...Array(4).keys()].map((i)=>
         <React.Fragment key={i}>
         {

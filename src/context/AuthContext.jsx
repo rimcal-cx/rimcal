@@ -30,8 +30,12 @@ export const AuthProvider = ({ children }) => {
 
     if (!user) {
         try {
-            const userInfo = data ? data.user : await me();
-            setUser(userInfo);
+            if (data) {
+                delete data.token
+                delete data.token_expiry
+            }
+            const userInfo = data ? data : await me();
+            setUser({ ...userInfo });
             if (data) {
                 toast.success(<ToastBody
                 title='Success'
