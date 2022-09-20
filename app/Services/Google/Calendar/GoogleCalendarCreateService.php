@@ -39,21 +39,34 @@ class GoogleCalendarCreateService
                 ]
             );
 
-            if($request->calendar_id !== null){
-                CalendarAttendee::whereCalendarId($request->calendar_id)->delete();
+            $alreadyPresentAttendees = [];
+            $alreadyPresentAttendeesEmails = [];
+            $currentAttendeesEmails = [];
+
+            if($request->calendar_id !== null) {
+                // CalendarAttendee::whereCalendarId($request->calendar_id)->delete();
+                $alreadyPresentAttendees = CalendarAttendee::whereCalendarId($request->calendar_id)->get();
+                $alreadyPresentAttendeesEmails = collect($alreadyPresentAttendees)->pluck('email')->all();
+                $currentAttendeesEmails = [];
             }
 
-            foreach($request->attendees as $attendee){
+            foreach($request->attendees as $attendee) {
+                $currentAttendeesEmails[] = $attendee['email'];
                 $attendees[] = ['email' => $attendee['email']];
-                $calAttendees[] = [
-                    'calendar_id' => $calendar->id,
-                    'user_id' => null,
-                    'name' => $attendee['name'],
-                    'email' => $attendee['email']
-                ];
-            };
+                if (!in_array($attendee['email'], $alreadyPresentAttendeesEmails)) {
+                    CalendarAttendee::create([
+                        'calendar_id' => $calendar->id,
+                        'user_id' => $attendee['id'],
+                        'name' => $attendee['name'],
+                        'email' => $attendee['email']
+                    ]);
+                }
+            }
 
-            CalendarAttendee::insert($calAttendees);
+            $attendeesRemoved = array_diff($alreadyPresentAttendeesEmails, $currentAttendeesEmails);
+            if (!empty($attendeesRemoved)) {
+                CalendarAttendee::whereCalendarId($request->calendar_id)->whereIn('email', $attendeesRemoved)->delete();
+            }
             $event = $this->addToGoogleCalendar($client, $request, $attendees, $calendar);
             $calendar->event_id = $event->id;
 

@@ -25,9 +25,13 @@ class GoogleCalendarSyncService
                 'timeMin' => $request->start_date."T00:00:00Z", // start time of the first day of the current month
                 'timeMax' => $request->end_date."T23:59:59Z",  // end time of the last day of the current month
             );
+            $start_datetime = \Carbon\Carbon::parse($request->start_date)->addHours(00)->addMinutes(00)->addSeconds(00)->format('Y-m-d H:i:s');
+            $end_datetime = \Carbon\Carbon::parse($request->end_date)->addHours(23)->addMinutes(59)->addSeconds(59)->format('Y-m-d H:i:s');
             $events = $service->events->listEvents('primary', $optParams);
+            $existingEventIds = [];
 
-            foreach($events as $event){
+            foreach($events as $event) {
+                $existingEventIds[] = $event->id;
                 if ($calendar = Calendar::where('event_id', $event->id)->first()) {
                         $calendar->update([
                         'user_id' => auth()->user()->id,
@@ -77,10 +81,18 @@ class GoogleCalendarSyncService
                 }
                 $attendeesRemoved = array_diff($alreadyPresentAttendeesEmails, $currentAttendeesEmails);
                 if (!empty($attendeesRemoved)) {
-                    Calendar::whereCalendarId($calendar->id)->whereIn('email', $attendeesRemoved)->delete();
+                    CalendarAttendee::whereCalendarId($calendar->id)->whereIn('email', $attendeesRemoved)->delete();
                 }
             }
 
+            $eventsRemovedFromGCal = Calendar::whereNotIn('event_id', $existingEventIds)
+                ->where('start_datetime', '>=' , $start_datetime)
+                ->where('end_datetime', '<=', $end_datetime)->get();
+            $eventsRemovedFromGCalId = collect($eventsRemovedFromGCal)->pluck('calendar_id')->toArray();
+            CalendarAttendee::whereIn('calendar_id', $eventsRemovedFromGCalId)->delete();
+            Calendar::whereNotIn('event_id', $existingEventIds)
+                ->where('start_datetime', '>=' , $start_datetime)
+                ->where('end_datetime', '<=', $end_datetime)->delete();
             DB::commit();
             return true;
         }catch(Exception $e){
