@@ -1,9 +1,9 @@
 import dayjs from 'dayjs'
 import React, { useContext, useEffect, useState } from 'react'
 import GlobalContext from '../context/GlobalContext'
+import EventsSkeleton from './EventsSkeleton'
 
 function Day({day,rowIdx}) {
-
     const[dayEvents,setDayevents] = useState([])
     const{
         setclickDay,
@@ -12,6 +12,7 @@ function Day({day,rowIdx}) {
         setSelectedEvent,
         eventList,
         eventCssClass,
+        syncToggle,
       }=useContext(GlobalContext)
 
 
@@ -39,8 +40,8 @@ function Day({day,rowIdx}) {
         </header>
 
         <div className='flex-1 cursor-pointer text-white' >
-
-        {dayEvents?.map((evt,idx)=>(
+        { syncToggle && <EventsSkeleton /> }
+        { !syncToggle && dayEvents?.map((evt,idx)=>(
             <div className={`${eventCssClass[evt?.event_label ?? Object.keys(eventCssClass)[0]]} p-1 mr-3 ${['lime', 'green'].includes(evt?.event_label ?? Object.keys(eventCssClass)[0]) ? 'text-gray-700' : 'text-gray-100'} text-sm rounded mb-1 truncate`}
             key={idx}
             onClick={()=>{setSelectedEvent(evt);setShowEventModal(true)}}
@@ -48,7 +49,7 @@ function Day({day,rowIdx}) {
                 {evt.summary}
             </div>
 
-        ))}
+        )) }
         </div>
 
     </div>
