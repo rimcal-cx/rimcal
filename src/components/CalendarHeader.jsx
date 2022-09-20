@@ -8,7 +8,7 @@ import logo from '../assets/images/logo-name.png'
 
 import GlobalContext from '../context/GlobalContext';
 function CalendarHeader() {
-  const { logout: authLogout } = useAuth()
+  const { logout: authLogout, user } = useAuth()
 
   const {
     monthIndex,
@@ -130,8 +130,8 @@ function CalendarHeader() {
     )
   }
   return (
-    <header className='px-2 py-4 flex items-center justify-between'>
-        <div className='flex justify-start'>
+    <header className='w-full px-2 py-4 flex items-center justify-between'>
+        <div className='w-6/12 flex justify-start'>
             <img src={logo} alt="" className='mr-2 w-14 '/>
             <div className="flex justify-center">
                 <button className='border rounded py-2 px-4 ml-5 hover:bg-gray-100' onClick={prevChange}>
@@ -155,9 +155,16 @@ function CalendarHeader() {
                 Sync Calendar
             </button> */}
         </div>
-        <button className='border hover:bg-gray-100 rounded py-2 px-4 mr-3' onClick={logout}>
-            Logout
-        </button>
+        <div className='w-6/12 flex justify-end'>
+            <div className='w-5/12 flex justify-around'>
+                <div className='w-full'>
+                    { user ? (<p className='p-2'>{ user.name }, </p>) : (<p className='skeleton rounded-lg w-10/12 mr-2 p-2'>&nbsp;</p>)}
+                </div>
+                <button className='border hover:bg-gray-100 rounded py-2 px-4 mr-3' onClick={logout}>
+                    Logout
+                </button>
+            </div>
+        </div>
 
 
 {/*  { showModal && (
