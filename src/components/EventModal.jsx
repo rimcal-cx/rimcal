@@ -60,6 +60,16 @@ function EventModal() {
     const ValidateField=(obj)=>{
         for (const key in obj) {
             const element = obj[key];
+            if (key === 'attendees') {
+                if (element.length === 0) {
+                    toast.error(<ToastBody
+                        title={'Error'}
+                        body={'Please add the attendees.'}
+                        type={'error'}
+                    />);
+                    return false
+                }
+            }
             if (!element && !['remind_before_in_mins', 'calendar_id'].includes(key)) {
                 toast.error(<ToastBody
                     title={'Error'}
@@ -102,14 +112,6 @@ function EventModal() {
         }
 
         if (selectedEvent) {
-            if (selectedEvent.attendees.length === 0) {
-                toast.error(<ToastBody
-                    title={'Error'}
-                    body={'Please add the attendees.'}
-                    type={'error'}
-                />);
-                return
-            }
             try {
                 calendarEvent.calendar_id = selectedEvent.calendar_id
                 const popupFooter = {
@@ -152,15 +154,6 @@ function EventModal() {
                 return
             }
         } else {
-            if (selectedUsers.length === 0) {
-                toast.error(<ToastBody
-                    title={'Error'}
-                    body={'Please add the attendees.'}
-                    type={'error'}
-                />);
-                return
-            }
-
             try {
                 const popupFooter = {
                     confirm: {
