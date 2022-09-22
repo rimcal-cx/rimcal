@@ -2,8 +2,6 @@
 
 namespace App\Services\Google\Calendar;
 
-use App\Models\Calendar;
-use Illuminate\Support\Collection;
 use App\Services\Google\GoogleAuthClient;
 use Google\Service\Calendar as GoogleCalendar;
 

@@ -15,6 +15,6 @@ class BaseController
 
         return response($result)->withHeaders([
             'Content-Type' => 'application/json',
-        ]);;
+        ]);
     }
 }
