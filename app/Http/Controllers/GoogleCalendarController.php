@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use App\Services\Google\Calendar\GoogleCalendarCreateService;
 use App\Http\Resources\Google\Calendar\GoogleCalendarResource;;
 use App\Http\Requests\Google\Calendar\CalendarCreateRequest;
-use App\Models\Calendar;
-use App\Services\Google\Calendar\GoogleCalendarDeleteService;
+use Illuminate\Http\Response;
 use App\Services\Google\Calendar\GoogleCalendarListService;
-use Illuminate\Http\JsonResponse;
+use App\Http\Requests\Google\Calendar\CalendarCreateRequest;
+use App\Services\Google\Calendar\GoogleCalendarCreateService;
+use App\Services\Google\Calendar\GoogleCalendarDeleteService;
+use App\Http\Resources\Google\Calendar\GoogleCalendarResource;
+use App\Services\Google\Calendar\GoogleCalendarEventListService;
 use App\Services\Google\Calendar\GoogleCalendarSyncService;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class GoogleCalendarController extends BaseController
 {
@@ -34,7 +36,18 @@ class GoogleCalendarController extends BaseController
     public function create(CalendarCreateRequest $request): Response
     {
         $result = (new GoogleCalendarCreateService())->handle($request);
-        return $this->response('Event added to calendar', 200, ['event' => new GoogleCalendarResource($result)]);
+        return $this->response('Event added to Calendar', 200, ['event' => new GoogleCalendarResource($result)]);
+    }
+
+    /**
+     * Fetch events from google calendar.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function googleEvents(): Response
+    {
+        $result = (new GoogleCalendarEventListService())->handle();
+        return $this->response('Events from google', 200, ['event' => $result]);
     }
 
     /**
