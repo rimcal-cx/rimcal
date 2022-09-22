@@ -30,6 +30,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::post('/add', [GoogleCalendarController::class, 'create']);
         Route::post('/sync', [GoogleCalendarController::class, 'sync']);
         Route::delete('/{calendar_id}', [GoogleCalendarController::class, 'destroy']);
+        Route::get('/google-events', [GoogleCalendarController::class, 'googleEvents']);
     });
     Route::get('/users', [UserController::class, 'index']);
 });
