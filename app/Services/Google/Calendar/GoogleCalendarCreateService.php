@@ -19,8 +19,6 @@ class GoogleCalendarCreateService
             DB::beginTransaction();
             $client = (new GoogleAuthClient)->handle();
             $attendees = [];
-            $calAttendees = [];
-
             $calendar = Calendar::updateOrCreate(
                 [
                     'id' => $request->calendar_id,
@@ -34,27 +32,32 @@ class GoogleCalendarCreateService
                     'end_datetime' => $request->end_datetime,
                     'timezone' => $request->timezone,
                     'remind_before_in_mins' => $request->remind_before_in_mins,
-                    'all_day' => $request->all_day
+                    'all_day' => false,
+                    'event_label' => $request->event_label,
                 ]
             );
 
-            if($request->calendar_id !== null){
-                CalendarAttendee::whereCalendarId($request->calendar_id)->delete();
+            $alreadyPresentAttendeesEmails = [];
+
+            if($request->calendar_id !== null) {
+                $alreadyPresentAttendeesEmails = CalendarAttendee::whereCalendarId($request->calendar_id)->pluck('email')->toArray();
             }
 
-            foreach($request->attendees as $attendee){
+            foreach($request->attendees as $attendee) {
                 $attendees[] = ['email' => $attendee['email']];
-                $calAttendees[] = [
-                    'calendar_id' => $calendar->id,
-                    'user_id' => null,
-                    'name' => $attendee['name'],
-                    'email' => $attendee['email']
-                ];
-            };
-
-            CalendarAttendee::insert($calAttendees);
+                if (!in_array($attendee['email'], $alreadyPresentAttendeesEmails)) {
+                    CalendarAttendee::create([
+                        'calendar_id' => $calendar->id,
+                        'user_id' => $attendee['id'],
+                        'name' => $attendee['name'],
+                        'email' => $attendee['email']
+                    ]);
+                }
+            }
             $event = $this->addToGoogleCalendar($client, $request, $attendees, $calendar);
+            CalendarAttendee::whereCalendarId($request->calendar_id)->whereNotIn('email', array_column($attendees, 'email'))->delete();
             $calendar->event_id = $event->id;
+
             $calendar->save();
             DB::commit();
             return $calendar;

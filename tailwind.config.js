@@ -16,6 +16,7 @@ module.exports = {
         "1/5":"1fr 5fr"
       }
     },
+    important: true,
     screens: {
       sm: '640px',
       md: '768px',

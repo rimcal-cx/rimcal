@@ -5,22 +5,37 @@ import Month from "../Month";
 import SideBar from "../SideBar";
 import GlobalContext from "../../context/GlobalContext";
 import EventModal from '../EventModal';
-import axios from 'axios';
+import { toast } from 'react-toastify'
+import ToastBody from '../ToastBody'
+import { loadEvents } from '../../utilities/util';
+import { PopupModal } from '../PopupModal';
+import dayjs from 'dayjs';
 
 const ComponentWrapper=({currentMonth})=>{
 
-    const { showEventModal,setDbdata,db_data } = useContext(GlobalContext)
-    const loadEvents =async ()=>{
-        const result = (await axios.get('calendar'))
-        setDbdata(result.data.data.events)
+    const {
+        showEventModal,
+        setEventList,
+        monthIndex,
+        popupToggle,
+        syncToggle,
+        setPopupToggle,
+        popupHeader,
+        popupFooter,
+        popupContent,
+    } = useContext(GlobalContext)
 
-    }
-
-    useEffect(()=>{
-
-    },[db_data])
     useEffect(() => {
-        loadEvents()
+        const dates = {
+            start_date: dayjs().month(monthIndex).date(1).format('YYYY-MM-DD').toString(),
+            end_date: dayjs().month(monthIndex + 1).date(1).subtract(1, 'day').format('YYYY-MM-DD').toString()
+        }
+        loadEvents(dates).then(({events}) => {
+            setEventList(events)
+        }).catch((e) => {
+            console.log(e)
+            toast.error(<ToastBody title="Error" body="Unable to fetch Event Lists. Try again later." type="error" />)
+        })
     }, [])
 
     return (
@@ -30,6 +45,14 @@ const ComponentWrapper=({currentMonth})=>{
         <SideBar/>
         <Month month={currentMonth}/>
         {showEventModal && <EventModal />}
+        {popupToggle && <PopupModal
+            popupToggle={popupToggle}
+            syncToggle={syncToggle}
+            setPopupToggle={setPopupToggle}
+            header={popupHeader}
+            footer={popupFooter}
+            content={popupContent}
+            />}
         </div>
 
     </div>

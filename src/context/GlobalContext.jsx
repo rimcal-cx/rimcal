@@ -1,4 +1,4 @@
-import  { createContext, useEffect } from "react";
+import  { createContext } from "react";
 
 const GlobalContext = createContext({
     monthIndex:0,
@@ -8,19 +8,29 @@ const GlobalContext = createContext({
     clickDay:0,
     setclickDay:(day)=>{},
     showEventModal:0,
-    setshowEventModal:()=>{},
+    setShowEventModal:()=>{},
     DispatchCalEvents:({type,payload})=>{},
     saveEvents:[],
     selectedEvent:null,
-    setselectedEvent:()=>{console.log("HELLO-GLOBAL");},
+    setSelectedEvent:()=>{},
     token:{},
     setToken:()=>{},
-    db_data:[],
-    setDbdata:()=>{},
-    userModal:false,
-    visbisltyUser:()=>{},
-    selctedUsers:[],
-    golbalSlectedUsers:()=>{},
+    eventList:[],
+    setEventList:()=>{},
+    popupToggle: false,
+    setPopupToggle: (toggle) => {},
+    syncToggle: false,
+    setSyncToggle: (toggle) => {},
+    popupFooter:'Footer',
+    setPopupFooter: (component) => {},
+    popupHeader: "Header",
+    setPopupHeader: (component) => {},
+    popupContent: "Content",
+    setPopupContent: (component) => {},
+    labelCssClasses: [],
+    paletteCssClass: {},
+    eventCssClass: {},
+
 
 })
 

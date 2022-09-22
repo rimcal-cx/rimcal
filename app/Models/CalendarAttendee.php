@@ -14,6 +14,7 @@ class CalendarAttendee extends Model
 
     protected $fillable = [
         'id',
+        'name',
         'calendar_id',
         'user_id',
         'email'

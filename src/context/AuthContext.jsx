@@ -1,28 +1,24 @@
 import { createContext, useState, useContext, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "../utilities/useLocalStorage";
-import axios  from "axios";
+import axios from 'axios'
+import { me } from '../utilities/util'
 import { toast, ToastContainer } from 'react-toastify';
-import GlobalContext from "./GlobalContext";
+import ToastBody from "../components/ToastBody";
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useLocalStorage("_auth_rimcal_token", null);
   const [user,setUser] = useState(null)
   const navigate = useNavigate();
-  const { db_data, setDbdata } = useContext(GlobalContext)
 
   if (token?.token) {
     axios.defaults.headers = {
         ...axios.defaults.headers,
         'Authorization': `Bearer ${token.token}`
     }
-
   }
-  const loadEvents =async ()=>{
-        const result = await (await axios.get('calendar'))
-        setDbdata(result)
-    }
 
 
   const setGlobalAuthentication = async (data = null) => {
@@ -34,24 +30,28 @@ export const AuthProvider = ({ children }) => {
 
     if (!user) {
         try {
-            const userInfo = data ? data.user : (await axios.get('/me')).data.data;
-            setUser(userInfo);
             if (data) {
-                toast.success("Login Successful !", {
-                    position: toast.POSITION.TOP_LEFT,
+                delete data.token
+                delete data.token_expiry
+            }
+            const userInfo = data ? data : await me();
+            setUser({ ...userInfo });
+            if (data) {
+                toast.success(<ToastBody
+                title='Success'
+                type='success'
+                body='Login Successful!'
+                />, {
                     toastId: 'login-id',
-                    autoClose: 2000,
                   });
             }
 
             navigate("/calendar", { replace: true });
-        } catch {
-            setToken(null)
-            setUser(null)
+        } catch (e){
+            if ([403, 401].includes(e.response.status))
+                logout()
         }
     }
-
-    await loadEvents()
 
   }
 
@@ -90,7 +90,16 @@ export const AuthProvider = ({ children }) => {
   );
   return <AuthContext.Provider value={value}>
     <>
-    <ToastContainer />
+    <ToastContainer
+        autoClose="4000"
+        position="top-right"
+        closeButton={true}
+        pauseOnHover={false}
+        pauseOnFocusLoss={false}
+        closeOnClick={false}
+        newestOnTop={true}
+        draggable={false}
+    />
     {children}
     </>
     </AuthContext.Provider>;

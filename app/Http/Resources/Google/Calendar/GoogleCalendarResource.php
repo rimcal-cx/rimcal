@@ -28,6 +28,7 @@ class GoogleCalendarResource extends JsonResource
             'timezone' => $this->timezone,
             'remind_before_in_mins' => $this->remind_before_in_mins,
             'all_day' => $this->all_day,
+            'event_label' => $this->event_label,
             'attendees' => $this->attendees
         ];
     }

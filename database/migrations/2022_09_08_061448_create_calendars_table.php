@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('timezone');
             $table->integer('remind_before_in_mins')->default(10);
             $table->tinyInteger('all_day')->default(0);
+            $table->string('event_label')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

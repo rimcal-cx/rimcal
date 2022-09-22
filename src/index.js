@@ -7,6 +7,7 @@ import { AuthProvider } from './context/AuthContext';
 import axios from 'axios'
 import {BrowserRouter} from 'react-router-dom'
 import 'react-toastify/dist/ReactToastify.min.css';
+import 'react-pure-modal/dist/react-pure-modal.min.css';
 
 axios.defaults.baseURL = `${process.env.REACT_APP_API_URL}/api/`
 axios.defaults.headers = {
