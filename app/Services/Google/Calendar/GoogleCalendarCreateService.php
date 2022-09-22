@@ -19,8 +19,6 @@ class GoogleCalendarCreateService
             DB::beginTransaction();
             $client = (new GoogleAuthClient)->handle();
             $attendees = [];
-            $calAttendees = [];
-
             $calendar = Calendar::updateOrCreate(
                 [
                     'id' => $request->calendar_id,
@@ -39,19 +37,13 @@ class GoogleCalendarCreateService
                 ]
             );
 
-            $alreadyPresentAttendees = [];
             $alreadyPresentAttendeesEmails = [];
-            $currentAttendeesEmails = [];
 
             if($request->calendar_id !== null) {
-                // CalendarAttendee::whereCalendarId($request->calendar_id)->delete();
-                $alreadyPresentAttendees = CalendarAttendee::whereCalendarId($request->calendar_id)->get();
-                $alreadyPresentAttendeesEmails = collect($alreadyPresentAttendees)->pluck('email')->all();
-                $currentAttendeesEmails = [];
+                $alreadyPresentAttendeesEmails = CalendarAttendee::whereCalendarId($request->calendar_id)->pluck('email')->toArray();
             }
 
             foreach($request->attendees as $attendee) {
-                $currentAttendeesEmails[] = $attendee['email'];
                 $attendees[] = ['email' => $attendee['email']];
                 if (!in_array($attendee['email'], $alreadyPresentAttendeesEmails)) {
                     CalendarAttendee::create([
@@ -62,12 +54,8 @@ class GoogleCalendarCreateService
                     ]);
                 }
             }
-
-            $attendeesRemoved = array_diff($alreadyPresentAttendeesEmails, $currentAttendeesEmails);
-            if (!empty($attendeesRemoved)) {
-                CalendarAttendee::whereCalendarId($request->calendar_id)->whereIn('email', $attendeesRemoved)->delete();
-            }
             $event = $this->addToGoogleCalendar($client, $request, $attendees, $calendar);
+            CalendarAttendee::whereCalendarId($request->calendar_id)->whereNotIn('email', array_column($attendees, 'email'))->delete();
             $calendar->event_id = $event->id;
 
             $calendar->save();
