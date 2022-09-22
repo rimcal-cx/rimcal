@@ -3,16 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Services\Google\Calendar\GoogleCalendarCreateService;
-use App\Http\Resources\Google\Calendar\GoogleCalendarResource;;
 use App\Http\Requests\Google\Calendar\CalendarCreateRequest;
 use Illuminate\Http\Response;
 use App\Services\Google\Calendar\GoogleCalendarListService;
-use App\Http\Requests\Google\Calendar\CalendarCreateRequest;
-use App\Services\Google\Calendar\GoogleCalendarCreateService;
 use App\Services\Google\Calendar\GoogleCalendarDeleteService;
 use App\Http\Resources\Google\Calendar\GoogleCalendarResource;
+use App\Models\Calendar;
 use App\Services\Google\Calendar\GoogleCalendarEventListService;
-use App\Services\Google\Calendar\GoogleCalendarSyncService;
 use Illuminate\Http\Request;
 
 class GoogleCalendarController extends BaseController
@@ -26,6 +23,18 @@ class GoogleCalendarController extends BaseController
     {
         $result = (new GoogleCalendarListService())->handle($request);
         return $this->response('Event added to Calendar', 200, ['events' => GoogleCalendarResource::collection($result)]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  Calendar $calendar
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Calendar $calendar): Response
+    {
+        (new GoogleCalendarDeleteService())->handle($calendar);
+        return $this->response('Event deleted successfully', 200);
     }
 
     /**
@@ -44,27 +53,10 @@ class GoogleCalendarController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function googleEvents(): Response
+    public function googleEvents(Request $request): Response
     {
-        $result = (new GoogleCalendarEventListService())->handle();
-        return $this->response('Events from google', 200, ['event' => $result]);
+        (new GoogleCalendarEventListService())->handle($request);
+        return $this->response('Events from google', 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($calendarId): Response
-    {
-        (new GoogleCalendarDeleteService())->handle($calendarId);
-        return $this->response('Event deleted successfully', 200);
-    }
-
-    public function sync(Request $request): Response
-    {
-        (new GoogleCalendarSyncService())->handle($request);
-        return $this->response('Synced successfully', 200);
-    }
 }

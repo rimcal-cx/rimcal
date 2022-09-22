@@ -12,13 +12,12 @@ use Illuminate\Support\Facades\DB;
 class GoogleCalendarDeleteService
 {
 
-    public function handle($calendarId): bool
+    public function handle(Calendar $calendar): bool
     {
         try{
             DB::beginTransaction();
             $client = (new GoogleAuthClient)->handle();
             $service = new GoogleCalendar($client);
-            $calendar = Calendar::find($calendarId);
             $service->events->delete('primary', $calendar->event_id);
             CalendarAttendee::where('calendar_id', $calendar->id)->delete();
             $calendar->delete();

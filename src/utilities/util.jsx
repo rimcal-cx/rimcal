@@ -1,12 +1,12 @@
 import dayjs from 'dayjs'
 import axios from 'axios'
 
-export function getMonth(month=dayjs().month()){
+export function getMonth(month = dayjs().month()){
     month = Math.floor(month)
     const year = dayjs().year()
-    const firstDayofMonth=dayjs(new Date(year,month,1)).day()
+    const firstDayofMonth = dayjs(new Date(year,month,1)).day()
     let currentMonthCount = 0 - firstDayofMonth;
-    const daysMatrix=new Array(5).fill([]).map(()=>{
+    const daysMatrix = new Array(5).fill([]).map(()=>{
          return new Array(7).fill(null).map(()=>{
             currentMonthCount++
             return dayjs(new Date(year,month,currentMonthCount))
@@ -34,7 +34,7 @@ export const eventDelete = async (calendarEvent) => {
 }
 
 export const syncCalendar = async (dates) => {
-    return (await axios.post('calendar/sync', dates)).data.data
+    return (await axios.get('calendar/google-events', { params: dates })).data.data
 
 }
 
